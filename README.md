@@ -1,6 +1,6 @@
 # Clean Air Council
 
-## Running the app
+## Setting up
 
 1. Clone the repo
 
@@ -32,13 +32,14 @@
 
     ```python
     >>> db.create_all()
-    >>> db.commit()
+    >>> db.session.commit()
     ```
 
-5. Run the server
+## Running the app
 
-    ```bash
-    $ python manage.py runserver
-     * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-     * Restarting with stat
-    ```
+```
+$ source env/bin/activate
+$ python manage.py runserver
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+```

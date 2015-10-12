@@ -43,6 +43,22 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role \'%s\'>' % self.name
 
+class IdlingIncident(db.Model):
+    __tablename__ = "incidents"
+    vehicle_id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(64))
+    date = db.Column(db.DateTime)
+    agency = db.Column(db.String(64))
+    picture = db.Column(db.String(64))
+    description = db.Column(db.Text)
+
+    def __init__(self, vehicle_id, location, date, agency, picture, description):
+        self.vehicle_id = vehicle_id
+        self.location = location
+        self.date = date
+        self.agency = agency
+        self.picture = picture
+        self.description = description
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

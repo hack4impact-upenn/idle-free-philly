@@ -18,3 +18,10 @@ def register_template_utils(app):
 
 def index_for_role(role):
     return url_for(role.name + '.index')
+
+
+def parse_to_db(db, filename):
+    import csv
+    with open(filename, 'rb') as file:
+        reader = csv.reader(file, delimiter=',')
+        return reader.next()

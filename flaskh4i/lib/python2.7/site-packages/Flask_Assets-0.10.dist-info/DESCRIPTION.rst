@@ -1,0 +1,7 @@
+Flask-Assets
+-------------
+
+Integrates the ``webassets`` library with Flask, adding support for
+merging, minifying and compiling CSS and Javascript files.
+
+

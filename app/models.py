@@ -11,6 +11,7 @@ class Permission:
     WORKER = 0x10
     ADMINISTER = 0xff
 
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +28,6 @@ class Role(db.Model):
                 Permission.GENERAL, 'main', True
             ),
             'AgencyWorker': (
-
                 Permission.WORKER, 'main', True
             ),
             'Administrator': (
@@ -193,41 +193,33 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-### Agency schema
+# Agency schema
 class Agency(db.Model):
     __tablename__ = 'agencies'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), index=True)
-    email = db.Column(db.String(64), unique=True, index=True)
-    password_hash = db.Column(db.String(128))
     is_public = db.Column(db.Boolean, default=False)
     users = db.relationship('User', backref='agency', lazy='dynamic')
-    reports = db.relationship('IncidentReport', backref='agency', lazy='dynamic')
+    reports = db.relationship('IncidentReport', backref='agency',
+                              lazy='dynamic')
 
     @staticmethod
     def insert_agencies():
         agencies = {
-        # TODO
-
-        #'AgencyType': (
-        #    field1, field2, field3
-        #)
+            'SEPTA': (
+                False
+            ),
+            'Other': (
+                True
+            )
         }
         for a in agencies:
             agency = Agency.query.filter_by(name=a).first()
             if agency is None:
                 agency = Agency(name=a)
-            # TODO
-            # agency.fieldx = agencies[a][x]
+            agency.is_public = agencies[a][0]
             db.session.add(agency)
         db.session.commit()
 
     def __repr__(self):
         return '<Agency \'%s\'>' % self.name
-
-class IncidentReport(db.Model):
-    __tablename__ = 'reports'
-    id = db.Column(db.Integer, primary_key=True)
-    user = db.relationship('User', lazy='dynamic')
-    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
-

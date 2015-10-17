@@ -192,8 +192,8 @@ def load_user(user_id):
 class Location(db.Model):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
-    latitude = db.Column(db.String(50), nullable=False)
-    longitude = db.Column(db.String(50), nullable=False)
+    latitude = db.Column(db.String(50))
+    longitude = db.Column(db.String(50))
     original_text = db.Column(db.Text)
     idling_incident_id = db.Column(db.Integer,
                                    db.ForeignKey('idling_incidents.id'))
@@ -208,9 +208,9 @@ class IdlingIncident(db.Model):
                                uselist=False,
                                lazy='joined',
                                backref='idling_incident')
-    date = db.Column(db.DateTime, nullable=False)  # hour the incident occurred
-    duration = db.Column(db.Interval, nullable=False)  # like timedelta object
+    date = db.Column(db.DateTime)  # hour the incident occurred
+    duration = db.Column(db.Interval)  # like timedelta object
     # agency = TODO: Hook this up with agency when Nancy finishes. TODO: set
-    # nullable=False for this field, default=<Other>
+    # default=<Other> for this field
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)

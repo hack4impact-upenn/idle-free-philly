@@ -27,24 +27,6 @@ class IdlingIncidentTestCase(unittest.TestCase):
         self.assertTrue(loc.original_text == '3700 Spruce St.')
         self.assertTrue(loc.idling_incident is None)
 
-    # def test_location_required_fields(self):
-    #     with self.assertRaises(AttributeError):
-    #         Location(
-    #             longitude='-75.197428',
-    #             original_text='3700 Spruce St.'
-    #         )
-    #     with self.assertRaises(AttributeError):
-    #         Location(
-    #             latitude='-75.197428',
-    #             original_text='3700 Spruce St.'
-    #         )
-    #
-    #     with not self.assertRaises(AttributeError):
-    #         Location(
-    #             latitude='39.951039',
-    #             longitude='-75.197428',
-    #         )
-
     def test_location_has_incident(self):
         idling_incident_1 = IdlingIncident()
         idling_incident_2 = IdlingIncident()
@@ -74,11 +56,6 @@ class IdlingIncidentTestCase(unittest.TestCase):
         self.assertEqual(incident.duration, datetime.timedelta(minutes=5))
         self.assertEqual(incident.picture_url, 'http://google.com')
         self.assertEqual(incident.description, 'Truck idling on the road!')
-
-    def test_location_required_fields(self):
-        # TODO: Figure out how required fields work and then fill in test if
-        # necessary
-        pass
 
     def test_idling_incident_with_location_no_agency(self):
         loc1 = Location(

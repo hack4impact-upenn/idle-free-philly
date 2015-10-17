@@ -43,22 +43,6 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role \'%s\'>' % self.name
 
-class IdlingIncident(db.Model):
-    __tablename__ = "incidents"
-    vehicle_id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String(64))
-    date = db.Column(db.DateTime)
-    agency = db.Column(db.String(64))
-    picture = db.Column(db.String(64))
-    description = db.Column(db.Text)
-
-    def __init__(self, vehicle_id, location, date, agency, picture, description):
-        self.vehicle_id = vehicle_id
-        self.location = location
-        self.date = date
-        self.agency = agency
-        self.picture = picture
-        self.description = description
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -203,3 +187,31 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Location(db.Model):
+    __tablename__ = 'locations'
+    id = db.Column(db.Integer, primary_key=True)
+    latitude = db.Column(db.String(50))
+    longitude = db.Column(db.String(50))
+    original_text = db.Column(db.Text)
+
+
+class IdlingIncident(db.Model):
+    __tablename__ = 'incidents'
+    id = db.Column(db.Integer, primary_key=True)
+    vehicle_id = db.Column(db.Integer)
+    location = db.relationship("Location", uselist=False,
+                               backref="idling_incident")
+    date = db.Column(db.DateTime)
+    agency = db.Column(db.String(64))
+    picture = db.Column(db.String(64))
+    description = db.Column(db.Text)
+
+    def __init__(self, vehicle_id, location, date, agency, picture, description):
+        self.vehicle_id = vehicle_id
+        self.location = location
+        self.date = date
+        self.agency = agency
+        self.picture = picture
+        self.description = description

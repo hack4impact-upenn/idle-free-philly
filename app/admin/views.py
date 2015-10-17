@@ -5,6 +5,7 @@ from flask.ext.login import login_required, current_user
 
 from forms import (
     ChangeUserEmailForm,
+    ChangeUserPhoneNumberForm,
     NewUserForm,
     ChangeAccountTypeForm,
     InviteUserForm,
@@ -34,6 +35,7 @@ def new_user():
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     email=form.email.data,
+                    phone_number=form.phone_number.data,
                     password=form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -52,7 +54,8 @@ def invite_user():
         user = User(role=form.role.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
-                    email=form.email.data)
+                    email=form.email.data,
+                    phone_number=form.phone_number.data)
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -105,6 +108,25 @@ def change_user_email(user_id):
         db.session.commit()
         flash('Email for user {} successfully changed to {}.'
               .format(user.full_name(), user.email),
+              'form-success')
+    return render_template('admin/manage_user.html', user=user, form=form)
+
+
+@admin.route('/user/<int:user_id>/change-phone-number', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_user_phone_number(user_id):
+    """Change a user's phone number."""
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        abort(404)
+    form = ChangeUserPhoneNumberForm()
+    if form.validate_on_submit():
+        user.phone_number = form.phone_number.data
+        db.session.add(user)
+        db.session.commit()
+        flash('Phone number for user {} successfully changed to {}.'
+              .format(user.full_name(), user.phone_number),
               'form-success')
     return render_template('admin/manage_user.html', user=user, form=form)
 

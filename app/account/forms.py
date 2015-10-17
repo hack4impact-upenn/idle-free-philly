@@ -4,10 +4,10 @@ from wtforms.fields import (
     StringField,
     PasswordField,
     BooleanField,
-    SubmitField
+    SubmitField,
 )
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.fields.html5 import EmailField, TelField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 from wtforms import ValidationError
 from ..models import User
 
@@ -37,6 +37,12 @@ class RegistrationForm(Form):
         Length(1, 64),
         Email()
     ])
+    phone_number = TelField('Phone Number', validators=[
+        Length(0, 15),
+        Regexp(r'^[0-9]*$',
+               message='Please enter just the number with no other symbols '
+                       '(e.g. 1234567898)')
+        ])
     password = PasswordField('Password', validators=[
         DataRequired(),
         EqualTo('password2', 'Passwords must match')
@@ -48,6 +54,12 @@ class RegistrationForm(Form):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered. (Did you mean to '
                                   '<a href="{}">log in</a> instead?)'
+                                  .format(url_for('account.login')))
+
+    def validate_phone_number(self, field):
+        if User.query.filter_by(phone_number=field.data).first():
+            raise ValidationError('Phone number already registered. (Did you '
+                                  'mean to <a href="{}">log in</a> instead?)'
                                   .format(url_for('account.login')))
 
 
@@ -112,3 +124,18 @@ class ChangeEmailForm(Form):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered.')
+
+
+class ChangePhoneNumberForm(Form):
+    phone_number = TelField('New phone number', validators=[
+        DataRequired(),
+        Length(1, 15),
+        Regexp(r'^[0-9]+$', message='Please enter just the number with no '
+                                    'other symbols (e.g. 1234567898)')
+    ])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Update phone number')
+
+    def validate_phone_number(self, field):
+        if User.query.filter_by(phone_number=field.data).first():
+            raise ValidationError('Phone number already registered.')

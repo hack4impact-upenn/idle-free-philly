@@ -192,26 +192,25 @@ def load_user(user_id):
 class Location(db.Model):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
-    latitude = db.Column(db.String(50))
-    longitude = db.Column(db.String(50))
+    latitude = db.Column(db.String(50), nullable=False)
+    longitude = db.Column(db.String(50), nullable=False)
     original_text = db.Column(db.Text)
+    idling_incident_id = db.Column(db.Integer,
+                                   db.ForeignKey('idling_incidents.id'))
 
 
 class IdlingIncident(db.Model):
-    __tablename__ = 'incidents'
+    __tablename__ = 'idling_incidents'
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_id = db.Column(db.Integer)
-    location = db.relationship("Location", uselist=False,
-                               backref="idling_incident")
-    date = db.Column(db.DateTime)
-    agency = db.Column(db.String(64))
-    picture = db.Column(db.String(64))
+    vehicle_id = db.Column(db.String(8))
+    license_plate = db.Column(db.String(8))
+    location = db.relationship('Location',
+                               uselist=False,
+                               lazy='joined',
+                               backref='idling_incident')
+    date = db.Column(db.DateTime, nullable=False)  # hour the incident occurred
+    duration = db.Column(db.Interval, nullable=False)  # like timedelta object
+    # agency = TODO: Hook this up with agency when Nancy finishes. TODO: set
+    # nullable=False for this field, default=<Other>
+    picture_url = db.Column(db.Text)
     description = db.Column(db.Text)
-
-    def __init__(self, vehicle_id, location, date, agency, picture, description):
-        self.vehicle_id = vehicle_id
-        self.location = location
-        self.date = date
-        self.agency = agency
-        self.picture = picture
-        self.description = description

@@ -8,8 +8,8 @@ from . import db, login_manager
 
 class Permission:
     GENERAL = 0x01
+    WORKER = 0x10
     ADMINISTER = 0xff
-
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -25,6 +25,10 @@ class Role(db.Model):
         roles = {
             'User': (
                 Permission.GENERAL, 'main', True
+            ),
+            'AgencyWorker': (
+
+                Permission.WORKER, 'main', True
             ),
             'Administrator': (
                 Permission.ADMINISTER, 'admin', False  # grants all permissions
@@ -53,6 +57,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -186,3 +191,43 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+### Agency schema
+class Agency(db.Model):
+    __tablename__ = 'agencies'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    email = db.Column(db.String(64), unique=True, index=True)
+    password_hash = db.Column(db.String(128))
+    is_public = db.Column(db.Boolean, default=False)
+    users = db.relationship('User', backref='agency', lazy='dynamic')
+    reports = db.relationship('IncidentReport', backref='agency', lazy='dynamic')
+
+    @staticmethod
+    def insert_agencies():
+        agencies = {
+        # TODO
+
+        #'AgencyType': (
+        #    field1, field2, field3
+        #)
+        }
+        for a in agencies:
+            agency = Agency.query.filter_by(name=a).first()
+            if agency is None:
+                agency = Agency(name=a)
+            # TODO
+            # agency.fieldx = agencies[a][x]
+            db.session.add(agency)
+        db.session.commit()
+
+    def __repr__(self):
+        return '<Agency \'%s\'>' % self.name
+
+class IncidentReport(db.Model):
+    __tablename__ = 'reports'
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.relationship('User', lazy='dynamic')
+    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
+

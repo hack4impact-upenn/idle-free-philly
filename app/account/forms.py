@@ -1,4 +1,3 @@
-from flask import url_for
 from flask.ext.wtf import Form
 from wtforms.fields import (
     StringField,
@@ -8,8 +7,7 @@ from wtforms.fields import (
 )
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
-from wtforms import ValidationError
-from ..models import User
+from ..custom_validators import UniqueEmail, UniquePhoneNumber
 
 
 class LoginForm(Form):
@@ -35,13 +33,15 @@ class RegistrationForm(Form):
     email = EmailField('Email', validators=[
         DataRequired(),
         Length(1, 64),
-        Email()
+        Email(),
+        UniqueEmail(),
     ])
     phone_number = TelField('Phone Number', validators=[
         Length(0, 15),
         Regexp(r'^[0-9]*$',
                message='Please enter just the number with no other symbols '
-                       '(e.g. 1234567898)')
+                       '(e.g. 1234567898)'),
+        UniquePhoneNumber()
         ])
     password = PasswordField('Password', validators=[
         DataRequired(),
@@ -49,18 +49,6 @@ class RegistrationForm(Form):
     ])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Register')
-
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered. (Did you mean to '
-                                  '<a href="{}">log in</a> instead?)'
-                                  .format(url_for('account.login')))
-
-    def validate_phone_number(self, field):
-        if User.query.filter_by(phone_number=field.data).first():
-            raise ValidationError('Phone number already registered. (Did you '
-                                  'mean to <a href="{}">log in</a> instead?)'
-                                  .format(url_for('account.login')))
 
 
 class RequestResetPasswordForm(Form):
@@ -78,7 +66,9 @@ class ResetPasswordForm(Form):
     email = EmailField('Email', validators=[
         DataRequired(),
         Length(1, 64),
-        Email()])
+        Email(),
+        UniqueEmail(),
+    ])
     new_password = PasswordField('New password', validators=[
         DataRequired(),
         EqualTo('new_password2', 'Passwords must match.')
@@ -86,10 +76,6 @@ class ResetPasswordForm(Form):
     new_password2 = PasswordField('Confirm new password',
                                   validators=[DataRequired()])
     submit = SubmitField('Reset password')
-
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first() is None:
-            raise ValidationError('Unknown email address.')
 
 
 class CreatePasswordForm(Form):
@@ -117,13 +103,11 @@ class ChangeEmailForm(Form):
     email = EmailField('New email', validators=[
         DataRequired(),
         Length(1, 64),
-        Email()])
+        Email(),
+        UniqueEmail(),
+    ])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Update email')
-
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered.')
 
 
 class ChangePhoneNumberForm(Form):
@@ -131,11 +115,8 @@ class ChangePhoneNumberForm(Form):
         DataRequired(),
         Length(1, 15),
         Regexp(r'^[0-9]+$', message='Please enter just the number with no '
-                                    'other symbols (e.g. 1234567898)')
+                                    'other symbols (e.g. 1234567898)'),
+        UniquePhoneNumber()
     ])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Update phone number')
-
-    def validate_phone_number(self, field):
-        if User.query.filter_by(phone_number=field.data).first():
-            raise ValidationError('Phone number already registered.')

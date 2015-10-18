@@ -6,8 +6,20 @@ from wtforms.fields import (
     SubmitField,
 )
 from wtforms.fields.html5 import EmailField, TelField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
-from ..custom_validators import UniqueEmail, UniquePhoneNumber
+from wtforms.validators import (
+    DataRequired,
+    Length,
+    Email,
+    EqualTo,
+    Optional,
+    ValidationError,
+)
+from ..custom_validators import (
+    UniqueEmail,
+    UniquePhoneNumber,
+    PhoneNumberLength,
+)
+from ..models import User
 
 
 class LoginForm(Form):
@@ -37,12 +49,10 @@ class RegistrationForm(Form):
         UniqueEmail(),
     ])
     phone_number = TelField('Phone Number', validators=[
-        Length(0, 15),
-        Regexp(r'^[0-9]*$',
-               message='Please enter just the number with no other symbols '
-                       '(e.g. 1234567898)'),
-        UniquePhoneNumber()
-        ])
+        Optional(),
+        PhoneNumberLength(1, 15),
+        UniquePhoneNumber(),
+    ])
     password = PasswordField('Password', validators=[
         DataRequired(),
         EqualTo('password2', 'Passwords must match')
@@ -67,7 +77,6 @@ class ResetPasswordForm(Form):
         DataRequired(),
         Length(1, 64),
         Email(),
-        UniqueEmail(),
     ])
     new_password = PasswordField('New password', validators=[
         DataRequired(),
@@ -76,6 +85,10 @@ class ResetPasswordForm(Form):
     new_password2 = PasswordField('Confirm new password',
                                   validators=[DataRequired()])
     submit = SubmitField('Reset password')
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first() is None:
+            raise ValidationError('Unknown email address.')
 
 
 class CreatePasswordForm(Form):
@@ -113,10 +126,8 @@ class ChangeEmailForm(Form):
 class ChangePhoneNumberForm(Form):
     phone_number = TelField('New phone number', validators=[
         DataRequired(),
-        Length(1, 15),
-        Regexp(r'^[0-9]+$', message='Please enter just the number with no '
-                                    'other symbols (e.g. 1234567898)'),
-        UniquePhoneNumber()
+        PhoneNumberLength(1, 15),
+        UniquePhoneNumber(),
     ])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Update phone number')

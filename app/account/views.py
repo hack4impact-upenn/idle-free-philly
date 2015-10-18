@@ -7,6 +7,7 @@ from flask.ext.login import (
 )
 from . import account
 from .. import db
+from ..utils import parse_phone_number
 from ..email import send_email
 from ..models import User
 from .forms import (
@@ -140,7 +141,8 @@ def change_phone_number():
     form = ChangePhoneNumberForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.password.data):
-            current_user.phone_number = form.phone_number.data
+            raw_phone_data = form.phone_number.data
+            current_user.phone_number = parse_phone_number(raw_phone_data)
             db.session.add(current_user)
             db.session.commit()
             flash('Your phone number has been updated.', 'success')

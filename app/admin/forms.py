@@ -2,9 +2,13 @@ from flask.ext.wtf import Form
 from wtforms.fields import StringField, PasswordField, SubmitField
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
-from ..custom_validators import UniqueEmail, UniquePhoneNumber
-from ..models import User, Role
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
+from ..custom_validators import (
+    UniqueEmail,
+    UniquePhoneNumber,
+    PhoneNumberLength,
+)
+from ..models import Role
 from .. import db
 
 
@@ -13,7 +17,7 @@ class ChangeUserEmailForm(Form):
         DataRequired(),
         Length(1, 64),
         Email(),
-
+        UniqueEmail(),
     ])
     submit = SubmitField('Update email')
 
@@ -21,10 +25,8 @@ class ChangeUserEmailForm(Form):
 class ChangeUserPhoneNumberForm(Form):
     phone_number = TelField('New phone number', validators=[
         DataRequired(),
-        Length(1, 15),
-        Regexp(r'^[0-9]+$', message='Please enter just the number with no '
-                                    'other symbols (e.g. 1234567898)'),
-        UniquePhoneNumber()
+        PhoneNumberLength(1, 15),
+        UniquePhoneNumber(),
     ])
     submit = SubmitField('Update phone number')
 
@@ -55,9 +57,8 @@ class InviteUserForm(Form):
         UniqueEmail()
     ])
     phone_number = TelField('Phone Number', validators=[
-        Length(0, 15),
-        Regexp(r'^[0-9]*$', message='Please enter just the number with no '
-                                    'other symbols (e.g. 1234567898)'),
+        Optional(),
+        PhoneNumberLength(1, 15),
         UniquePhoneNumber(),
     ])
     submit = SubmitField('Invite')
@@ -65,8 +66,8 @@ class InviteUserForm(Form):
 
 class NewUserForm(InviteUserForm):
     password = PasswordField('Password', validators=[
-        DataRequired(), EqualTo('password2',
-                                'Passwords must match.')
+        DataRequired(),
+        EqualTo('password2', 'Passwords must match.')
     ])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
 

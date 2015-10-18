@@ -1,3 +1,4 @@
+import re
 from flask import url_for
 
 
@@ -18,3 +19,8 @@ def register_template_utils(app):
 
 def index_for_role(role):
     return url_for(role.name + '.index')
+
+
+def parse_phone_number(phone_number):
+    stripped = re.sub(r'\D', '', phone_number)
+    return stripped

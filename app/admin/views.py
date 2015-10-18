@@ -13,6 +13,7 @@ from forms import (
 from . import admin
 from ..models import User, Role
 from .. import db
+from ..utils import parse_phone_number
 from ..email import send_email
 
 
@@ -35,7 +36,7 @@ def new_user():
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     email=form.email.data,
-                    phone_number=form.phone_number.data,
+                    phone_number=parse_phone_number(form.phone_number.data),
                     password=form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -55,7 +56,7 @@ def invite_user():
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     email=form.email.data,
-                    phone_number=form.phone_number.data)
+                    phone_number=parse_phone_number(form.phone_number.data))
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -122,7 +123,7 @@ def change_user_phone_number(user_id):
         abort(404)
     form = ChangeUserPhoneNumberForm()
     if form.validate_on_submit():
-        user.phone_number = form.phone_number.data
+        user.phone_number = parse_phone_number(form.phone_number.data)
         db.session.add(user)
         db.session.commit()
         flash('Phone number for user {} successfully changed to {}.'

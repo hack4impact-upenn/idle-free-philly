@@ -50,7 +50,7 @@ class RegistrationForm(Form):
     ])
     phone_number = TelField('Phone Number', validators=[
         Optional(),
-        PhoneNumberLength(1, 15),
+        PhoneNumberLength(10, 15),
         UniquePhoneNumber(),
     ])
     password = PasswordField('Password', validators=[
@@ -126,7 +126,7 @@ class ChangeEmailForm(Form):
 class ChangePhoneNumberForm(Form):
     phone_number = TelField('New phone number', validators=[
         DataRequired(),
-        PhoneNumberLength(1, 15),
+        PhoneNumberLength(10, 15),
         UniquePhoneNumber(),
     ])
     password = PasswordField('Password', validators=[DataRequired()])

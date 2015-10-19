@@ -194,7 +194,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.String(50))
     longitude = db.Column(db.String(50))
-    original_text = db.Column(db.Text)
+    original_user_text = db.Column(db.Text)  # the raw text which we geocoded
     idling_incident_id = db.Column(db.Integer,
                                    db.ForeignKey('idling_incidents.id'))
 

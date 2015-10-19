@@ -20,11 +20,11 @@ class IdlingIncidentTestCase(unittest.TestCase):
         loc = Location(
             latitude='39.951039',
             longitude='-75.197428',
-            original_text='3700 Spruce St.'
+            original_user_text='3700 Spruce St.'
         )
         self.assertTrue(loc.latitude == '39.951039')
         self.assertTrue(loc.longitude == '-75.197428')
-        self.assertTrue(loc.original_text == '3700 Spruce St.')
+        self.assertTrue(loc.original_user_text == '3700 Spruce St.')
         self.assertTrue(loc.idling_incident is None)
 
     def test_location_has_incident(self):
@@ -33,7 +33,7 @@ class IdlingIncidentTestCase(unittest.TestCase):
         loc = Location(
             latitude='39.951039',
             longitude='-75.197428',
-            original_text='3700 Spruce St.',
+            original_user_text='3700 Spruce St.',
             idling_incident=idling_incident_1
         )
         self.assertEqual(loc.idling_incident, idling_incident_1)
@@ -61,12 +61,12 @@ class IdlingIncidentTestCase(unittest.TestCase):
         loc1 = Location(
             latitude='-75.197428',
             longitude='39.951039',
-            original_text='3700 Spruce St.'
+            original_user_text='3700 Spruce St.'
         )
         loc2 = Location(
             latitude='',
             longitude='-75.197428',
-            original_text='3800 Spruce St.'
+            original_user_text='3800 Spruce St.'
         )
         incident = IdlingIncident(
             vehicle_id='123456',

@@ -7,22 +7,21 @@ class Location(db.Model):
     latitude = db.Column(db.String(50))
     longitude = db.Column(db.String(50))
     original_user_text = db.Column(db.Text)  # the raw text which we geocoded
-    idling_incident_id = db.Column(db.Integer,
-                                   db.ForeignKey('idling_incidents.id'))
+    incident_report_id = db.Column(db.Integer,
+                                   db.ForeignKey('incident_reports.id'))
 
 
-class IdlingIncident(db.Model):
-    __tablename__ = 'idling_incidents'
+class IncidentReport(db.Model):
+    __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.String(8))
     license_plate = db.Column(db.String(8))
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',
-                               backref='idling_incident')
+                               backref='incident_report')
     date = db.Column(db.DateTime)  # hour the incident occurred
     duration = db.Column(db.Interval)  # like timedelta object
-    # agency = TODO: Hook this up with agency when Nancy finishes. TODO: set
-    # default=<Other> for this field
+    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)

@@ -8,7 +8,7 @@ from .. import db, login_manager
 
 class Permission:
     GENERAL = 0x01
-    WORKER = 0x10
+    AGENCY_WORKER = 0x10
     ADMINISTER = 0xff
 
 
@@ -16,7 +16,9 @@ class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    index = db.Column(db.String(64), unique=True)
+    index = db.Column(db.String(64))
+
+    # True if user is assigned this role by default
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
@@ -28,7 +30,7 @@ class Role(db.Model):
                 Permission.GENERAL, 'main', True
             ),
             'AgencyWorker': (
-                Permission.WORKER, 'main', True
+                Permission.AGENCY_WORKER, 'main', False
             ),
             'Administrator': (
                 Permission.ADMINISTER, 'admin', False  # grants all permissions
@@ -195,35 +197,3 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-# Agency schema
-class Agency(db.Model):
-    __tablename__ = 'agencies'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), index=True)
-    is_public = db.Column(db.Boolean, default=False)
-    users = db.relationship('User', backref='agency', lazy='dynamic')
-    reports = db.relationship('IncidentReport', backref='agency',
-                              lazy='dynamic')
-
-    @staticmethod
-    def insert_agencies():
-        agencies = {
-            'SEPTA': (
-                False
-            ),
-            'Other': (
-                True
-            )
-        }
-        for a in agencies:
-            agency = Agency.query.filter_by(name=a).first()
-            if agency is None:
-                agency = Agency(name=a)
-            agency.is_public = agencies[a][0]
-            db.session.add(agency)
-        db.session.commit()
-
-    def __repr__(self):
-        return '<Agency \'%s\'>' % self.name

@@ -3,7 +3,7 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
     BadSignature, SignatureExpired
-from . import db, login_manager
+from .. import db, login_manager
 
 
 class Permission:
@@ -89,8 +89,9 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def generate_confirmation_token(self, expiration=3600):
+    def generate_confirmation_token(self, expiration=604800):
         """Generate a confirmation token to email a new user."""
+
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
@@ -154,8 +155,10 @@ class User(UserMixin, db.Model):
     def generate_fake(count=100, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
-        from random import seed
+        from random import seed, choice
         import forgery_py
+
+        roles = Role.query.all()
 
         seed()
         for i in range(count):
@@ -165,6 +168,7 @@ class User(UserMixin, db.Model):
                 email=forgery_py.internet.email_address(),
                 password=forgery_py.lorem_ipsum.word(),
                 confirmed=True,
+                role=choice(roles),
                 **kwargs
             )
             db.session.add(u)

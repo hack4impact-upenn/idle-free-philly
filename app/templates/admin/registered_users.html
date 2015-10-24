@@ -44,6 +44,7 @@
                             <th>First name</th>
                             <th class="sorted ascending">Last name</th>
                             <th>Email address</th>
+                            <th>Phone number</th>
                             <th>Account type</th>
                         </tr>
                     </thead>
@@ -54,6 +55,7 @@
                             <td>{{ u.first_name }}</td>
                             <td>{{ u.last_name }}</td>
                             <td>{{ u.email }}</td>
+                            <td>{{ u.phone_number }}</td>
                             <td class="user role">{{ u.role.name }}</td>
                         </tr>
                     {% endfor %}

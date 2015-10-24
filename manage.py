@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role, Agency, Permission
+from app.models import User, Role, Agency, Permission, IncidentReport
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -46,18 +46,24 @@ def recreate_db():
     db.session.commit()
 
 
-@manager.option('-n',
+@manager.option('-nu',
                 '--number-users',
                 default=10,
                 type=int,
-                help='Number of each model type to create',
+                help='Number of users to create',
                 dest='number_users')
-def add_fake_data(number_users):
+@manager.option('-nr',
+                '--number-reports',
+                default=100,
+                type=int,
+                help='Number of reports to create',
+                dest='number_reports')
+def add_fake_data(number_users, number_reports):
     """
     Adds fake data to the database.
     """
     User.generate_fake(count=number_users)
-
+    IncidentReport.generate_fake(count=number_reports)
 
 @manager.command
 def setup_dev():

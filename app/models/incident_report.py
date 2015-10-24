@@ -35,15 +35,21 @@ class IncidentReport(db.Model):
         from datetime import timedelta
         import forgery_py
 
+        def flip_coin():
+            """Returns True or False with equal probability"""
+            return choice([True, False])
+
         agencies = Agency.query.all()
 
         seed()
         for i in range(count):
-            l = Location(original_user_text=forgery_py.address.street_address())
-            u = IncidentReport(
+            l = Location(original_user_text=forgery_py.address
+                         .street_address())
+            r = IncidentReport(
                 vehicle_id=forgery_py.basic.text(length=6, spaces=False),
+                # Either sets license plate to '' or random 6 character string
                 license_plate=forgery_py.basic.text(at_least=6, spaces=False)
-                if choice([True, False]) else '',
+                if flip_coin() else '',
                 location=l,
                 date=forgery_py.date.date(),
                 duration=timedelta(minutes=randint(1, 30)),
@@ -52,7 +58,7 @@ class IncidentReport(db.Model):
                 description=forgery_py.lorem_ipsum.paragraph(),
                 **kwargs
             )
-            db.session.add(u)
+            db.session.add(r)
             try:
                 db.session.commit()
             except IntegrityError:

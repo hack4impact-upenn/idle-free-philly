@@ -10,6 +10,10 @@ class Agency(db.Model):
     # agencies can have relationships to AgencyWorkers and will show up in the
     # reporting form. Non-official agencies will not show up in the form.
     is_official = db.Column(db.Boolean, default=False)
+
+    # True if this agency will be publicly shown with reports. That is, when a
+    # public user sees a report on the map, the report's agency will only be
+    # shown if is_public is True.
     is_public = db.Column(db.Boolean, default=False)
     users = db.relationship('User', backref='agency', lazy='select')
     incident_reports = db.relationship('IncidentReport', backref='agency',

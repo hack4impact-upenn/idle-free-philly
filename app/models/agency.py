@@ -12,8 +12,8 @@ class Agency(db.Model):
     is_official = db.Column(db.Boolean, default=False)
     is_public = db.Column(db.Boolean, default=False)
     users = db.relationship('User', backref='agency', lazy='select')
-    reports = db.relationship('IncidentReport', backref='agency',
-                              lazy='joined')
+    incident_reports = db.relationship('IncidentReport', backref='agency',
+                                       lazy='joined')
 
     @staticmethod
     def insert_agencies():

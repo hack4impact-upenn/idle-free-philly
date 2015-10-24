@@ -1,7 +1,7 @@
 import unittest
 import time
 from app import create_app, db
-from app.models import User, AnonymousUser, Permission, Role
+from app.models import User, AnonymousUser, Permission, Role, Agency
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -135,15 +135,10 @@ class UserModelTestCase(unittest.TestCase):
     def test_agency_worker_role(self):
         Role.insert_roles()
         r = Role.query.filter_by(permissions=Permission.AGENCY_WORKER).first()
-        u = User(email='user@example.com', password='password', role=r)
-        u.role = Role.query.filter_by(
-            permissions=Permission.AGENCY_WORKER).first()
-        self.assertTrue(u.can(Permission.AGENCY_WORKER))
-
-    def test_agency_worker(self):
-        Role.insert_roles()
-        r = Role.query.filter_by(permissions=Permission.AGENCY_WORKER).first()
-        u = User(email='user@example.com', password='password', role=r)
+        a = Agency(name='SEPTA')
+        u = User(email='user@example.com', password='password', role=r,
+                 agency=a)
         self.assertTrue(u.can(Permission.AGENCY_WORKER))
         self.assertFalse(u.can(Permission.ADMINISTER))
         self.assertFalse(u.is_admin())
+        self.assertEqual(u.agency, a)

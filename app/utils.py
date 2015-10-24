@@ -24,24 +24,35 @@ def index_for_role(role):
 def parse_to_db(db, filename):
     import csv, geocoder
     city_default = ', philadelphia, pennsylvania, usa'
-    vehicle_id_index = 7;
-    location_index = 3;
-    date_index = 0;
-    agency_index = 6;
-    picture_index = 13;
-    description_index = 11;
+    vehicle_id_index = 8
+    license_plate_index = 9
+    location_index = 4
+    date_index = 0
+    agency_index = 6
+    picture_index = 13
+    description_index = 11
     
     with open(filename, 'rb') as file:
         reader = csv.reader(file, delimiter=',')
         columns = reader.next()
         for row in reader:
             print row
-            a = address=row[location_index]
-            g = geocoder.arcgis(a + city_default).latlng
-            l = Location(lat=g[0], long=g[1], address=a)
-            i = IdlingIncident(vehicle_id=row[vehicle_id_index], l,
-                date=row[date_index], agency=row[agency_index], picture=row[picture_index],
+            address_text = row[location_index]
+            # TODO: error handling for geocoder
+            coordinates = geocoder.arcgis(address_text + city_default).latlng
+            loc = Location(
+                latitude=coordinates[0],
+                longitude=coordinates[1],
+                original_user_text=address_text)
+            db.session.add(loc)
+            incident = IdlingIncident(
+                vehicle_id=row[vehicle_id_index],
+                license_plate=row[license_plate_index],
+                location=loc,
+                date=row[date_index],
+                duration=....,
+                picture_url=row[picture_index],
                 description=row[description_index])
-            db.session.add(i)
-            db.session.commit()
+            db.session.add(incident)
+        db.session.commit()
         return columns

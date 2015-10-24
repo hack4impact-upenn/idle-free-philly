@@ -26,3 +26,4 @@ class IdlingIncident(db.Model):
     # default=<Other> for this field
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))

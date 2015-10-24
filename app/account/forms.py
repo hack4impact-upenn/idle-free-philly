@@ -1,14 +1,24 @@
-from flask import url_for
 from flask.ext.wtf import Form
 from wtforms.fields import (
     StringField,
     PasswordField,
     BooleanField,
-    SubmitField
+    SubmitField,
 )
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
-from wtforms import ValidationError
+from wtforms.fields.html5 import EmailField, TelField
+from wtforms.validators import (
+    DataRequired,
+    Length,
+    Email,
+    EqualTo,
+    Optional,
+    ValidationError,
+)
+from ..custom_validators import (
+    UniqueEmail,
+    UniquePhoneNumber,
+    PhoneNumberLength,
+)
 from ..models import User
 
 
@@ -35,7 +45,13 @@ class RegistrationForm(Form):
     email = EmailField('Email', validators=[
         DataRequired(),
         Length(1, 64),
-        Email()
+        Email(),
+        UniqueEmail(),
+    ])
+    phone_number = TelField('Phone Number', validators=[
+        Optional(),
+        PhoneNumberLength(10, 15),
+        UniquePhoneNumber(),
     ])
     password = PasswordField('Password', validators=[
         DataRequired(),
@@ -43,12 +59,6 @@ class RegistrationForm(Form):
     ])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Register')
-
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered. (Did you mean to '
-                                  '<a href="{}">log in</a> instead?)'
-                                  .format(url_for('account.login')))
 
 
 class RequestResetPasswordForm(Form):
@@ -66,7 +76,8 @@ class ResetPasswordForm(Form):
     email = EmailField('Email', validators=[
         DataRequired(),
         Length(1, 64),
-        Email()])
+        Email(),
+    ])
     new_password = PasswordField('New password', validators=[
         DataRequired(),
         EqualTo('new_password2', 'Passwords must match.')
@@ -105,10 +116,18 @@ class ChangeEmailForm(Form):
     email = EmailField('New email', validators=[
         DataRequired(),
         Length(1, 64),
-        Email()])
+        Email(),
+        UniqueEmail(),
+    ])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Update email')
 
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered.')
+
+class ChangePhoneNumberForm(Form):
+    phone_number = TelField('New phone number', validators=[
+        DataRequired(),
+        PhoneNumberLength(10, 15),
+        UniquePhoneNumber(),
+    ])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Update phone number')

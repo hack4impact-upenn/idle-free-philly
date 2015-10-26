@@ -113,7 +113,8 @@ def change_user_email(user_id):
     return render_template('admin/manage_user.html', user=user, form=form)
 
 
-@admin.route('/user/<int:user_id>/change-phone-number', methods=['GET', 'POST'])
+@admin.route('/user/<int:user_id>/change-phone-number',
+             methods=['GET', 'POST'])
 @login_required
 @admin_required
 def change_user_phone_number(user_id):

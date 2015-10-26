@@ -8,6 +8,7 @@ from .. import db, login_manager
 
 class Permission:
     GENERAL = 0x01
+    AGENCY_WORKER = 0x10
     ADMINISTER = 0xff
 
 
@@ -16,6 +17,8 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     index = db.Column(db.String(64))
+
+    # True if user is assigned this role by default
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
@@ -25,6 +28,9 @@ class Role(db.Model):
         roles = {
             'User': (
                 Permission.GENERAL, 'main', True
+            ),
+            'AgencyWorker': (
+                Permission.AGENCY_WORKER, 'main', False
             ),
             'Administrator': (
                 Permission.ADMINISTER, 'admin', False  # grants all permissions
@@ -54,6 +60,7 @@ class User(UserMixin, db.Model):
     phone_number = db.Column(db.String(16), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

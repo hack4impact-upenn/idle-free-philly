@@ -155,7 +155,7 @@ class User(UserMixin, db.Model):
         return True
 
     @staticmethod
-    def generate_fake(count=100, **kwargs):
+    def generate_fake(count=10, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
         from random import seed, choice

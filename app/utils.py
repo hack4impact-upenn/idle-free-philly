@@ -1,6 +1,6 @@
-import re
+import re, datetime
 from flask import url_for
-from app.models import IdlingIncident
+from app.models import IncidentReport, Location
 
 
 def register_template_utils(app):
@@ -55,11 +55,12 @@ def parse_to_db(db, filename):
                 longitude=coordinates[1],
                 original_user_text=address_text)
             db.session.add(loc)
-            incident = IdlingIncident(
+            date_format = "%m/%d/%Y %H:%M"
+            incident = IncidentReport(
                 vehicle_id=row[vehicle_id_index],
                 license_plate=row[license_plate_index],
                 location=loc,
-                date=row[date_index],
+                date=datetime.datetime.strptime(row[date_index], date_format),
                 # TODO: calculate duration interval from timestamps
                 duration=0,
                 picture_url=row[picture_index],

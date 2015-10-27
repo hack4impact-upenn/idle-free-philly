@@ -31,7 +31,6 @@ def parse_to_db(db, filename):
     agency_index = 6
     picture_index = 13
     description_index = 11
-    
     with open(filename, 'rb') as file:
         reader = csv.reader(file, delimiter=',')
         columns = reader.next()
@@ -50,7 +49,8 @@ def parse_to_db(db, filename):
                 license_plate=row[license_plate_index],
                 location=loc,
                 date=row[date_index],
-                duration=....,
+                # TODO: calculate duration interval from timestamps
+                duration=0,
                 picture_url=row[picture_index],
                 description=row[description_index])
             db.session.add(incident)

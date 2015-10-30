@@ -74,6 +74,8 @@ def setup_dev():
     # Create a default admin user
     admin = User(email='admin@user.com',
                  password='password',
+                 first_name='Admin',
+                 last_name='User',
                  role=Role.query.filter_by(permissions=Permission.ADMINISTER)
                  .first(),
                  confirmed=True)
@@ -81,6 +83,9 @@ def setup_dev():
     # Create a default agency worker user
     worker = User(email='agency@user.com',
                   password='password',
+                  first_name='AgencyWorker',
+                  last_name='User',
+                  agency='SEPTA',
                   role=Role.query
                   .filter_by(permissions=Permission.AGENCY_WORKER)
                   .first(),
@@ -89,6 +94,8 @@ def setup_dev():
     # Create a default general user
     general = User(email='general@user.com',
                    password='password',
+                   first_name='General',
+                   last_name='User',
                    role=Role.query.filter_by(permissions=Permission.GENERAL)
                    .first(),
                    confirmed=True)

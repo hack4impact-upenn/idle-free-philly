@@ -79,7 +79,7 @@ def setup_dev():
                  confirmed=True)
 
     # Create a default agency worker user
-    worker = User(email='admin@user.com',
+    worker = User(email='agency@user.com',
                   password='password',
                   role=Role.query
                   .filter_by(permissions=Permission.AGENCY_WORKER)

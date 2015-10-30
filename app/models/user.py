@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
     BadSignature, SignatureExpired
 from .. import db, login_manager
+from . import Agency
 
 
 class Permission:
@@ -159,21 +160,25 @@ class User(UserMixin, db.Model):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
         from random import seed, choice
-        import forgery_py
+        from faker import Faker
 
+        fake = Faker()
         roles = Role.query.all()
+        agencies = Agency.query.all()
 
         seed()
         for i in range(count):
             u = User(
-                first_name=forgery_py.name.first_name(),
-                last_name=forgery_py.name.last_name(),
-                email=forgery_py.internet.email_address(),
-                password=forgery_py.lorem_ipsum.word(),
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                email=fake.email(),
+                password=fake.password(),
                 confirmed=True,
                 role=choice(roles),
                 **kwargs
             )
+            if u.role.name == 'AgencyWorker':
+                u.agency = choice(agencies)
             db.session.add(u)
             try:
                 db.session.commit()

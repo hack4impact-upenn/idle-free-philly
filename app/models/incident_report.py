@@ -11,6 +11,9 @@ class Location(db.Model):
     incident_report_id = db.Column(db.Integer,
                                    db.ForeignKey('incident_reports.id'))
 
+    def __repr__(self):
+        return '<Location \'%s\'>' % self.longitude
+
 
 class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'

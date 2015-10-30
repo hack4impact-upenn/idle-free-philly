@@ -18,7 +18,7 @@ def view_reports():
         agencies = Agency.query.all()
 
     elif current_user.is_agency_worker():
-        agency_id = current_user.get_agency_id()
+        agency_id = current_user.agency.id
         agencies = Agency.query.filter_by(id=agency_id)
         reports = IncidentReport.query.filter_by(agency_id=agency_id)
 

@@ -33,29 +33,29 @@ class IncidentReport(db.Model):
         from sqlalchemy.exc import IntegrityError
         from random import seed, choice, randint
         from datetime import timedelta
-        import forgery_py
+        from faker import Faker
 
         def flip_coin():
             """Returns True or False with equal probability"""
             return choice([True, False])
 
         agencies = Agency.query.all()
+        fake = Faker()
 
         seed()
         for i in range(count):
-            l = Location(original_user_text=forgery_py.address
-                         .street_address())
+            l = Location(original_user_text=fake.address())
             r = IncidentReport(
-                vehicle_id=forgery_py.basic.text(length=6, spaces=False),
+                vehicle_id=fake.password(length=6, lower_case=False),
                 # Either sets license plate to '' or random 6 character string
-                license_plate=forgery_py.basic.text(at_least=6, spaces=False)
+                license_plate=fake.password(length=6, lower_case=False)
                 if flip_coin() else '',
                 location=l,
-                date=forgery_py.date.date(),
+                date=fake.date_time_between(start_date="-1y", end_date="now"),
                 duration=timedelta(minutes=randint(1, 30)),
                 agency=choice(agencies),
-                picture_url=forgery_py.internet.top_level_domain(),
-                description=forgery_py.lorem_ipsum.paragraph(),
+                picture_url=fake.image_url(),
+                description=fake.paragraph(),
                 **kwargs
             )
             db.session.add(r)

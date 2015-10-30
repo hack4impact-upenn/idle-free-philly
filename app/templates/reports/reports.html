@@ -15,7 +15,7 @@
             </h2>
 
             <div class="ui menu">
-                <div id="select-role" class="ui dropdown item">
+                <div id="select-agency" class="ui dropdown item">
                     <div class="text">
                         {% if current_user.is_admin() %}
                             All incident reports
@@ -28,7 +28,7 @@
                         {% if current_user.is_admin() %}
                             <div class="item" data-value="">All incident reports</div>
                             {% for a in agencies %}
-                                <div class="item" data-value="{{ a.name }}">{{ a.name }}s</div>
+                                <div class="item" data-value="{{ a.name }}">{{ a.name }}</div>
                             {% endfor %}
                         {% else %}
                                 <div class="item" data-value="{{ current_user.agency.name }}">
@@ -65,7 +65,7 @@
                         <tr onclick="window.location.href = '';"> -->
 
                             <td>{{ r.date }}</td>
-                            <td>{{ r.agency_id }}</td>
+                            <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.location }}</td>
                             <td>{{ r.duration }}</td>
@@ -95,8 +95,10 @@
 
             $('#select-agency').dropdown({
                 onChange: function (value, text, $selectedItem) {
-                    $('td.user.role:contains(' + value + ')').closest('tr').removeClass('hidden').show();
-                    $('td.user.role').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
+                    $('td.agency.name').closest('tr').addClass('hidden').hide();
+                    $('td.agency.name').filter(function() {
+                        return $(this).text() === value
+                    }).closest('tr').removeClass('hidden').show();
                 }
             });
         });

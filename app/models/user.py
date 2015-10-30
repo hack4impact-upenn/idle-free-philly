@@ -3,11 +3,12 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
     BadSignature, SignatureExpired
-from . import db, login_manager
+from .. import db, login_manager
 
 
 class Permission:
     GENERAL = 0x01
+    AGENCY_WORKER = 0x10
     ADMINISTER = 0xff
 
 
@@ -15,7 +16,9 @@ class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    index = db.Column(db.String(64), unique=True)
+    index = db.Column(db.String(64))
+
+    # True if user is assigned this role by default
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
@@ -25,6 +28,9 @@ class Role(db.Model):
         roles = {
             'User': (
                 Permission.GENERAL, 'main', True
+            ),
+            'AgencyWorker': (
+                Permission.AGENCY_WORKER, 'main', False
             ),
             'Administrator': (
                 Permission.ADMINISTER, 'admin', False  # grants all permissions
@@ -43,22 +49,6 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role \'%s\'>' % self.name
 
-class IdlingIncident(db.Model):
-    __tablename__ = "incidents"
-    vehicle_id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String(64))
-    date = db.Column(db.DateTime)
-    agency = db.Column(db.String(64))
-    picture = db.Column(db.String(64))
-    description = db.Column(db.Text)
-
-    def __init__(self, vehicle_id, location, date, agency, picture, description):
-        self.vehicle_id = vehicle_id
-        self.location = location
-        self.date = date
-        self.agency = agency
-        self.picture = picture
-        self.description = description
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -67,8 +57,10 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
     email = db.Column(db.String(64), unique=True, index=True)
+    phone_number = db.Column(db.String(16), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -100,8 +92,9 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def generate_confirmation_token(self, expiration=3600):
+    def generate_confirmation_token(self, expiration=604800):
         """Generate a confirmation token to email a new user."""
+
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
@@ -162,11 +155,13 @@ class User(UserMixin, db.Model):
         return True
 
     @staticmethod
-    def generate_fake(count=100, **kwargs):
+    def generate_fake(count=10, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
-        from random import seed
+        from random import seed, choice
         import forgery_py
+
+        roles = Role.query.all()
 
         seed()
         for i in range(count):
@@ -176,6 +171,7 @@ class User(UserMixin, db.Model):
                 email=forgery_py.internet.email_address(),
                 password=forgery_py.lorem_ipsum.word(),
                 confirmed=True,
+                role=choice(roles),
                 **kwargs
             )
             db.session.add(u)

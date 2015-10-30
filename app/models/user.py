@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
     BadSignature, SignatureExpired
 from .. import db, login_manager
+from . import Agency
 
 
 class Permission:
@@ -162,6 +163,7 @@ class User(UserMixin, db.Model):
         import forgery_py
 
         roles = Role.query.all()
+        agencies = Agency.query.all()
 
         seed()
         for i in range(count):
@@ -174,6 +176,8 @@ class User(UserMixin, db.Model):
                 role=choice(roles),
                 **kwargs
             )
+            if u.role.name == 'AgencyWorker':
+                u.agency = choice(agencies)
             db.session.add(u)
             try:
                 db.session.commit()

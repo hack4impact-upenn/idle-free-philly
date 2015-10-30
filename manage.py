@@ -89,7 +89,7 @@ def setup_dev():
                   .filter_by(permissions=Permission.AGENCY_WORKER)
                   .first(),
                   confirmed=True)
-    worker.agency = 'SEPTA'
+    worker.agency = Agency.query.filter_by(name='SEPTA').first()
 
     # Create a default general user
     general = User(email='general@user.com',

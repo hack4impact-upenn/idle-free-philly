@@ -15,28 +15,25 @@
             </h2>
 
             <div class="ui menu">
+                {% if current_user.is_admin() %}
                 <div id="select-agency" class="ui dropdown item">
                     <div class="text">
-                        {% if current_user.is_admin() %}
                             All incident reports
-                        {% else %}
-                            {{ current_user.agency.name }}
-                        {% endif %}
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        {% if current_user.is_admin() %}
                             <div class="item" data-value="">All incident reports</div>
                             {% for a in agencies %}
                                 <div class="item" data-value="{{ a.name }}">{{ a.name }}</div>
                             {% endfor %}
-                        {% else %}
-                                <div class="item" data-value="{{ current_user.agency.name }}">
-                                    {{ current_user.agency.name }}
-                                </div>
-                        {% endif %}
                     </div>
                 </div>
+                {% else %}
+                <div class="item" data-value="{{ current_user.agency.name }}">
+                    {{ current_user.agency.name }}'s incident reports
+                </div>
+                {% endif %}
+
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
                         <input id="search-reports" type="text" placeholder="Search reports…">
@@ -54,6 +51,7 @@
                             <th class="sorted ascending">Date</th>
                             <th>Agency</th>
                             <th>Vehicle ID</th>
+                            <th>License Plate</th>
                             <th>Location</th>
                             <th>Duration</th>
                             <th>Description</th>
@@ -67,6 +65,7 @@
                             <td>{{ r.date }}</td>
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>
+                            <td>{{ r.license_plate }}</td>
                             <td>{{ r.location }}</td>
                             <td>{{ r.duration }}</td>
                             <td>{{ r.description }}</td>

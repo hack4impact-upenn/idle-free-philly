@@ -1,6 +1,6 @@
-import re, datetime
+import re, datetime, csv, geocoder
 from flask import url_for
-from app.models import IncidentReport, Location
+from app.models import Location, Agency, IncidentReport
 
 
 def register_template_utils(app):
@@ -33,7 +33,6 @@ def parse_phone_number(phone_number):
 
 
 def parse_to_db(db, filename):
-    import csv, geocoder
     city_default = ', philadelphia, pennsylvania, usa'
     vehicle_id_index = 8
     license_plate_index = 9
@@ -46,25 +45,39 @@ def parse_to_db(db, filename):
         reader = csv.reader(file, delimiter=',')
         columns = reader.next()
         for row in reader:
-            print row
             address_text = row[location_index]
-            # TODO: error handling for geocoder
-            coordinates = geocoder.arcgis(address_text + city_default).latlng
+            coordinates = geocoder.google(address_text + city_default).latlng
+            # Try arcgis geocode implementation if Google fails
+            if len(coordinates) == 0:
+                coordinates = geocoder.arcgis(address_text + city_default).latlng
             loc = Location(
                 latitude=coordinates[0],
                 longitude=coordinates[1],
                 original_user_text=address_text)
             db.session.add(loc)
             date_format = "%m/%d/%Y %H:%M"
+            start_time = datetime.datetime.strptime(row[date_index], date_format)
+            end_time = datetime.datetime.strptime(row[date_index + 1], date_format)
+            # Assign correct agency id
+            agency_name = row[agency_index].rstrip().upper()
+            if agency_name == 'OTHER':
+                agency_name = row[agency_index + 1].rstrip().upper()
+            a = Agency.query.filter_by(name=agency_name).first()
+            if a is None:
+                a = Agency(name=agency_name)
+                a.is_public = False
+                a.is_official = False
+                db.session.add(a)
+                db.session.commit()
             incident = IncidentReport(
                 vehicle_id=row[vehicle_id_index],
                 license_plate=row[license_plate_index],
                 location=loc,
-                date=datetime.datetime.strptime(row[date_index], date_format),
-                # TODO: calculate duration interval from timestamps
-                duration=0,
+                date=start_time,
+                duration=end_time - start_time,
+                agency = a,
                 picture_url=row[picture_index],
                 description=row[description_index])
             db.session.add(incident)
-        db.session.commit()
+            db.session.commit()
         return columns

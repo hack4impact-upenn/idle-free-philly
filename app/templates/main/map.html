@@ -20,14 +20,42 @@
         <meta id="descriptions" data-name="{{descriptions}}">
     </head>
     <body>
-        <div id="wrapper">
-            <div id="googleMap"></div>
+     <div class ="column">
+         <div id="wrapper">
+             <div class="row">
+                <div id="googleMap"></div>
+                           <div class="ui form">
+              <div class="fields">
+                <div class="three wide field">
+                  <label>License Plate Number</label>
+                  <input type="text" placeholder="XXX-XXX">
+                </div>
+                <div class="three wide field">
+                  <label>Vehicle ID</label>
+                  <input type="text" placeholder="enter vehicle ID">
+                </div>
+              </div>
+              <div class="fields">
+                <div class="six wide field">
+                    <label>Notes </label>
+                  <input type="text" placeholder="(e.g. 'Was the driver sleeping?')">
+                </div>
+                <div class="three wide field">
+                    <label>Idling Duration </label>
+                  <input type="number" placeholder="~X minutes">
+                </div>
+            </div>
+
+
+             </div>
     	    <div id="slider"></div>
             <form name = "addressForm" id = "addressForm">
                 <input type="ui text" name="address" id="address" value="Enter Address">
                 <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
             </form>
-        </div>
+         </div>
+
+    </div>
     </body>
 </html>
 {% endblock %}

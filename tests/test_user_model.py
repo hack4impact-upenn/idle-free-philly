@@ -1,7 +1,13 @@
 import unittest
 import time
 from app import create_app, db
-from app.models import User, AnonymousUser, Permission, Role, Agency
+from app.models import (
+    User,
+    AnonymousUser,
+    Permission,
+    Role,
+    Agency,
+    IncidentReport)
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -142,3 +148,16 @@ class UserModelTestCase(unittest.TestCase):
         self.assertFalse(u.can(Permission.ADMINISTER))
         self.assertFalse(u.is_admin())
         self.assertEqual(u.agency, a)
+
+    def test_reported_incidents(self):
+        u = User(email='user@example.com', password='password')
+        incident1 = IncidentReport(
+            vehicle_id='123456',
+            user=u
+        )
+        incident2 = IncidentReport(
+            vehicle_id='654321',
+            user=u
+        )
+        u.reported_incidents = [incident1, incident2]
+        self.assertEqual(u.reported_incidents, [incident1, incident2])

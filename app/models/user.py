@@ -61,6 +61,9 @@ class User(UserMixin, db.Model):
     phone_number = db.Column(db.String(16), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    reported_incidents = db.relationship('IncidentReport',
+                                         backref='user',
+                                         lazy='select')
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
 
     def __init__(self, **kwargs):

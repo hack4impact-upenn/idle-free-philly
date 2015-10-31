@@ -43,4 +43,3 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(agency.is_official)
         self.assertFalse(agency.is_public)
         self.assertEqual(agency.incident_reports, [incident1, incident2])
-

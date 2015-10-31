@@ -219,7 +219,7 @@ def change_agency_official_status(agency_id):
         abort(404)
     form = ChangeAgencyOfficialStatusForm()
     if form.validate_on_submit():
-        agency.is_official = form.is_official.data == 'y'
+        agency.is_official = (form.is_official.data == 'y')
         db.session.add(agency)
         db.session.commit()
         flash('Official status for agency {} successfully changed.'
@@ -242,7 +242,7 @@ def change_agency_public_status(agency_id):
         abort(404)
     form = ChangeAgencyPublicStatusForm()
     if form.validate_on_submit():
-        agency.is_public = form.is_public.data == 'y'
+        agency.is_public = (form.is_public.data == 'y')
         db.session.add(agency)
         db.session.commit()
         flash('Public status for agency {} successfully changed.'

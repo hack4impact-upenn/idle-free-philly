@@ -29,7 +29,7 @@
                 <!--</div>-->
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
-                        <input id="search-users" type="text" placeholder="Search agencies…">
+                        <input id="search-agencies" type="text" placeholder="Search agencies…">
                         <i class="search icon"></i>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#search-users').keyup(function () {
+            $('#search-agencies').keyup(function () {
                 var searchText = $(this).val();
                 if (searchText.length > 0) {
                     $('tbody td:icontains(' + searchText + ')').addClass('positive');
@@ -75,13 +75,6 @@
                 } else {
                     $('td.positive').removeClass('positive');
                     $('tr.hidden').removeClass('hidden').show();
-                }
-            });
-
-            $('#select-role').dropdown({
-                onChange: function (value, text, $selectedItem) {
-                    $('td.user.role:contains(' + value + ')').closest('tr').removeClass('hidden').show();
-                    $('td.user.role').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
                 }
             });
         });

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role
+from app.models import User, Role, Agency, Permission, IncidentReport
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -46,23 +46,65 @@ def recreate_db():
     db.session.commit()
 
 
-@manager.option('-n',
+@manager.option('-nu',
                 '--number-users',
                 default=10,
                 type=int,
-                help='Number of each model type to create',
+                help='Number of users to create',
                 dest='number_users')
-def add_fake_data(number_users):
+@manager.option('-nr',
+                '--number-reports',
+                default=100,
+                type=int,
+                help='Number of reports to create',
+                dest='number_reports')
+def add_fake_data(number_users, number_reports):
     """
     Adds fake data to the database.
     """
     User.generate_fake(count=number_users)
+    IncidentReport.generate_fake(count=number_reports)
 
 
 @manager.command
 def setup_dev():
     """Runs the set-up needed for local development."""
     setup_general()
+
+    # Create a default admin user
+    admin = User(email='admin@user.com',
+                 password='password',
+                 first_name='Admin',
+                 last_name='User',
+                 role=Role.query.filter_by(permissions=Permission.ADMINISTER)
+                 .first(),
+                 confirmed=True)
+
+    # Create a default agency worker user
+    worker = User(email='agency@user.com',
+                  password='password',
+                  first_name='AgencyWorker',
+                  last_name='User',
+                  role=Role.query
+                  .filter_by(permissions=Permission.AGENCY_WORKER)
+                  .first(),
+                  confirmed=True)
+    worker.agency = Agency.query.filter_by(name='SEPTA').first()
+
+    # Create a default general user
+    general = User(email='general@user.com',
+                   password='password',
+                   first_name='General',
+                   last_name='User',
+                   role=Role.query.filter_by(permissions=Permission.GENERAL)
+                   .first(),
+                   confirmed=True)
+
+    db.session.add(admin)
+    db.session.add(worker)
+    db.session.add(general)
+
+    db.session.commit()
 
 
 @manager.command
@@ -74,6 +116,7 @@ def setup_prod():
 def setup_general():
     """Runs the set-up needed for both local development and production."""
     Role.insert_roles()
+    Agency.insert_agencies()
 
 if __name__ == '__main__':
     manager.run()

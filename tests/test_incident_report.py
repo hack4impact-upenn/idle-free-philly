@@ -1,10 +1,10 @@
 import unittest
 import datetime
 from app import create_app, db
-from app.models import IdlingIncident, Location
+from app.models import IncidentReport, Location, Agency
 
 
-class IdlingIncidentTestCase(unittest.TestCase):
+class IncidentReportTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
@@ -25,24 +25,24 @@ class IdlingIncidentTestCase(unittest.TestCase):
         self.assertTrue(loc.latitude == '39.951039')
         self.assertTrue(loc.longitude == '-75.197428')
         self.assertTrue(loc.original_user_text == '3700 Spruce St.')
-        self.assertTrue(loc.idling_incident is None)
+        self.assertTrue(loc.incident_report is None)
 
     def test_location_has_incident(self):
-        idling_incident_1 = IdlingIncident()
-        idling_incident_2 = IdlingIncident()
+        incident_report_1 = IncidentReport()
+        incident_report_2 = IncidentReport()
         loc = Location(
             latitude='39.951039',
             longitude='-75.197428',
             original_user_text='3700 Spruce St.',
-            idling_incident=idling_incident_1
+            incident_report=incident_report_1
         )
-        self.assertEqual(loc.idling_incident, idling_incident_1)
-        loc.idling_incident = idling_incident_2
-        self.assertEqual(loc.idling_incident, idling_incident_2)
+        self.assertEqual(loc.incident_report, incident_report_1)
+        loc.incident_report = incident_report_2
+        self.assertEqual(loc.incident_report, incident_report_2)
 
-    def test_idling_incident_no_location_no_agency(self):
+    def test_incident_report_no_location_no_agency(self):
         now = datetime.datetime.now()
-        incident = IdlingIncident(
+        incident = IncidentReport(
             vehicle_id='123456',
             license_plate='ABC123',
             date=now,
@@ -57,7 +57,7 @@ class IdlingIncidentTestCase(unittest.TestCase):
         self.assertEqual(incident.picture_url, 'http://google.com')
         self.assertEqual(incident.description, 'Truck idling on the road!')
 
-    def test_idling_incident_with_location_no_agency(self):
+    def test_incident_report_with_location_no_agency(self):
         loc1 = Location(
             latitude='-75.197428',
             longitude='39.951039',
@@ -68,7 +68,7 @@ class IdlingIncidentTestCase(unittest.TestCase):
             longitude='-75.197428',
             original_user_text='3800 Spruce St.'
         )
-        incident = IdlingIncident(
+        incident = IncidentReport(
             vehicle_id='123456',
             license_plate='ABC123',
             date=datetime.datetime.now(),
@@ -81,6 +81,19 @@ class IdlingIncidentTestCase(unittest.TestCase):
         incident.location = loc2
         self.assertEqual(incident.location, loc2)
 
-    def test_idling_incident_with_agency_no_location(self):
-        # TODO: Fill this in when we connect agency to incident
-        pass
+    def test_incident_report_with_agency_no_location(self):
+        agency1 = Agency(name='SEPTA')
+        agency2 = Agency(name='PECO')
+
+        incident = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency1
+        )
+        self.assertEqual(incident.agency, agency1)
+        incident.agency = agency2
+        self.assertEqual(incident.agency, agency2)

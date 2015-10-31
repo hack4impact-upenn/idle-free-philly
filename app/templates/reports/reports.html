@@ -24,7 +24,7 @@
                     <div class="menu">
                             <div class="item" data-value="">All incident reports</div>
                             {% for a in agencies %}
-                                <div class="item" data-value="{{ a.name }}">{{ a.name }}</div>
+                            <div class="item" data-value="{{ a.name }}">{{ a.name }}</div>
                             {% endfor %}
                     </div>
                 </div>
@@ -33,6 +33,13 @@
                     {{ current_user.agency.name }}'s incident reports
                 </div>
                 {% endif %}
+
+                <div class="ui left item">
+                    <div class="ui toggle checkbox">
+                        <input id="user-only-reports" type="checkbox">
+                        <label>View my reports only</label>
+                    </div>
+                </div>
 
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
@@ -49,6 +56,9 @@
                     <thead>
                         <tr>
                             <th class="sorted ascending">Date</th>
+                            {% if current_user.is_admin() %}
+                            <th>Submitter</th>
+                            {% endif %}
                             <th>Agency</th>
                             <th>Vehicle ID</th>
                             <th>License Plate</th>
@@ -61,8 +71,15 @@
                     {% for r in reports | sort(attribute='date') %}
                     <!-- TODO url_for report
                         <tr onclick="window.location.href = '';"> -->
-
+                        {% if r.user == current_user %}
+                        <tr class="report current-user-report">
+                        {% else %}
+                        <tr class="report">
+                        {% endif %}
                             <td>{{ r.date }}</td>
+                            {% if current_user.is_admin() %}
+                            <td>Submitter</td>
+                            {% endif %}
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.license_plate }}</td>
@@ -98,6 +115,17 @@
                     $('td.agency.name').filter(function() {
                         return $(this).text() === value
                     }).closest('tr').removeClass('hidden').show();
+                }
+            });
+
+            $('#user-only-reports').change(function() {
+                if (this.checked) {
+                    // filter reports by current user
+                    $('tr.report').addClass('hidden').hide();
+                    $('tr.report.current-user-report').removeClass('hidden').show();
+                } else {
+                    // unfilter
+                    $('tr.report').removeClass('hidden').show();
                 }
             });
         });

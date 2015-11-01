@@ -1,11 +1,17 @@
 geocoder = new google.maps.Geocoder();
 address = document.getElementById("address");
+
+//Global array for map markers
+var markers = []
+
 //Initial map center coordinates
 INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
 initial_coords = new google.maps.LatLng(INITIAL_CENTER_LAT, INITIAL_CENTER_LONG);
+
 //Initial map zoom value
 ZOOM = 17;
+
 //An integer for the offset between the actual window size and the
 //JavaScript-determined Window size in order to size the map
 WINDOW_OFFSET = 70
@@ -16,7 +22,11 @@ var BOUNDS_MAX = new Date();
 
 //Get Incident Report information through HTML and Jinja2 and add markers
 //to the map.
-function addMarkers(map) {
+function addMarkers(map, min_date, max_date) {
+    for (ind = 0; ind < markers.length; ind++) {
+        markers[ind].setMap(null);
+    }
+    markers = [];
     var vehicle_ids_str = $("#vehicle_ids").data();
     var license_plates_str = $("#license_plates").data();
     var latitudes = $("#latitudes").data();
@@ -48,7 +58,7 @@ function addMarkers(map) {
             //Tie marker to map passed as an argument
             
             marker.setMap(map);
-            
+            markers.push(marker);
             //Information presented when marker is clicked
             var contentString = '<div id="content">' +
                 '<div id="siteNotice">' +
@@ -80,7 +90,9 @@ function initialize() {
     var mapProp = {
         center: initial_coords,
         zoom:ZOOM,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false
     };
     map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
@@ -98,7 +110,7 @@ function initialize() {
     else {
         console.log("Browser is not supporting geolocation.");
     }
-    addMarkers(map);
+    addMarkers(map, BOUNDS_MIN, BOUNDS_MAX);
 }
 
 //Use Google geocoder to update geolocation given an address through
@@ -143,6 +155,94 @@ $(function() {
             min: BOUNDS_MIN,
             max: BOUNDS_MAX,
         },
+    });
+    $("#slider").bind("valuesChanged", function(e, data) {
+        console.log("Values just changed. min: " + String(data.values.min).substring(4, 15) + " max: " + String(data.values.max).substring(4, 15));
+        var beginYear = parseInt(String(data.values.min).substring(11, 15), 10);
+        var beginDay = parseInt(String(data.values.min).substring(8, 10), 10);
+        var endYear = parseInt(String(data.values.max).substring(11, 15), 10);
+        var endDay = parseInt(String(data.values.min).substring(8, 10), 10);
+        var beginMonth = 0;
+        var endMonth = 0;
+        switch(String(data.values.min).substring(4, 7)) {
+            case "Jan":
+                beginMonth = 0;
+                break;
+            case "Feb":
+                beginMonth = 1;
+                break;
+            case "Mar":
+                beginMonth = 2;
+                break;
+            case "Apr":
+                beginMonth = 3;
+                break;
+            case "May":
+                beginMonth = 4;
+                break;
+            case "Jun":
+                beginMonth = 5;
+                break;
+            case "Jul":
+                beginMonth = 6;
+                break;
+            case "Aug":
+                beginMonth = 7;
+                break;
+            case "Sep":
+                beginMonth = 8;
+                break;
+            case "Oct":
+                beginMonth = 9;
+                break;
+            case "Nov":
+                beginMonth = 10;
+                break;
+            case "Dec":
+                beginMonth = 11;
+                break;
+        }
+        switch(String(data.values.max).substring(4, 7)) {
+            case "Jan":
+                endMonth = 0;
+                break;
+            case "Feb":
+                endMonth = 1;
+                break;
+            case "Mar":
+                endMonth = 2;
+                break;
+            case "Apr":
+                endMonth = 3;
+                break;
+            case "May":
+                endMonth = 4;
+                break;
+            case "Jun":
+                endMonth = 5;
+                break;
+            case "Jul":
+                endMonth = 6;
+                break;
+            case "Aug":
+                endMonth = 7;
+                break;
+            case "Sep":
+                endMonth = 8;
+                break;
+            case "Oct":
+                endMonth = 9;
+                break;
+            case "Nov":
+                endMonth = 10;
+                break;
+            case "Dec":
+                endMonth = 11;
+                break;
+        }
+        beginDate = new Date(beginYear, beginMonth, beginDay);
+        endDate = new Date(endYear, endMonth, endDay);
+        addMarkers(map, beginDate, endDate);
     });
 });
 

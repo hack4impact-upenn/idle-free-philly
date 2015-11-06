@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, PasswordField, SubmitField
+from wtforms.fields import StringField, SubmitField
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional
+from wtforms.validators import InputRequired, Length, Email, Optional
 from ..custom_validators import (
     UniqueEmail,
     UniquePhoneNumber,
@@ -62,13 +62,3 @@ class InviteUserForm(Form):
         UniquePhoneNumber(),
     ])
     submit = SubmitField('Invite')
-
-
-class NewUserForm(InviteUserForm):
-    password = PasswordField('Password', validators=[
-        InputRequired(),
-        EqualTo('password2', 'Passwords must match.')
-    ])
-    password2 = PasswordField('Confirm password', validators=[InputRequired()])
-
-    submit = SubmitField('Create')

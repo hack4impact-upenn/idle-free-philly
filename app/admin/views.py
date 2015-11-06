@@ -6,7 +6,6 @@ from flask.ext.login import login_required, current_user
 from forms import (
     ChangeUserEmailForm,
     ChangeUserPhoneNumberForm,
-    NewUserForm,
     ChangeAccountTypeForm,
     InviteUserForm,
 )
@@ -23,26 +22,6 @@ from ..email import send_email
 def index():
     """Admin dashboard page."""
     return render_template('admin/index.html')
-
-
-@admin.route('/new-user', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def new_user():
-    """Create a new user."""
-    form = NewUserForm()
-    if form.validate_on_submit():
-        user = User(role=form.role.data,
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    email=form.email.data,
-                    phone_number=parse_phone_number(form.phone_number.data),
-                    password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('User {} successfully created'.format(user.full_name()),
-              'form-success')
-    return render_template('admin/new_user.html', form=form)
 
 
 @admin.route('/invite-user', methods=['GET', 'POST'])
@@ -68,7 +47,7 @@ def invite_user():
                    token=token)
         flash('User {} successfully invited'.format(user.full_name()),
               'form-success')
-    return render_template('admin/new_user.html', form=form)
+    return render_template('admin/invite_user.html', form=form)
 
 
 @admin.route('/users')

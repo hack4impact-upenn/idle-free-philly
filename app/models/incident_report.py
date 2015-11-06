@@ -26,6 +26,7 @@ class IncidentReport(db.Model):
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     @staticmethod
     def generate_fake(count=100, **kwargs):
@@ -44,7 +45,13 @@ class IncidentReport(db.Model):
 
         seed()
         for i in range(count):
-            l = Location(original_user_text=fake.address())
+            l = Location(
+                original_user_text=fake.address(),
+                latitude=str(fake.geo_coordinate(center=39.951021,
+                                                 radius=0.001)),
+                longitude=str(fake.geo_coordinate(center=-75.197243,
+                                                  radius=0.001))
+            )
             r = IncidentReport(
                 vehicle_id=fake.password(length=6, lower_case=False),
                 # Either sets license plate to '' or random 6 character string

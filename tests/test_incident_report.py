@@ -1,7 +1,7 @@
 import unittest
 import datetime
 from app import create_app, db
-from app.models import IncidentReport, Location, Agency
+from app.models import IncidentReport, Location, Agency, User
 
 
 class IncidentReportTestCase(unittest.TestCase):
@@ -97,3 +97,13 @@ class IncidentReportTestCase(unittest.TestCase):
         self.assertEqual(incident.agency, agency1)
         incident.agency = agency2
         self.assertEqual(incident.agency, agency2)
+
+    def test_incident_report_with_user(self):
+        u1 = User(email='user@example.com', password='password')
+        u2 = User(email='otheruser@example.org', password='notpassword')
+        incident = IncidentReport(
+            user=u1
+        )
+        self.assertEqual(incident.user, u1)
+        incident.user = u2
+        self.assertEqual(incident.user, u2)

@@ -7,33 +7,30 @@
                 <i class="caret left icon"></i>
                 Back to dashboard
             </a>
-            <h2 class="ui header">
-                Agencies
-                <div class="sub header">
-                    View and manage all agencies.
-                </div>
-            </h2>
+            <div class="ui four column padded grid">
+              <div class="left floated ten wide column">
+                  <h2 class="ui header">
+                    Agencies
+                      <div class="sub header">
+                        View and manage all agencies.
+                      </div>
+                  </h2>
+              </div>
+              <div class="right floated column">
+                  <div class="ui icon input">
+                      <input id="search-agencies" type="text" placeholder="Search agencies…">
+                      <i class="search icon"></i>
+                  </div>
+              </div>
+            </div>
 
-            <div class="ui menu">
-                <!--<div id="select-role" class="ui dropdown item">-->
-                    <!--<div class="text">-->
-                        <!--All account types-->
-                    <!--</div>-->
-                    <!--<i class="dropdown icon"></i>-->
-                    <!--<div class="menu">-->
-                        <!--<div class="item" data-value="">All account types</div>-->
-                        <!--{% for r in roles %}-->
-                            <!--<div class="item" data-value="{{ r.name }}">{{ r.name }}s</div>-->
-                        <!--{% endfor %}-->
+                <!--<div class="ui search input">-->
+                    <!--<div class="ui transparent icon input">-->
+                        <!--<input id="search-agencies" type="text" placeholder="Search agencies…">-->
+                        <!--<i class="search icon"></i>-->
                     <!--</div>-->
                 <!--</div>-->
-                <div class="ui right search item">
-                    <div class="ui transparent icon input">
-                        <input id="search-agencies" type="text" placeholder="Search agencies…">
-                        <i class="search icon"></i>
-                    </div>
-                </div>
-            </div>
+
 
             {# Use overflow-x: scroll so that mobile views don't freak out
              # when the table is too wide #}

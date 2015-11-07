@@ -1,25 +1,74 @@
-@media -sass-debug-info{filename{}line{font-family:\000037}}
+@media -sass-debug-info{filename{}line{font-family:\0000311}}
 nav {
   margin-bottom: 40px !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000312}}
+@media -sass-debug-info{filename{}line{font-family:\0000315}}
+#CAC_logo {
+  content: url("../../static/images/CAC_logo.png");
+  height: 60px;
+  width: auto;
+  margin-right: 15px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000322}}
+.ui.secondary.pointing.menu {
+  background-color: #56A5BF;
+  width: 100%;
+  font-size: 1.3em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000328}}
+.ui.secondary.pointing.menu > .header.item {
+  color: #FFF !important;
+  font-size: 1.4em;
+  font-weight: 400;
+  border: none;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000335}}
+.ui.secondary.pointing.menu > .right.menu {
+  margin-right: 20px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000339}}
+.ui.secondary.pointing.menu > .right.menu > a {
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000344}}
+.ui.secondary.pointing.menu > .right.menu > a.active {
+  color: #B0DFEE;
+  border-bottom-style: solid;
+  border-color: #B0DFEE;
+  border-width: 5px;
+  font-weight: 400;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000353}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
   border-right: 1px solid rgba(34, 36, 38, 0.09804);
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000318}}
+@media -sass-debug-info{filename{}line{font-family:\0000359}}
 nav .mobile.only.row .ui.vertical.menu {
   margin-top: 40px;
   display: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000325}}
+@media -sass-debug-info{filename{}line{font-family:\0000366}}
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000330}}
+@media -sass-debug-info{filename{}line{font-family:\0000371}}
 table.selectable tr:hover {
   cursor: pointer !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000376}}
+h1 {
+  color: #1C7592;
+  text-transform: uppercase;
 }

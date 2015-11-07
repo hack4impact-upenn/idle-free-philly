@@ -3,9 +3,50 @@ $mobile-breakpoint:        768px;
 $tablet-breakpoint:        992px;
 $small-monitor-breakpoint: 1200px;
 
+$teal: #56A5BF;
+$dark-teal: #1C7592;
+$light-teal: #B0DFEE;
+
 // General nav
 nav {
     margin-bottom: 40px !important;
+}
+
+#CAC_logo {
+	content: url("../../static/images/CAC_logo.png");
+	height: 60px;
+	width: auto;
+	margin-right: 15px;
+}
+
+.ui.secondary.pointing.menu {
+	background-color: $teal;
+	width: 100%;
+	font-size: 1.3em;
+}
+
+.ui.secondary.pointing.menu > .header.item {
+	color: #FFF !important;
+	font-size: 1.4em;
+	font-weight: 400;
+	border: none;
+}
+
+.ui.secondary.pointing.menu > .right.menu {
+	margin-right: 20px;
+}
+
+.ui.secondary.pointing.menu > .right.menu > a{
+	color: #FFF;
+	text-transform: uppercase;
+}
+
+.ui.secondary.pointing.menu > .right.menu > a.active {
+	color: $light-teal;
+	border-bottom-style: solid;
+	border-color: $light-teal;
+	border-width: 5px;
+	font-weight: 400;
 }
 
 // Desktop nav
@@ -29,4 +70,10 @@ nav .mobile.only.row {
 // Tables
 table.selectable tr:hover {
     cursor: pointer !important;
+}
+
+// Text
+h1 {
+	color: $dark-teal;
+	text-transform: uppercase;
 }

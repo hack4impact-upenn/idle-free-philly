@@ -80,12 +80,17 @@ nav .mobile.only.row .ui.main.menu {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000388}}
+@media -sass-debug-info{filename{}line{font-family:\0000387}}
+ui.red.pointing.label {
+  background-color: #FF684C !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000392}}
 table.selectable tr:hover {
   cursor: pointer !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000393}}
+@media -sass-debug-info{filename{}line{font-family:\0000397}}
 h1, h2 {
   color: #1C7592 !important;
   text-transform: uppercase !important;

@@ -84,6 +84,10 @@ nav .mobile.only.row {
     margin-bottom: 2rem;
 }
 
+ui.red.pointing.label {
+	background-color: #FF684C !important;
+}
+
 // Tables
 table.selectable tr:hover {
     cursor: pointer !important;
@@ -94,3 +98,5 @@ h1, h2 {
 	color: $dark-teal !important;
 	text-transform: uppercase !important;
 }
+
+

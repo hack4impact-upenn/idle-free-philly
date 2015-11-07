@@ -31,6 +31,7 @@ def get_map():
         longitudes.append(float((ir.location).longitude))
         dates.append(str(ir.date))
         durations.append(str(ir.duration))
+        print('vehicle id:', ir.vehicle_id)
         agencies.append(str(ir.agency.name))
         pictures.append(ir.picture_url)
         descriptions.append(str(ir.description))

@@ -11,8 +11,8 @@
 }
 #submitButton {
     position: absolute;
-    left: 30px;
-    top: 50px;
+    left: 40px;
+    top: 60px;
     z-index: 99;
 }
 

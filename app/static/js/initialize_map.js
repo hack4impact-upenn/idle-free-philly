@@ -36,15 +36,30 @@ function addMarkers(map, minDate, maxDate) {
     var agencies_str = $("#agencies").data();
     var pictures_str = $("#pictures").data();
     var descriptions_str = $("#descriptions").data();
+    vehicle_ids_str.name = vehicle_ids_str.name.replace(/\'/g, "\"");
+    license_plates_str.name = license_plates_str.name.replace(/\'/g, "\"");
+    dates_str.name = dates_str.name.replace(/\'/g, "\"");
+    durations_str.name = durations_str.name.replace(/\'/g, "\"");
+    agencies_str.name = agencies_str.name.replace(/\'/g, "\"");
+    pictures_str.name = pictures_str.name.replace(/(u\'|\')/g, "\"");
+    pictures_str.name = pictures_str.name.replace("[", "");
+    pictures_str.name = pictures_str.name.replace("]", "");
+    descriptions_str.name = descriptions_str.name.replace(/\'/g, "\"");
     //Tokenize the strings representing arrays that are given through HTML
     //by Jinja2
-    var vehicle_ids = (vehicle_ids_str.name).split('\'');
-    var license_plates = (license_plates_str.name).split('\'');
-    var dates = (dates_str.name).split('\'');
-    var durations = (durations_str.name).split('\'');
-    var agencies = (agencies_str.name).split('\'');
-    var pictures = (pictures_str.name).split('\'');
-    var descriptions = (descriptions_str.name).split('\'');
+    //var vehicle_ids = (vehicle_ids_str.name).split('\'');
+    var vehicle_ids = JSON.parse(vehicle_ids_str.name);
+    var license_plates = JSON.parse(license_plates_str.name);
+    var dates = JSON.parse(dates_str.name);
+    var durations = JSON.parse(durations_str.name);
+    var agencies = JSON.parse(agencies_str.name);
+    var pictures = pictures_str.name.split(", ");
+    var descriptions = JSON.parse(descriptions_str.name);
+    console.log(vehicle_ids.length);
+    console.log(dates.length);
+    console.log(durations.length);
+    console.log(pictures.length);
+    console.log(latitudes.length);
     for (i = 0; i < (latitudes.name).length; i = i + 1) {
         //In order that the same marker isn't modified every time,
         //we create a new function here to create and design each marker
@@ -57,33 +72,38 @@ function addMarkers(map, minDate, maxDate) {
 
             //Tie marker to map passed as an argument
             year = parseInt((dates[i].split(' '))[0].split('-')[0])
-            month = parseInt((dates[i].split(' '))[0].split('-')[1])
+            month = parseInt((dates[i].split(' '))[0].split('-')[1])-1
             day = parseInt((dates[i].split(' '))[0].split('-')[2])
-            //console.log(year)
-            //console.log(month)
-            //console.log(day)
+            console.log("Day");
+            console.log(day);
             incidentDate = new Date(year, month, day)
-            if ((incidentDate.getTime() >= minDate) && (incidentDate.getTime() <= maxDate)) {
+            console.log((new Date(2015, 7, 14)).getTime());
+            console.log("Max");
+            console.log(maxDate.getTime());
+            if ((incidentDate.getTime() >= minDate.getTime()) && (incidentDate.getTime() <= maxDate.getTime())) {
                 marker.setMap(map);
                 markers.push(marker);
             }
             else {
+                /*console.log(dates[i]);
+                console.log(latitudes.name[i]);
+                console.log(marker.position.lat);
                 console.log(year);
                 console.log(month);
-                console.log(day);
+                console.log(day);*/
             }
             //Information presented when marker is clicked
             var contentString = '<div id="content">' +
                 '<div id="siteNotice">' +
                 '</div>' +
-                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + vehicle_ids[2*i+1] +'</h1>' +
+                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + vehicle_ids[i] +'</h1>' +
                 '<div id="bodyContent">' +
-                '<p>License Plate: ' + license_plates[2*i+1] + '</p>' +
-                '<p>Date: ' + dates[2*i+1] + '</p>' +
-                '<p>Duration: ' + durations[2*i+1] + '</p>' +
-                '<p>Agency: ' + agencies[2*i+1] + '</p>' +
-                '<p>Link to Picture: ' + pictures[2*i+1] + '</p>' +
-                '<p>Description: ' + descriptions[2*i+1] + '</p>' +
+                '<p>License Plate: ' + license_plates[i] + '</p>' +
+                '<p>Date: ' + dates[i] + '</p>' +
+                '<p>Duration: ' + durations[i] + '</p>' +
+                '<p>Agency: ' + agencies[i] + '</p>' +
+                '<p>Link to Picture: ' + pictures[i] + '</p>' +
+                '<p>Description: ' + descriptions[i] + '</p>' +
                 '</div>' +
                 '</div>';
             var infoWindow = new google.maps.InfoWindow({

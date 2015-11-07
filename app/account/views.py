@@ -7,6 +7,7 @@ from flask.ext.login import (
 )
 from . import account
 from .. import db
+from ..utils import parse_phone_number
 from ..email import send_email
 from ..models import User
 from .forms import (
@@ -14,6 +15,7 @@ from .forms import (
     RegistrationForm,
     CreatePasswordForm,
     ChangePasswordForm,
+    ChangePhoneNumberForm,
     ChangeEmailForm,
     RequestResetPasswordForm,
     ResetPasswordForm
@@ -129,6 +131,24 @@ def change_password():
             return redirect(url_for('main.index'))
         else:
             flash('Original password is invalid.', 'form-error')
+    return render_template('account/manage.html', form=form)
+
+
+@account.route('/manage/change-phone-number', methods=['GET', 'POST'])
+@login_required
+def change_phone_number():
+    """Change an existing user's phone number."""
+    form = ChangePhoneNumberForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.password.data):
+            raw_phone_data = form.phone_number.data
+            current_user.phone_number = parse_phone_number(raw_phone_data)
+            db.session.add(current_user)
+            db.session.commit()
+            flash('Your phone number has been updated.', 'success')
+            return redirect(url_for('main.index'))
+        else:
+            flash('Invalid password.', 'form-error')
     return render_template('account/manage.html', form=form)
 
 

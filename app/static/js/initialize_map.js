@@ -22,7 +22,7 @@ var BOUNDS_MAX = new Date();
 
 //Get Incident Report information through HTML and Jinja2 and add markers
 //to the map.
-function addMarkers(map, min_date, max_date) {
+function addMarkers(map, minDate, maxDate) {
     for (ind = 0; ind < markers.length; ind++) {
         markers[ind].setMap(null);
     }
@@ -56,9 +56,22 @@ function addMarkers(map, min_date, max_date) {
             });
 
             //Tie marker to map passed as an argument
-            
-            marker.setMap(map);
-            markers.push(marker);
+            year = parseInt((dates[i].split(' '))[0].split('-')[0])
+            month = parseInt((dates[i].split(' '))[0].split('-')[1])
+            day = parseInt((dates[i].split(' '))[0].split('-')[2])
+            //console.log(year)
+            //console.log(month)
+            //console.log(day)
+            incidentDate = new Date(year, month, day)
+            if ((incidentDate.getTime() >= minDate) && (incidentDate.getTime() <= maxDate)) {
+                marker.setMap(map);
+                markers.push(marker);
+            }
+            else {
+                console.log(year);
+                console.log(month);
+                console.log(day);
+            }
             //Information presented when marker is clicked
             var contentString = '<div id="content">' +
                 '<div id="siteNotice">' +

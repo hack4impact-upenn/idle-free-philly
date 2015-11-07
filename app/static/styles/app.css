@@ -9,16 +9,17 @@ nav {
   height: 60px;
   width: auto;
   margin-right: 15px;
+  padding-left: 10px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000322}}
+@media -sass-debug-info{filename{}line{font-family:\0000323}}
 .ui.secondary.pointing.menu {
   background-color: #56A5BF;
   width: 100%;
   font-size: 1.3em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000328}}
+@media -sass-debug-info{filename{}line{font-family:\0000329}}
 .ui.secondary.pointing.menu > .header.item {
   color: #FFF !important;
   font-size: 1.4em;
@@ -26,49 +27,66 @@ nav {
   border: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000335}}
+@media -sass-debug-info{filename{}line{font-family:\0000336}}
 .ui.secondary.pointing.menu > .right.menu {
   margin-right: 20px;
+  padding-bottom: 1.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000339}}
+@media -sass-debug-info{filename{}line{font-family:\0000341}}
 .ui.secondary.pointing.menu > .right.menu > a {
   color: #FFF;
   text-transform: uppercase;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000344}}
+@media -sass-debug-info{filename{}line{font-family:\0000346}}
+.ui.secondary.pointing.menu > .right.menu > a:hover {
+  background-color: #B0DFEE;
+  border-radius: 5px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000351}}
 .ui.secondary.pointing.menu > .right.menu > a.active {
-  color: #B0DFEE;
-  border-bottom-style: solid;
-  border-color: #B0DFEE;
-  border-width: 5px;
+  background-color: #B0DFEE;
+  color: #FFF;
+  border: none;
   font-weight: 400;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000353}}
+@media -sass-debug-info{filename{}line{font-family:\0000359}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
   border-right: 1px solid rgba(34, 36, 38, 0.09804);
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000359}}
+@media -sass-debug-info{filename{}line{font-family:\0000365}}
 nav .mobile.only.row .ui.vertical.menu {
   margin-top: 40px;
   display: none;
+  background-color: #1C7592;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000366}}
+@media -sass-debug-info{filename{}line{font-family:\0000373}}
+nav .mobile.only.row .ui.main.menu {
+  background-color: #56A5BF;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000378}}
+.ui.vertical.menu > a {
+  color: #FFF;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000383}}
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000371}}
+@media -sass-debug-info{filename{}line{font-family:\0000388}}
 table.selectable tr:hover {
   cursor: pointer !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000376}}
-h1 {
-  color: #1C7592;
-  text-transform: uppercase;
+@media -sass-debug-info{filename{}line{font-family:\0000393}}
+h1, h2 {
+  color: #1C7592 !important;
+  text-transform: uppercase !important;
 }

@@ -17,6 +17,7 @@ nav {
 	height: 60px;
 	width: auto;
 	margin-right: 15px;
+	padding-left: 10px;
 }
 
 .ui.secondary.pointing.menu {
@@ -34,6 +35,7 @@ nav {
 
 .ui.secondary.pointing.menu > .right.menu {
 	margin-right: 20px;
+	padding-bottom: 1.5em;
 }
 
 .ui.secondary.pointing.menu > .right.menu > a{
@@ -41,11 +43,15 @@ nav {
 	text-transform: uppercase;
 }
 
+.ui.secondary.pointing.menu > .right.menu > a:hover {
+	background-color: $light-teal;
+	border-radius: 5px;
+}
+
 .ui.secondary.pointing.menu > .right.menu > a.active {
-	color: $light-teal;
-	border-bottom-style: solid;
-	border-color: $light-teal;
-	border-width: 5px;
+	background-color: $light-teal;
+	color: #FFF;
+	border: none;
 	font-weight: 400;
 }
 
@@ -59,7 +65,18 @@ nav .mobile.only.row {
     .ui.vertical.menu {
         margin-top: 40px;
         display: none;
+        background-color: $dark-teal;
     }
+}
+
+nav .mobile.only.row {
+    .ui.main.menu {
+    	background-color: $teal;
+    }
+}
+
+.ui.vertical.menu > a {
+	color: #FFF;
 }
 
 // Flashes
@@ -73,7 +90,7 @@ table.selectable tr:hover {
 }
 
 // Text
-h1 {
-	color: $dark-teal;
-	text-transform: uppercase;
+h1, h2 {
+	color: $dark-teal !important;
+	text-transform: uppercase !important;
 }

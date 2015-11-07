@@ -12,6 +12,7 @@ Jinja2==2.7.3
 Mako==1.0.1
 MarkupSafe==0.23
 SQLAlchemy==1.0.6
+twilio==4.9.0
 WTForms==2.0.2
 Werkzeug==0.10.4
 alembic==0.7.6

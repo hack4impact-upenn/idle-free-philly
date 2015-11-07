@@ -54,7 +54,7 @@
     <div class="computer tablet only row">
         <div class="ui secondary pointing menu">
          <a class="header item" href="{{ url_for('main.index') }}">
-         <img id = "CAC_logo">IdleFreePhilly</a>
+         <img id = "CAC_logo">{{ config.APP_NAME }}</a>
         <div class="right menu">
                 {{ header_items(current_user) }}
                 {{ account_items(current_user) }}

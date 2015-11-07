@@ -9,7 +9,7 @@ nav {
   height: 60px;
   width: auto;
   margin-right: 15px;
-  padding-left: 10px;
+  margin-left: 10px;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000323}}
@@ -41,13 +41,13 @@ nav {
 
 @media -sass-debug-info{filename{}line{font-family:\0000346}}
 .ui.secondary.pointing.menu > .right.menu > a:hover {
-  background-color: #B0DFEE;
+  background-color: #7CC1D8;
   border-radius: 5px;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000351}}
 .ui.secondary.pointing.menu > .right.menu > a.active {
-  background-color: #B0DFEE;
+  background-color: #7CC1D8;
   color: #FFF;
   border: none;
   font-weight: 400;

@@ -5,13 +5,14 @@ from flask.ext.login import login_required, current_user
 
 from forms import (
     ChangeUserEmailForm,
-    NewUserForm,
+    ChangeUserPhoneNumberForm,
     ChangeAccountTypeForm,
     InviteUserForm,
 )
 from . import admin
 from ..models import User, Role
 from .. import db
+from ..utils import parse_phone_number
 from ..email import send_email
 
 
@@ -21,25 +22,6 @@ from ..email import send_email
 def index():
     """Admin dashboard page."""
     return render_template('admin/index.html')
-
-
-@admin.route('/new-user', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def new_user():
-    """Create a new user."""
-    form = NewUserForm()
-    if form.validate_on_submit():
-        user = User(role=form.role.data,
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    email=form.email.data,
-                    password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('User {} successfully created'.format(user.full_name()),
-              'form-success')
-    return render_template('admin/new_user.html', form=form)
 
 
 @admin.route('/invite-user', methods=['GET', 'POST'])
@@ -52,7 +34,8 @@ def invite_user():
         user = User(role=form.role.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
-                    email=form.email.data)
+                    email=form.email.data,
+                    phone_number=parse_phone_number(form.phone_number.data))
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -64,7 +47,7 @@ def invite_user():
                    token=token)
         flash('User {} successfully invited'.format(user.full_name()),
               'form-success')
-    return render_template('admin/new_user.html', form=form)
+    return render_template('admin/invite_user.html', form=form)
 
 
 @admin.route('/users')
@@ -105,6 +88,26 @@ def change_user_email(user_id):
         db.session.commit()
         flash('Email for user {} successfully changed to {}.'
               .format(user.full_name(), user.email),
+              'form-success')
+    return render_template('admin/manage_user.html', user=user, form=form)
+
+
+@admin.route('/user/<int:user_id>/change-phone-number',
+             methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_user_phone_number(user_id):
+    """Change a user's phone number."""
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        abort(404)
+    form = ChangeUserPhoneNumberForm()
+    if form.validate_on_submit():
+        user.phone_number = parse_phone_number(form.phone_number.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Phone number for user {} successfully changed to {}.'
+              .format(user.full_name(), user.phone_number),
               'form-success')
     return render_template('admin/manage_user.html', user=user, form=form)
 

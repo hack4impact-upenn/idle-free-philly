@@ -6,6 +6,9 @@ $small-monitor-breakpoint: 1200px;
 $teal: #56A5BF;
 $dark-teal: #1C7592;
 $light-teal: #7CC1D8;
+$dark-gray: #222222;
+$white: #FFFFFF;
+$red: #FF684C;
 
 // General nav
 nav {
@@ -27,7 +30,7 @@ nav {
 }
 
 .ui.secondary.pointing.menu > .header.item {
-	color: #FFF !important;
+	color: $white !important;
 	font-size: 1.4em;
 	font-weight: 400;
 	border: none;
@@ -39,7 +42,7 @@ nav {
 }
 
 .ui.secondary.pointing.menu > .right.menu > a{
-	color: #FFF;
+	color: $white;
 	text-transform: uppercase;
 }
 
@@ -50,7 +53,7 @@ nav {
 
 .ui.secondary.pointing.menu > .right.menu > a.active {
 	background-color: $light-teal;
-	color: #FFF;
+	color: $white;;
 	border: none;
 	font-weight: 400;
 }
@@ -76,7 +79,11 @@ nav .mobile.only.row {
 }
 
 .ui.vertical.menu > a {
-	color: #FFF;
+	color: #white;
+}
+
+.ui.vertical.secondary.menu > a {
+	color: $dark-gray;
 }
 
 // Flashes
@@ -85,7 +92,7 @@ nav .mobile.only.row {
 }
 
 ui.red.pointing.label {
-	background-color: #FF684C !important;
+	background-color: $red !important;
 }
 
 // Tables
@@ -99,4 +106,7 @@ h1, h2 {
 	text-transform: uppercase !important;
 }
 
+.sub.header {
+	text-transform: lowercase;
+}
 

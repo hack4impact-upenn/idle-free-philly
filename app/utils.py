@@ -69,9 +69,15 @@ def parse_to_db(db, filename):
                 a.is_official = False
                 db.session.add(a)
                 db.session.commit()
+            vehicle_id_text=row[vehicle_id_index].strip()
+            if len(vehicle_id_text) is 0:
+                vehicle_id_text = None
+            license_plate_text=row[license_plate_index].strip()
+            if len(license_plate_text) is 0:
+                license_plate_text = None
             incident = IncidentReport(
-                vehicle_id=row[vehicle_id_index],
-                license_plate=row[license_plate_index],
+                vehicle_id=vehicle_id_text,
+                license_plate=license_plate_text,
                 location=loc,
                 date=start_time,
                 duration=end_time - start_time,

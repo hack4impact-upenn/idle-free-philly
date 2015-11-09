@@ -22,11 +22,12 @@ var BOUNDS_MAX = new Date();
 
 //Get Incident Report information through HTML and Jinja2 and add markers
 //to the map.
-function addMarkers(map, minDate, maxDate) {
+function addMarkers(map, minDate, maxDate, flag) {
     for (ind = 0; ind < markers.length; ind++) {
         markers[ind].setMap(null);
     }
     markers = [];
+    var boundsMin = new Date();
     var vehicle_ids_str = $("#vehicle_ids").data();
     var license_plates_str = $("#license_plates").data();
     var latitudes = $("#latitudes").data();
@@ -80,18 +81,12 @@ function addMarkers(map, minDate, maxDate) {
             console.log((new Date(2015, 7, 14)).getTime());
             console.log("Max");
             console.log(maxDate.getTime());
-            if ((incidentDate.getTime() >= minDate.getTime()) && (incidentDate.getTime() <= maxDate.getTime())) {
+            if ((flag == 0) || (incidentDate.getTime() >= minDate.getTime()) && (incidentDate.getTime() <= maxDate.getTime())) {
                 marker.setMap(map);
                 markers.push(marker);
             }
-            else {
-                /*console.log(dates[i]);
-                console.log(latitudes.name[i]);
-                console.log(marker.position.lat);
-                console.log(year);
-                console.log(month);
-                console.log(day);*/
-            }
+
+
             //Information presented when marker is clicked
             var contentString = '<div id="content">' +
                 '<div id="siteNotice">' +
@@ -143,7 +138,9 @@ function initialize() {
     else {
         console.log("Browser is not supporting geolocation.");
     }
-    addMarkers(map, BOUNDS_MIN, BOUNDS_MAX);
+    addMarkers(map, BOUNDS_MIN, BOUNDS_MAX, 0);
+    $("#slider").dateRangeSlider("min", BOUNDS_MIN);
+    $("#slider").dateRangeSlider("max", BOUNDS_MAX);
 }
 
 //Use Google geocoder to update geolocation given an address through
@@ -275,7 +272,7 @@ $(function() {
         }
         beginDate = new Date(beginYear, beginMonth, beginDay);
         endDate = new Date(endYear, endMonth, endDay);
-        addMarkers(map, beginDate, endDate);
+        addMarkers(map, beginDate, endDate, 1);
     });
 });
 

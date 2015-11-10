@@ -21,7 +21,7 @@
 
     ```
     $ pip install -r requirements/common.txt
-    $ pip install -r requirements/dev.txt
+    $ pip install -r requirements/dev.  txt
     ```
 
 4. Create the database

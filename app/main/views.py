@@ -10,7 +10,9 @@ def index():
 
 @main.route('/map')
 def get_map():
-    """Get information on all Incident Reports in the db, and pass to map.html"""
+    """Get information on all Incident Reports in the db, and
+    pass to map.html
+    """
     vehicle_ids = []
     license_plates = []
     latitudes = []
@@ -21,7 +23,6 @@ def get_map():
     pictures = []
     descriptions = []
 
-    from app.models import IncidentReport
     for ir in IncidentReport.query.all():
         vehicle_ids.append(str(ir.vehicle_id))
         license_plates.append(str(ir.license_plate))
@@ -37,6 +38,7 @@ def get_map():
         descriptions.append(str(ir.description))
 
     return render_template('main/map.html', vehicle_ids=vehicle_ids,
-            license_plates=license_plates, latitudes=latitudes,
-            longitudes=longitudes, dates=dates, durations=durations,
-            agencies=agencies, pictures=pictures, descriptions=descriptions)
+                license_plates=license_plates, latitudes=latitudes,
+                longitudes=longitudes, dates=dates, durations=durations,
+                agencies=agencies, pictures=pictures,
+                descriptions=descriptions)

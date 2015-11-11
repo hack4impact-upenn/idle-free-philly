@@ -38,11 +38,11 @@ def get_map():
         descriptions.append(str(ir.description))
 
     return render_template('main/map.html', vehicle_ids=vehicle_ids,
-                            license_plates=license_plates,
-                            latitudes=latitudes,
-                            longitudes=longitudes,
-                            dates=dates,
-                            durations=durations,
-                            agencies=agencies,
-                            pictures=pictures,
-                            descriptions=descriptions)
+                           license_plates=license_plates,
+                           latitudes=latitudes,
+                           longitudes=longitudes,
+                           dates=dates,
+                           durations=durations,
+                           agencies=agencies,
+                           pictures=pictures,
+                           descriptions=descriptions)

@@ -10,3 +10,8 @@ def index():
 @main.route('/about.html')
 def about():
     return render_template('main/about.html')
+
+
+@main.route('/faq.html')
+def faq():
+    return render_template('main/faq.html')

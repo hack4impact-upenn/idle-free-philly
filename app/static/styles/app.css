@@ -115,3 +115,8 @@ p, label, input {
 .sub.header {
   text-transform: none;
 }
+
+@media -sass-debug-info{filename{}line{font-family:\00003121}}
+.ui.red.error {
+  color: #FF684C;
+}

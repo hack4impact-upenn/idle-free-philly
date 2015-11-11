@@ -12,7 +12,7 @@
 {% macro header_items(current_user) %}
     <a id = "nav_map" class="item" href="{{ url_for('main.index') }}">Map</a>
     <a id = "nav_about" class="item" href="{{ url_for('main.about') }}">About</a>
-    <a id = "nav_faq" class="item" href="{{ href }}">FAQ</a>
+    <a id = "nav_faq" class="item" href="{{ url_for('main.faq') }}">FAQ</a>
     {% if current_user.is_authenticated() %}
         {% set href = url_for(current_user.role.index + '.index') %}
         <a id = "nav_dashboard" class="item" href="{{ href }}"> Dashboard</a>

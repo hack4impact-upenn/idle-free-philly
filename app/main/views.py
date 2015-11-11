@@ -21,17 +21,17 @@ def get_map():
     pictures = []
     descriptions = []
 
-    for ir in models.IncidentReport.query.all():
+    from app.models import IncidentReport
+    for ir in IncidentReport.query.all():
         vehicle_ids.append(str(ir.vehicle_id))
         license_plates.append(str(ir.license_plate))
 
-#Pass latitudes, longitudes as floats so they can be used to fix
+        #Pass latitudes, longitudes as floats so they can be used to fix
         #locations of map markers
         latitudes.append(float((ir.location).latitude))
         longitudes.append(float((ir.location).longitude))
         dates.append(str(ir.date))
         durations.append(str(ir.duration))
-        print('vehicle id:', ir.vehicle_id)
         agencies.append(str(ir.agency.name))
         pictures.append(ir.picture_url)
         descriptions.append(str(ir.description))

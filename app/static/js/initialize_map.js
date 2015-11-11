@@ -1,33 +1,29 @@
 geocoder = new google.maps.Geocoder();
 address = document.getElementById("address");
 
-//Global array for map markers
+// Global array for map markers
 var markers = []
 
-//Initial map center coordinates
+// Initial map center coordinates
 INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
 initial_coords = new google.maps.LatLng(INITIAL_CENTER_LAT, INITIAL_CENTER_LONG);
 
-//Initial map zoom value
+// Initial map zoom value
 ZOOM = 17;
 
-//An integer for the offset between the actual window size and the
-//JavaScript-determined Window size in order to size the map
-WINDOW_OFFSET = 70
-
-//Bounds for the Date Slider. End date is current date.
+// Bounds for the Date Slider. End date is current date.
 var BOUNDS_MIN = new Date(2015, 0, 1);
 var BOUNDS_MAX = new Date();
 
-//Get Incident Report information through HTML and Jinja2 and add markers
-//to the map.
+// Get Incident Report information through HTML and Jinja2 and add markers
+// to the map.
 function addMarkers(map, minDate, maxDate, flag) {
     for (ind = 0; ind < markers.length; ind++) {
         markers[ind].setMap(null);
     }
     markers = [];
-    var boundsMin = new Date();
+    var boundsMin = new Date(2015, 0, 1);
     var vehicle_ids_str = $("#vehicle_ids").data();
     var license_plates_str = $("#license_plates").data();
     var latitudes = $("#latitudes").data();
@@ -46,9 +42,8 @@ function addMarkers(map, minDate, maxDate, flag) {
     pictures_str.name = pictures_str.name.replace("[", "");
     pictures_str.name = pictures_str.name.replace("]", "");
     descriptions_str.name = descriptions_str.name.replace(/\'/g, "\"");
-    //Tokenize the strings representing arrays that are given through HTML
-    //by Jinja2
-    //var vehicle_ids = (vehicle_ids_str.name).split('\'');
+    // Tokenize the strings representing arrays that are given through HTML
+    // by Jinja2
     var vehicle_ids = JSON.parse(vehicle_ids_str.name);
     var license_plates = JSON.parse(license_plates_str.name);
     var dates = JSON.parse(dates_str.name);
@@ -62,16 +57,16 @@ function addMarkers(map, minDate, maxDate, flag) {
     console.log(pictures.length);
     console.log(latitudes.length);
     for (i = 0; i < (latitudes.name).length; i = i + 1) {
-        //In order that the same marker isn't modified every time,
-        //we create a new function here to create and design each marker
+        // In order that the same marker isn't modified every time,
+        // we create a new function here to create and design each marker
         $(function() {
             var marker = new google.maps.Marker({
-                //Use latitude and longitude values from incident report
-                //to set position of marker
+                // Use latitude and longitude values from incident report
+                // to set position of marker
                 position:{lat: latitudes.name[i], lng: longitudes.name[i]}
             });
 
-            //Tie marker to map passed as an argument
+            // Tie marker to map passed as an argument
             year = parseInt((dates[i].split(' '))[0].split('-')[0])
             month = parseInt((dates[i].split(' '))[0].split('-')[1])-1
             day = parseInt((dates[i].split(' '))[0].split('-')[2])
@@ -86,8 +81,10 @@ function addMarkers(map, minDate, maxDate, flag) {
                 markers.push(marker);
             }
 
-
-            //Information presented when marker is clicked
+            if ((flag == 0) && (incidentDate.getTime() < boundsMin.getTime())) {
+                boundsMin.setTime(incidentDate.getTime());
+            }
+            // Information presented when marker is clicked
             var contentString = '<div id="content">' +
                 '<div id="siteNotice">' +
                 '</div>' +
@@ -105,15 +102,16 @@ function addMarkers(map, minDate, maxDate, flag) {
                 content: contentString
             });
 
-            //Add click listener to marker for displaying infoWindow
+            // Add click listener to marker for displaying infoWindow
             marker.addListener('click', function() {
                 infoWindow.open(map, marker);
             });
         });
     }
+    BOUNDS_MIN.setTime(boundsMin.getTime());
 }
 
-//Initialize map and add markers
+// Initialize map and add markers
 function initialize() {
     var mapProp = {
         center: initial_coords,
@@ -124,7 +122,7 @@ function initialize() {
     };
     map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
-    //Use HTML geolocation to center map if possible
+    // Use HTML geolocation to center map if possible
     if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var pos_center = {
@@ -139,12 +137,11 @@ function initialize() {
         console.log("Browser is not supporting geolocation.");
     }
     addMarkers(map, BOUNDS_MIN, BOUNDS_MAX, 0);
-    $("#slider").dateRangeSlider("min", BOUNDS_MIN);
-    $("#slider").dateRangeSlider("max", BOUNDS_MAX);
+    initializeDateSlider();
 }
 
-//Use Google geocoder to update geolocation given an address through
-//the address search box
+// Use Google geocoder to update geolocation given an address through
+// the address search box
 function update_center() {
     geocoder = new google.maps.Geocoder();
     address = $("#address").val();
@@ -165,7 +162,7 @@ function update_center() {
     }
 }
 
-//Get address submit event
+// Get address submit event
 $(document).ready(function() {
     $('#addressForm').on('submit', function (event) {
         update_center();
@@ -173,8 +170,7 @@ $(document).ready(function() {
     });
 });
 
-//Date Slider - TODO
-$(function() {
+function initializeDateSlider() {
     $("#slider").dateRangeSlider({
         bounds: {
             min: BOUNDS_MIN,
@@ -194,92 +190,31 @@ $(function() {
         var endDay = parseInt(String(data.values.min).substring(8, 10), 10);
         var beginMonth = 0;
         var endMonth = 0;
-        switch(String(data.values.min).substring(4, 7)) {
-            case "Jan":
-                beginMonth = 0;
-                break;
-            case "Feb":
-                beginMonth = 1;
-                break;
-            case "Mar":
-                beginMonth = 2;
-                break;
-            case "Apr":
-                beginMonth = 3;
-                break;
-            case "May":
-                beginMonth = 4;
-                break;
-            case "Jun":
-                beginMonth = 5;
-                break;
-            case "Jul":
-                beginMonth = 6;
-                break;
-            case "Aug":
-                beginMonth = 7;
-                break;
-            case "Sep":
-                beginMonth = 8;
-                break;
-            case "Oct":
-                beginMonth = 9;
-                break;
-            case "Nov":
-                beginMonth = 10;
-                break;
-            case "Dec":
-                beginMonth = 11;
-                break;
-        }
-        switch(String(data.values.max).substring(4, 7)) {
-            case "Jan":
-                endMonth = 0;
-                break;
-            case "Feb":
-                endMonth = 1;
-                break;
-            case "Mar":
-                endMonth = 2;
-                break;
-            case "Apr":
-                endMonth = 3;
-                break;
-            case "May":
-                endMonth = 4;
-                break;
-            case "Jun":
-                endMonth = 5;
-                break;
-            case "Jul":
-                endMonth = 6;
-                break;
-            case "Aug":
-                endMonth = 7;
-                break;
-            case "Sep":
-                endMonth = 8;
-                break;
-            case "Oct":
-                endMonth = 9;
-                break;
-            case "Nov":
-                endMonth = 10;
-                break;
-            case "Dec":
-                endMonth = 11;
-                break;
-        }
+        monthObj = {
+            "Jan": 0,
+            "Feb": 1,
+            "Mar": 2,
+            "Apr": 3,
+            "May": 4,
+            "Jun": 5,
+            "Jul": 6,
+            "Aug": 7,
+            "Sep": 8,
+            "Oct": 9,
+            "Nov": 10,
+            "Dec": 11
+        };
+        beginMonth = monthObj[String(data.values.min).substring(4, 7)];
+        endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
         endDate = new Date(endYear, endMonth, endDay);
         addMarkers(map, beginDate, endDate, 1);
     });
-});
+}
 
-//Add the map to the window
+// Add the map to the window
 google.maps.event.addDomListener(window, 'load', initialize)
 
-//Set the map's height to be (hopefully) full window height
-$(function() {
-    $("#googleMap").css("height", $(window).height()-WINDOW_OFFSET);
+$(function () {
+    $("#googleMap").css("height", $(window).height());
 });

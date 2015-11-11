@@ -7,8 +7,8 @@
                 <i class="caret left icon"></i>
                 Back to dashboard
             </a>
-            <div class="ui four column padded grid">
-              <div class="left floated ten wide column">
+            <div class="ui two column vertically padded stackable grid">
+              <div class="column">
                   <h2 class="ui header">
                     Agencies
                       <div class="sub header">
@@ -16,21 +16,19 @@
                       </div>
                   </h2>
               </div>
-              <div class="right floated column">
+              <div class="computer only right aligned column">
                   <div class="ui icon input">
-                      <input id="search-agencies" type="text" placeholder="Search agencies…">
+                      <input class="search-agencies" type="text" placeholder="Search agencies…">
+                      <i class="search icon"></i>
+                  </div>
+              </div>
+              <div class="mobile tablet only column">
+                  <div class="ui icon input">
+                      <input class="search-agencies" type="text" placeholder="Search agencies…">
                       <i class="search icon"></i>
                   </div>
               </div>
             </div>
-
-                <!--<div class="ui search input">-->
-                    <!--<div class="ui transparent icon input">-->
-                        <!--<input id="search-agencies" type="text" placeholder="Search agencies…">-->
-                        <!--<i class="search icon"></i>-->
-                    <!--</div>-->
-                <!--</div>-->
-
 
             {# Use overflow-x: scroll so that mobile views don't freak out
              # when the table is too wide #}
@@ -62,7 +60,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#search-agencies').keyup(function () {
+            $('.search-agencies').keyup(function () {
                 var searchText = $(this).val();
                 if (searchText.length > 0) {
                     $('tbody td:icontains(' + searchText + ')').addClass('positive');

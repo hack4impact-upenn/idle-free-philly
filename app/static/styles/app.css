@@ -6,10 +6,10 @@ nav {
 @media -sass-debug-info{filename{}line{font-family:\0000318}}
 #CAC_logo {
   content: url("../../static/images/CAC_logo.png");
-  height: 60px;
+  height: 2em;
   width: auto;
-  margin-right: 15px;
-  margin-left: 10px;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000326}}
@@ -29,8 +29,8 @@ nav {
 
 @media -sass-debug-info{filename{}line{font-family:\0000339}}
 .ui.secondary.pointing.menu > .right.menu {
-  margin-right: 20px;
-  padding-bottom: 1.5em;
+  margin-right: 2em;
+  padding-bottom: 1em;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000344}}
@@ -42,7 +42,7 @@ nav {
 @media -sass-debug-info{filename{}line{font-family:\0000349}}
 .ui.secondary.pointing.menu > .right.menu > a:hover {
   background-color: #7CC1D8;
-  border-radius: 5px;
+  border-radius: 0.5em;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000354}}
@@ -102,6 +102,16 @@ h1, h2 {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003109}}
+h3 {
+  margin-bottom: 0.3em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003113}}
+p, label, input {
+  font-size: 1.1em !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003117}}
 .sub.header {
-  text-transform: lowercase;
+  text-transform: none;
 }

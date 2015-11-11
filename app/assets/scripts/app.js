@@ -15,11 +15,6 @@ $(document).ready(function () {
         $('.mobile.only .vertical.menu').transition('slide down');
     });
 
-    $('.ui .item').on('click', function() {
-      $('.ui .item').removeClass('active');
-      $(this).addClass('active');
-    });      
-
     // Enable sortable tables
     $('table.ui.sortable').tablesort();
 

@@ -4,6 +4,10 @@ address = document.getElementById("address");
 // Global array for map markers
 var markers = []
 
+// Global Marker Wrappers and Map
+var globalMarkerWrappers = null;
+var globalMap = null;
+
 // Initial map center coordinates
 INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
@@ -16,128 +20,20 @@ ZOOM = 17;
 var BOUNDS_MIN = new Date(2015, 0, 1);
 var BOUNDS_MAX = new Date();
 
-// Get Incident Report information through HTML and Jinja2 and add markers
-// to the map.
-function addMarkers(map, minDate, maxDate, flag) {
-    for (ind = 0; ind < markers.length; ind++) {
-        markers[ind].setMap(null);
-    }
-    markers = [];
-    var boundsMin = new Date(2015, 0, 1);
-    var vehicle_ids_str = $("#vehicle_ids").data();
-    var license_plates_str = $("#license_plates").data();
-    var latitudes = $("#latitudes").data();
-    var longitudes = $("#longitudes").data();
-    var dates_str = $("#dates").data();
-    var durations_str = $("#durations").data();
-    var agencies_str = $("#agencies").data();
-    var pictures_str = $("#pictures").data();
-    var descriptions_str = $("#descriptions").data();
-    vehicle_ids_str.name = vehicle_ids_str.name.replace(/\'/g, "\"");
-    license_plates_str.name = license_plates_str.name.replace(/\'/g, "\"");
-    dates_str.name = dates_str.name.replace(/\'/g, "\"");
-    durations_str.name = durations_str.name.replace(/\'/g, "\"");
-    agencies_str.name = agencies_str.name.replace(/\'/g, "\"");
-    pictures_str.name = pictures_str.name.replace(/(u\'|\')/g, "\"");
-    pictures_str.name = pictures_str.name.replace("[", "");
-    pictures_str.name = pictures_str.name.replace("]", "");
-    descriptions_str.name = descriptions_str.name.replace(/\'/g, "\"");
-    // Tokenize the strings representing arrays that are given through HTML
-    // by Jinja2
-    var vehicle_ids = JSON.parse(vehicle_ids_str.name);
-    var license_plates = JSON.parse(license_plates_str.name);
-    var dates = JSON.parse(dates_str.name);
-    var durations = JSON.parse(durations_str.name);
-    var agencies = JSON.parse(agencies_str.name);
-    var pictures = pictures_str.name.split(", ");
-    var descriptions = JSON.parse(descriptions_str.name);
-    console.log(vehicle_ids.length);
-    console.log(dates.length);
-    console.log(durations.length);
-    console.log(pictures.length);
-    console.log(latitudes.length);
-    for (i = 0; i < (latitudes.name).length; i = i + 1) {
-        // In order that the same marker isn't modified every time,
-        // we create a new function here to create and design each marker
-        $(function() {
-            var marker = new google.maps.Marker({
-                // Use latitude and longitude values from incident report
-                // to set position of marker
-                position:{lat: latitudes.name[i], lng: longitudes.name[i]}
-            });
-
-            // Tie marker to map passed as an argument
-            year = parseInt((dates[i].split(' '))[0].split('-')[0])
-            month = parseInt((dates[i].split(' '))[0].split('-')[1])-1
-            day = parseInt((dates[i].split(' '))[0].split('-')[2])
-            console.log("Day");
-            console.log(day);
-            incidentDate = new Date(year, month, day)
-            console.log((new Date(2015, 7, 14)).getTime());
-            console.log("Max");
-            console.log(maxDate.getTime());
-            if ((flag == 0) || (incidentDate.getTime() >= minDate.getTime()) && (incidentDate.getTime() <= maxDate.getTime())) {
-                marker.setMap(map);
-                markers.push(marker);
-            }
-
-            if ((flag == 0) && (incidentDate.getTime() < boundsMin.getTime())) {
-                boundsMin.setTime(incidentDate.getTime());
-            }
-            // Information presented when marker is clicked
-            var contentString = '<div id="content">' +
-                '<div id="siteNotice">' +
-                '</div>' +
-                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + vehicle_ids[i] +'</h1>' +
-                '<div id="bodyContent">' +
-                '<p>License Plate: ' + license_plates[i] + '</p>' +
-                '<p>Date: ' + dates[i] + '</p>' +
-                '<p>Duration: ' + durations[i] + '</p>' +
-                '<p>Agency: ' + agencies[i] + '</p>' +
-                '<p>Link to Picture: ' + pictures[i] + '</p>' +
-                '<p>Description: ' + descriptions[i] + '</p>' +
-                '</div>' +
-                '</div>';
-            var infoWindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
-            // Add click listener to marker for displaying infoWindow
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });
-        });
-    }
-    BOUNDS_MIN.setTime(boundsMin.getTime());
+function MarkerWrapper(actualMarker, incidentDate, contentString) {
+    this.actualMarker = actualMarker;
+    this.incidentDate = incidentDate;
+    this.contentString = contentString;
 }
 
-// Initialize map and add markers
-function initialize() {
-    var mapProp = {
-        center: initial_coords,
-        zoom:ZOOM,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControl: false,
-        streetViewControl: false
-    };
-    map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-
-    // Use HTML geolocation to center map if possible
-    if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var pos_center = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-
-                map.setCenter(pos_center);
-            });
+function storeMarkerState(markerWrappers, map, minDate) {
+    globalMarkerWrappers = markerWrappers;
+    globalMap = map;
+    for (mw in globalMarkerWrappers)
+    {
+        (mw.actualMarker).setMap(globalMap);
     }
-    else {
-        console.log("Browser is not supporting geolocation.");
-    }
-    addMarkers(map, BOUNDS_MIN, BOUNDS_MAX, 0);
-    initializeDateSlider();
+    BOUNDS_MIN = minDate;
 }
 
 // Use Google geocoder to update geolocation given an address through
@@ -156,7 +52,7 @@ function update_center() {
                 alert("Address not found!");
             }
             else {
-                map.setCenter(results[0].geometry.location);
+                globalMap.setCenter(results[0].geometry.location);
             }
         });
     }
@@ -183,7 +79,7 @@ function initializeDateSlider() {
         },
     });
     $("#slider").bind("valuesChanged", function(e, data) {
-        console.log("Values just changed. min: " + String(data.values.min).substring(4, 15) + " max: " + String(data.values.max).substring(4, 15));
+    	console.log("Values just changed. min: " + String(data.values.min).substring(4, 15) + " max: " + String(data.values.max).substring(4, 15));
         var beginYear = parseInt(String(data.values.min).substring(11, 15), 10);
         var beginDay = parseInt(String(data.values.min).substring(8, 10), 10);
         var endYear = parseInt(String(data.values.max).substring(11, 15), 10);
@@ -208,13 +104,15 @@ function initializeDateSlider() {
         endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
         endDate = new Date(endYear, endMonth, endDay);
-        addMarkers(map, beginDate, endDate, 1);
+        for (m in globalMarkerWrappers) {
+            if ((m.incidentDate.getTime() < beginDate.getTime()) ||
+                (m.incidentDate.getTime() > endDate.getTime())) {
+                m.actualMarker.setMap(null);
+            }
+            else
+            {
+                m.actualMarker.setMap(globalMap);
+            }
+        }
     });
 }
-
-// Add the map to the window
-google.maps.event.addDomListener(window, 'load', initialize)
-
-$(function () {
-    $("#googleMap").css("height", $(window).height());
-});

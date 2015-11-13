@@ -13,7 +13,7 @@ def get_map():
     """Get information on all Incident Reports in the db, and
     pass to map.html
     """
-    vehicle_ids = []
+    '''vehicle_ids = []
     license_plates = []
     latitudes = []
     longitudes = []
@@ -46,3 +46,5 @@ def get_map():
                            agencies=agencies,
                            pictures=pictures,
                            descriptions=descriptions)
+    '''
+    return render_template('main/map.html', incident_reports=IncidentReport.query.all())

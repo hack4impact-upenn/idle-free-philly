@@ -1,0 +1,8 @@
+{
+  "name":"clean-air-council",
+  "scripts":{},
+  "env":{},
+  "addons":[
+    "heroku-postgresql"
+  ]
+}

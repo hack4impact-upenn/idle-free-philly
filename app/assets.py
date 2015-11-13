@@ -24,3 +24,18 @@ vendor_js = Bundle(
     filters='jsmin',
     output='scripts/vendor.js'
 )
+
+iThing_css = Bundle(
+    'iThing.css',
+    output='styles/iThing.css'
+)
+
+jqueryui_js = Bundle(
+    'jquery-ui.js',
+    output='scripts/jquery-ui.js'
+)
+
+jQDateRangeSlidermin_js = Bundle(
+    'jQDateRangeSlider-min.js',
+    output='scripts/jQDateRangeSlider-min.js'
+)

@@ -29,9 +29,10 @@ function MarkerWrapper(actualMarker, incidentDate, contentString) {
 function storeMarkerState(markerWrappers, map, minDate) {
     globalMarkerWrappers = markerWrappers;
     globalMap = map;
-    for (mw in globalMarkerWrappers)
+    console.log(markerWrappers[0].actualMarker);
+    for (mw = 0; mw < globalMarkerWrappers.length; mw++)
     {
-        (mw.actualMarker).setMap(globalMap);
+        (globalMarkerWrappers[mw].actualMarker).setMap(globalMap);
     }
     BOUNDS_MIN = minDate;
 }
@@ -104,14 +105,14 @@ function initializeDateSlider() {
         endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
         endDate = new Date(endYear, endMonth, endDay);
-        for (m in globalMarkerWrappers) {
-            if ((m.incidentDate.getTime() < beginDate.getTime()) ||
-                (m.incidentDate.getTime() > endDate.getTime())) {
-                m.actualMarker.setMap(null);
+        for (mw = 0; mw < globalMarkerWrappers.length; mw++) {
+            if ((globalMarkerWrappers[mw].incidentDate.getTime() < beginDate.getTime()) ||
+                (globalMarkerWrappers[mw].incidentDate.getTime() > endDate.getTime())) {
+                globalMarkerWrappers[mw].actualMarker.setMap(null);
             }
             else
             {
-                m.actualMarker.setMap(globalMap);
+                globalMarkerWrappers[mw].actualMarker.setMap(globalMap);
             }
         }
     });

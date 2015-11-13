@@ -1,23 +1,10 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<link rel="stylesheet" href="static/styles/iThing.css" type="text/css" />
 <link rel="stylesheet" href="static/styles/map.css" type="text/css" />
-<script src="static/js/jquery-ui.js"></script>
-<script src="static/js/jQDateRangeSlider-min.js"></script>
 <script src="static/js/initialize_map.js"></script> 
-<!--<meta id="vehicle_ids" data-name="{{vehicle_ids}}">
-<meta id="license_plates" data-name="{{license_plates}}">
-<meta id="latitudes" data-name="{{latitudes}}">
-<meta id="longitudes" data-name="{{longitudes}}">
-<meta id="dates" data-name="{{dates}}">
-<meta id="durations" data-name="{{durations}}">
-<meta id="agencies" data-name="{{agencies}}">
-<meta id="pictures" data-name="{{pictures}}">
-<meta id="descriptions" data-name="{{descriptions}}"> -->
 
 <script type="text/javascript">
     function initializeMapAndMarkers() {
-        // <generate map here just like before>
         var mapProp = {
             center: initial_coords,
             zoom:ZOOM,
@@ -50,7 +37,7 @@
             var marker = new google.maps.Marker({
                 // Use latitude and longitude values from incident report
                 // to set position of marker
-                position:{lat: parseInt('{{ report.location.latitude }}', 10), lng: parseInt('{{ report.location.longitude }}', 10)}
+                position:{lat: parseFloat('{{ report.location.latitude }}'), lng: parseFloat('{{ report.location.longitude }}')}
             });
             var dateString = '{{ report.date }}';
             year = parseInt((dateString.split(' '))[0].split('-')[0]);
@@ -63,7 +50,7 @@
             var contentString = '<div id="content">' +
                                 '<div id="siteNotice">' +
                                 '</div>' +
-                                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h1>'
+                                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h1>' +
                                 '<div id="bodyContent">' +
                                 '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
                                 '<p>Date: ' + '{{ report.date }}' + '</p>' +

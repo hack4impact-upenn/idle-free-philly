@@ -10,18 +10,19 @@ def handle_message():
     message = str(request.values.get('Body'))  # noqa
     resp = twilio.twiml.Response()
     step = session.get('step', 0)
-    if step is 0 and "report" in message.lower():
-        resp.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
-    if step is 1:
-        resp.message("What is the License Plate Number? (eg.MG-1234E)")
-    elif step is 2:
-        resp.message("What is the Vehicle ID? (eg.105014)")
-    elif step is 3:
-        resp.message("How many minutes has it been Idling for? (eg. 10)")
-    elif step is 4:
-        resp.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
-    else:
-        resp.message("Thanks!")
+    # if step is 0 and "report" in message.lower():
+    #     resp.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
+    # if step is 1:
+    #     resp.message("What is the License Plate Number? (eg.MG-1234E)")
+    # elif step is 2:
+    #     resp.message("What is the Vehicle ID? (eg.105014)")
+    # elif step is 3:
+    #     resp.message("How many minutes has it been Idling for? (eg. 10)")
+    # elif step is 4:
+    #     resp.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
+    # else:
+    #     resp.message("Thanks!")
+    # session.pop('step', None)
     resp.message(str(step))
     session['step'] = step + 1
     return str(resp)

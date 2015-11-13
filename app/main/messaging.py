@@ -9,7 +9,8 @@ SECRET_KEY = '7c\xf9\r\xa7\xea\xdc\xef\x96\xf7\x8c\xaf\xdeW!\x81jp\xf7[}%\xda2' 
 def handle_message():
     message = str(request.values.get('Body'))  # noqa
     resp = twilio.twiml.Response()
-    step = session.get('step', 0)
+    print resp
+    step = session['step'] if 'step' in session else 0
     # if step is 0 and "report" in message.lower():
     #     resp.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
     # if step is 1:

@@ -2,6 +2,8 @@ from flask import request, session
 from . import main
 import twilio.twiml
 
+SECRET_KEY = '7c\xf9\r\xa7\xea\xdc\xef\x96\xf7\x8c\xaf\xdeW!\x81jp\xf7[}%\xda2'  # noqa
+
 
 @main.route("/report_incident", methods=['GET', 'POST'])
 def handle_message():
@@ -23,4 +25,3 @@ def handle_message():
             resp.message("Thanks!")
         session['step'] = step + 1
     return str(resp)
-main.secret_key = '7c\xf9\r\xa7\xea\xdc\xef\x96\xf7\x8c\xaf\xdeW!\x81jp\xf7[}%\xda2'  # noqa

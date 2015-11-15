@@ -80,13 +80,16 @@ function initialize() {
     var mapProp = {
         center: initial_coords,
         zoom:ZOOM,
+
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
     google.maps.event.addListener(map, 'click', function(event) {
-      placeMarker(event.latLng);
+            $('#latitude').val(event.latLng.lat());
+            $('#longitude').val(event.latLng.lng());
+            getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
       });
-      //Use HTML geolocation to center map if possible
+    //Use HTML geolocation to center map if possible
     if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var pos_center = {
@@ -101,6 +104,41 @@ function initialize() {
         console.log("Browser is not supporting geolocation.");
     }
     addMarkers(map);
+}
+
+function getReverseGeocodingData(lat, lng) {
+    var latlng = new google.maps.LatLng(lat, lng);
+    // This is making the Geocode request
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+        if (status !== google.maps.GeocoderStatus.OK) {
+            alert(status);
+        }
+        // This is checking to see if the Geoeode Status is OK before proceeding
+        if (status == google.maps.GeocoderStatus.OK) {
+            console.log(results);
+             $('#location').val(results[0].formatted_address);
+        }
+    });
+}
+
+function geoFindMe() {
+
+  if (!navigator.geolocation){
+      return;
+    }
+
+  function success(position) {
+    var geocoder = new google.maps.Geocoder;
+
+    $('#latitude').val(position.coords.latitude);
+    $('#longitude').val(position.coords.longitude);
+    getReverseGeocodingData(position.coords.latitude, position.coords.longitude)
+  };
+
+  function error() {
+  };
+  navigator.geolocation.getCurrentPosition(success, error);
 }
 
 //Use Google geocoder to update geolocation given an address through

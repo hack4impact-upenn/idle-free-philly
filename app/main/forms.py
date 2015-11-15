@@ -1,6 +1,8 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, PasswordField, SubmitField, IntegerField, TextAreaField, HiddenField, \
                                         BooleanField, FileField, FloatField
+from werkzeug.datastructures import MultiDict
+
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
@@ -17,11 +19,13 @@ class NewIncidentForm(Form):
     vehicle_ID = StringField('License Plate Number')
     notes = StringField('Notes')
     latitude = FloatField('latitude')
-    location = StringField('location')
+    location = StringField('Location')
     longitude = FloatField('longitude')
     current_longitude = HiddenField('current_longitude')
     current_latitude = HiddenField('current_latitude')
     use_current_location = BooleanField('Use Current Location')
     idling_duration = IntegerField('Idling Duration')
     submit = SubmitField('Create Report')
+
+
 

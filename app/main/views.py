@@ -33,7 +33,7 @@ def get_map():
 
         current_address = ""
         address = ""
-        l = models.Location(original_user_text =fake.address(), latitude= form.latitude.data,
+        l = models.Location(original_user_text =form.location.data, latitude= form.latitude.data,
                             longitude= form.longitude.data)
         agencies = models.Agency.query.all()
 
@@ -66,6 +66,7 @@ def get_map():
         #flash('incident {} successfully created'.format(new_incident.vehicle_id),
               #'form-success')
         #get_map()
+
     return render_template('main/map.html', form = form, vehicle_ids=vehicle_ids,
                            license_plates=license_plates, latitudes=latitudes,
                            longitudes=longitudes, dates=dates, durations=durations,

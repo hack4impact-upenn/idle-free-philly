@@ -61,42 +61,7 @@
        <p><button onclick="geoFindMe()">Use Current location</button></p>
 
        <script>
-        function getReverseGeocodingData(lat, lng) {
-            var latlng = new google.maps.LatLng(lat, lng);
-            // This is making the Geocode request
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                if (status !== google.maps.GeocoderStatus.OK) {
-                    alert(status);
-                }
-                // This is checking to see if the Geoeode Status is OK before proceeding
-                if (status == google.maps.GeocoderStatus.OK) {
-                    console.log(results);
-                     $('#location').val(results[0].formatted_address);
-                }
-            });
-        }
 
-      function geoFindMe() {
-
-        if (!navigator.geolocation){
-          return;
-        }
-
-      function success(position) {
-        var geocoder = new google.maps.Geocoder;
-
-        $('#latitude').val(position.coords.latitude);
-        $('#longitude').val(position.coords.longitude);
-        getReverseGeocodingData(position.coords.latitude, position.coords.longitude)
-
-
-      };
-
-      function error() {
-      };
-      navigator.geolocation.getCurrentPosition(success, error);
-     }
        </script>
         <div class="ui divider">
 

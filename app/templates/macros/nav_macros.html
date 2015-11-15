@@ -32,17 +32,19 @@
 {% macro mobile_nav(current_user, endpoints=None) %}
     <div class="mobile only row">
         <div class="ui fixed inverted black main menu">
-            {{ header_items(current_user) }}
-            <div class="right menu">
+            <div class="menu">
                 <a class="icon item" id="open-nav"><i class="sidebar icon"></i></a>
             </div>
+            <a class="header item" href="{{ url_for('main.index') }}">
+            <img id = "CAC_logo">{{ config.APP_NAME }}</a>
         </div>
 
         {# The menu items which will be shown when open-nav is clicked #}
-        <div class="ui fixed vertical fluid menu">
+        <div class="ui fixed left vertical menu">
             {% if endpoints %}
                 {{ render_menu_items(endpoints) }}
             {% endif %}
+            {{ header_items(current_user) }}
             {{ account_items(current_user) }}
         </div>
     </div>
@@ -55,11 +57,10 @@
         <div class="ui secondary pointing menu">
          <a class="header item" href="{{ url_for('main.index') }}">
          <img id = "CAC_logo">{{ config.APP_NAME }}</a>
-        <div class="right menu">
-                {{ header_items(current_user) }}
-                {{ account_items(current_user) }}
-            </div>
-            
+         <div class="right menu">
+            {{ header_items(current_user) }}
+            {{ account_items(current_user) }}
+         </div>    
         </div>
 
         {# Endpoints go into a submenu #}

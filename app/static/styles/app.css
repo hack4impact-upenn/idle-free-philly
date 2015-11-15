@@ -64,59 +64,63 @@ nav .mobile.only.row .ui.vertical.menu {
   display: none;
   background-color: #1C7592;
 }
+@media -sass-debug-info{filename{}line{font-family:\0000373}}
+nav .mobile.only.row .ui.vertical.menu > a {
+  color: #FFFFFF;
+}
 
-@media -sass-debug-info{filename{}line{font-family:\0000376}}
+@media -sass-debug-info{filename{}line{font-family:\0000379}}
 nav .mobile.only.row .ui.main.menu {
   background-color: #56A5BF;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000381}}
+@media -sass-debug-info{filename{}line{font-family:\0000384}}
 .ui.vertical.menu > a {
   color: #white;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000385}}
+@media -sass-debug-info{filename{}line{font-family:\0000388}}
 .ui.vertical.secondary.menu > a {
   color: #222222;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000390}}
+@media -sass-debug-info{filename{}line{font-family:\0000393}}
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000394}}
+@media -sass-debug-info{filename{}line{font-family:\0000397}}
 ui.red.pointing.label {
   background-color: #FF684C !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000399}}
+@media -sass-debug-info{filename{}line{font-family:\00003102}}
 table.selectable tr:hover {
   cursor: pointer !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003104}}
+@media -sass-debug-info{filename{}line{font-family:\00003107}}
 h1, h2 {
   color: #1C7592 !important;
   text-transform: uppercase !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003109}}
+@media -sass-debug-info{filename{}line{font-family:\00003112}}
 h3 {
   margin-bottom: 0.3em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003113}}
+@media -sass-debug-info{filename{}line{font-family:\00003116}}
 p, label, input {
   font-size: 1.1em !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003117}}
+@media -sass-debug-info{filename{}line{font-family:\00003120}}
 .sub.header {
   text-transform: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003121}}
+@media -sass-debug-info{filename{}line{font-family:\00003124}}
 .ui.red.error {
   color: #FF684C;
 }

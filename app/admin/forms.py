@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, SubmitField
+from wtforms.fields import StringField, SubmitField, SelectField
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import InputRequired, Length, Email, Optional
+from wtforms.validators import Length, Email, Optional, InputRequired
 from ..custom_validators import (
     UniqueEmail,
     UniquePhoneNumber,
@@ -62,3 +62,30 @@ class InviteUserForm(Form):
         UniquePhoneNumber(),
     ])
     submit = SubmitField('Invite')
+
+
+class ChangeAgencyOfficialStatusForm(Form):
+    is_official = SelectField(
+        'Officially Approved',
+        description='Officially approved agencies show up on the reporting '
+                    'form in the \"agency\" dropdown and can be linked to '
+                    'Agency Workers. Agencies which are not officially '
+                    'approved were added by users in the \"other\" option of '
+                    'the reporting form.',
+        choices=[('y', 'Yes'), ('n', 'No')],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField('Update status')
+
+
+class ChangeAgencyPublicStatusForm(Form):
+    is_public = SelectField(
+        'Publicly visible',
+        description='The public does not see the agency connected to an '
+                    'idling incident if that agency is not publicly visible. '
+                    'Agencies which are not publicly visible still have '
+                    'anonymized reports which the public can see.',
+        choices=[('y', 'Yes'), ('n', 'No')],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField('Update status')

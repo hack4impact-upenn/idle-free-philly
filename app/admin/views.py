@@ -8,9 +8,11 @@ from forms import (
     ChangeUserPhoneNumberForm,
     ChangeAccountTypeForm,
     InviteUserForm,
+    ChangeAgencyOfficialStatusForm,
+    ChangeAgencyPublicStatusForm,
 )
 from . import admin
-from ..models import User, Role
+from ..models import User, Role, Agency
 from .. import db
 from ..utils import parse_phone_number
 from ..email import send_email
@@ -162,3 +164,70 @@ def delete_user(user_id):
         db.session.commit()
         flash('Successfully deleted user %s.' % user.full_name(), 'success')
     return redirect(url_for('admin.registered_users'))
+
+
+@admin.route('/agencies')
+@login_required
+@admin_required
+def all_agencies():
+    """View all agencies."""
+    agencies = Agency.query.all()
+    return render_template('admin/all_agencies.html', agencies=agencies)
+
+
+@admin.route('/agency/<int:agency_id>')
+@admin.route('/agency/<int:agency_id>/info')
+@login_required
+@admin_required
+def agency_info(agency_id):
+    """View an agency's information."""
+    agency = Agency.query.filter_by(id=agency_id).first()
+    if agency is None:
+        abort(404)
+    return render_template('admin/manage_agency.html', agency=agency)
+
+
+@admin.route('/agency/<int:agency_id>/change-official-status',
+             methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_agency_official_status(agency_id):
+    """Make an agency official or unofficial."""
+    agency = Agency.query.filter_by(id=agency_id).first()
+    if agency is None:
+        abort(404)
+    form = ChangeAgencyOfficialStatusForm()
+    if form.validate_on_submit():
+        agency.is_official = (form.is_official.data == 'y')
+        db.session.add(agency)
+        db.session.commit()
+        flash('Official status for agency {} successfully changed.'
+              .format(agency.name),
+              'form-success')
+    form.is_official.default = 'y' if agency.is_official else 'n'
+    form.process()
+    return render_template('admin/manage_agency.html', agency=agency,
+                           form=form)
+
+
+@admin.route('/agency/<int:agency_id>/change-public-status',
+             methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_agency_public_status(agency_id):
+    """Make an agency official or unofficial."""
+    agency = Agency.query.filter_by(id=agency_id).first()
+    if agency is None:
+        abort(404)
+    form = ChangeAgencyPublicStatusForm()
+    if form.validate_on_submit():
+        agency.is_public = (form.is_public.data == 'y')
+        db.session.add(agency)
+        db.session.commit()
+        flash('Public status for agency {} successfully changed.'
+              .format(agency.name),
+              'form-success')
+    form.is_public.default = 'y' if agency.is_public else 'n'
+    form.process()
+    return render_template('admin/manage_agency.html', agency=agency,
+                           form=form)

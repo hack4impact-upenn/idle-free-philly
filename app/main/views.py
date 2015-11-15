@@ -1,6 +1,7 @@
 from flask import render_template
 from . import main
-from app import models, db
+from app import models
+
 
 @main.route('/')
 def index():
@@ -9,8 +10,8 @@ def index():
 
 @main.route('/map')
 def get_map():
-    #Get information on all Incident Reports in the db, and pass to
-    #map.html
+    # Get information on all Incident Reports in the db, and pass to
+    # map.html
     vehicle_ids = []
     license_plates = []
     latitudes = []
@@ -25,8 +26,8 @@ def get_map():
         vehicle_ids.append(str(ir.vehicle_id))
         license_plates.append(str(ir.license_plate))
 
-#Pass latitudes, longitudes as floats so they can be used to fix
-        #locations of map markers
+        # Pass latitudes, longitudes as floats so they can be used to fix
+        # locations of map markers
         latitudes.append(float((ir.location).latitude))
         longitudes.append(float((ir.location).longitude))
         dates.append(str(ir.date))
@@ -36,4 +37,18 @@ def get_map():
         pictures.append(ir.picture_url)
         descriptions.append(str(ir.description))
 
-    return render_template('main/map.html', vehicle_ids=vehicle_ids, license_plates=license_plates, latitudes=latitudes, longitudes=longitudes, dates=dates, durations=durations, agencies=agencies, pictures=pictures, descriptions=descriptions)
+    return render_template(
+        'main/map.html', vehicle_ids=vehicle_ids,
+        license_plates=license_plates, latitudes=latitudes,
+        longitudes=longitudes, dates=dates, durations=durations,
+        agencies=agencies, pictures=pictures, descriptions=descriptions)
+
+
+@main.route('/about.html')
+def about():
+    return render_template('main/about.html')
+
+
+@main.route('/faq.html')
+def faq():
+    return render_template('main/faq.html')

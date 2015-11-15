@@ -149,7 +149,7 @@ class UserModelTestCase(unittest.TestCase):
         self.assertFalse(u.is_admin())
         self.assertEqual(u.agency, a)
 
-    def test_reported_incidents(self):
+    def test_incident_reports(self):
         u = User(email='user@example.com', password='password')
         incident1 = IncidentReport(
             vehicle_id='123456',
@@ -159,5 +159,5 @@ class UserModelTestCase(unittest.TestCase):
             vehicle_id='654321',
             user=u
         )
-        u.reported_incidents = [incident1, incident2]
+        u.incident_reports = [incident1, incident2]
         self.assertEqual(u.reported_incidents, [incident1, incident2])

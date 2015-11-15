@@ -1,4 +1,6 @@
 {% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
 {% block content %}
 <html>
     <head>
@@ -10,6 +12,8 @@
         <script src="static/js/jQDateRangeSlider-min.js"></script>
         <script src="static/js/initialize_map.js"></script>
         <meta id="vehicle_ids" data-name="{{vehicle_ids}}">
+        <meta id="addresses" data-name="{{vehicle_ids}}">
+
         <meta id="license_plates" data-name="{{license_plates}}">
         <meta id="latitudes" data-name="{{latitudes}}">
         <meta id="longitudes" data-name="{{longitudes}}">
@@ -20,42 +24,105 @@
         <meta id="descriptions" data-name="{{descriptions}}">
     </head>
     <body>
-     <div class ="column">
-         <div id="wrapper">
-             <div class="row">
-                <div id="googleMap"></div>
-                           <div class="ui form">
-              <div class="fields">
-                <div class="three wide field">
-                  <label>License Plate Number</label>
-                  <input type="text" placeholder="XXX-XXX">
-                </div>
-                <div class="three wide field">
-                  <label>Vehicle ID</label>
-                  <input type="text" placeholder="enter vehicle ID">
-                </div>
-              </div>
-              <div class="fields">
-                <div class="six wide field">
-                    <label>Notes </label>
-                  <input type="text" placeholder="(e.g. 'Was the driver sleeping?')">
-                </div>
-                <div class="three wide field">
-                    <label>Idling Duration </label>
-                  <input type="number" placeholder="~X minutes">
-                </div>
-            </div>
+       <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                Add New Incident Report
+                <div class="sub header">Create a new user account</div>
+            </h2>
 
+            {% set flashes = {
+                'error':   get_flashed_messages(category_filter=['form-error']),
+                'warning': get_flashed_messages(category_filter=['form-check-email']),
+                'info':    get_flashed_messages(category_filter=['form-info']),
+                'success': get_flashed_messages(category_filter=['form-success'])
+            } %}
 
-             </div>
-    	    <div id="slider"></div>
-            <form name = "addressForm" id = "addressForm">
-                <input type="ui text" name="address" id="address" value="Enter Address">
-                <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
-            </form>
-         </div>
+            {{ f.begin_form(form, flashes) }}
 
+                {{ f.render_form_field(form.vehicle_ID) }}
+                {{ f.render_form_field(form.license_plate_number) }}
+                {{ f.render_form_field(form.notes) }}
+                {{ f.render_form_field(form.idling_duration) }}
+                {{ f.render_form_field(form.longitude)}}
+                {{ f.render_form_field(form.latitude)}}
+                {{ f.render_form_field(form.location)}}
+
+                {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+                {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+                {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
+                    {{ f.render_form_field(field) }}
+                {% endfor %}
+            {{ f.end_form() }}
+        </div>
     </div>
+       <p><button onclick="geoFindMe()">Use Current location</button></p>
+
+       <script>
+        function getReverseGeocodingData(lat, lng) {
+            var latlng = new google.maps.LatLng(lat, lng);
+            // This is making the Geocode request
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                if (status !== google.maps.GeocoderStatus.OK) {
+                    alert(status);
+                }
+                // This is checking to see if the Geoeode Status is OK before proceeding
+                if (status == google.maps.GeocoderStatus.OK) {
+                    console.log(results);
+                     $('#location').val(results[0].formatted_address);
+                }
+            });
+        }
+
+      function geoFindMe() {
+
+        if (!navigator.geolocation){
+          return;
+        }
+
+      function success(position) {
+        var geocoder = new google.maps.Geocoder;
+
+        $('#latitude').val(position.coords.latitude);
+        $('#longitude').val(position.coords.longitude);
+        getReverseGeocodingData(position.coords.latitude, position.coords.longitude)
+
+
+      };
+
+      function error() {
+      };
+      navigator.geolocation.getCurrentPosition(success, error);
+     }
+       </script>
+        <div class="ui divider">
+
+             <div class="row">
+
+                 <div class="four wide column">
+                     <div class="ui small form">
+                         <div id="slider"</div>
+                            <input type="ui text" name="address" id="address" value="Enter Address">
+                            <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
+                     </div>
+                    <div class="row">
+                        <form name = "addressForm" id = "addressForm">
+                            <input type="ui text" name="address" id="address" value="Enter Address">
+                            <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
+                        </form>
+                    </div>
+             </div>
+            </div>
+            <div id="googleMap"></div>
+        </div>
+    <script>
+
+    </script>
+
+
     </body>
 </html>
 {% endblock %}

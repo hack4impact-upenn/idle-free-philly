@@ -83,8 +83,10 @@ function initialize() {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-
-    //Use HTML geolocation to center map if possible
+    google.maps.event.addListener(map, 'click', function(event) {
+      placeMarker(event.latLng);
+      });
+      //Use HTML geolocation to center map if possible
     if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var pos_center = {

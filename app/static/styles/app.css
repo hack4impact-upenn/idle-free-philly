@@ -60,11 +60,14 @@ nav {
 
 @media -sass-debug-info{filename{}line{font-family:\0000368}}
 nav .mobile.only.row .ui.vertical.menu {
-  margin-top: 40px;
+  margin-top: 45px;
   display: none;
   background-color: #1C7592;
 }
-
+@media -sass-debug-info{filename{}line{font-family:\0000373}}
+nav .mobile.only.row .ui.vertical.menu > a {
+  color: #FFFFFF;
+}
 @media -sass-debug-info{filename{}line{font-family:\0000376}}
 nav .mobile.only.row .ui.main.menu {
   background-color: #56A5BF;

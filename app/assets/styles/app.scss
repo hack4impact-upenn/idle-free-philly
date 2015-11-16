@@ -66,13 +66,13 @@ nav {
 // Mobile nav
 nav .mobile.only.row {
     .ui.vertical.menu {
-        margin-top: 40px;
+    	margin-top: 45px;
         display: none;
         background-color: $dark-teal;
     }
-}
-
-nav .mobile.only.row {
+    .ui.vertical.menu > a{
+    	color: $white;
+    } 
     .ui.main.menu {
     	background-color: $teal;
     }

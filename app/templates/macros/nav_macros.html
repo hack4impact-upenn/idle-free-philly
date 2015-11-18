@@ -10,21 +10,23 @@
 {% endmacro %}
 
 {% macro header_items(current_user) %}
-    <a class="header item" href="{{ url_for('main.index') }}">{{ config.APP_NAME }}</a>
+    <a id = "nav_map" class="item" href="{{ url_for('main.index') }}">Map</a>
+    <a id = "nav_about" class="item" href="{{ url_for('main.about') }}">About</a>
+    <a id = "nav_faq" class="item" href="{{ url_for('main.faq') }}">FAQ</a>
     {% if current_user.is_authenticated() %}
         {% set href = url_for(current_user.role.index + '.index') %}
-        <a class="item" href="{{ href }}">{{ current_user.role.name }} Dashboard</a>
+        <a id = "nav_dashboard" class="item" href="{{ href }}"> Dashboard</a>
     {% endif %}
     <a class="item" href="{{ url_for('main.about') }}">About</a>
 {% endmacro %}
 
 {% macro account_items(current_user) %}
     {% if current_user.is_authenticated() %}
-        <a href="{{ url_for('account.manage') }}" class="item">Your Account</a>
+        <a href="{{ url_for('account.manage') }}" class="item">Account</a>
         <a href="{{ url_for('account.logout') }}" class="item">Log out</a>
     {% else %}
-        <a href="{{ url_for('account.register') }}" class="item">Register</a>
-        <a href="{{ url_for('account.login') }}" class="item">Log in</a>
+        <a id = "nav_register" href="{{ url_for('account.register') }}" class="item">Register</a>
+        <a id = "nav_login" href="{{ url_for('account.login') }}" class="item">Log in</a>
     {% endif %}
 {% endmacro %}
 
@@ -51,13 +53,14 @@
  # secondary menu. `count` should be the string (e.g. 'four') number of endpoints. #}
 {% macro desktop_nav(current_user, endpoints=None, count=None) %}
     <div class="computer tablet only row">
-        <div class="ui fixed inverted black main menu">
-            <div class="ui container">
+        <div class="ui secondary pointing menu">
+         <a class="header item" href="{{ url_for('main.index') }}">
+         <img id = "CAC_logo">{{ config.APP_NAME }}</a>
+        <div class="right menu">
                 {{ header_items(current_user) }}
-                <div class="right menu">
-                    {{ account_items(current_user) }}
-                </div>
+                {{ account_items(current_user) }}
             </div>
+            
         </div>
 
         {# Endpoints go into a submenu #}

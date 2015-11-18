@@ -12,6 +12,7 @@
        </button>
     {% endif %}
 
+    <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
     <script>
     var editorIDName = "editor-{{ editable_html_obj.editor_name }}";
     $(document).ready(function() {

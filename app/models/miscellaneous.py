@@ -1,3 +1,4 @@
+from flask import render_template
 from .. import db
 
 
@@ -14,3 +15,12 @@ class EditableHTML(db.Model):
         if editable_html_obj is None:
             editable_html_obj = EditableHTML(editor_name=editor_name, value='')
         return editable_html_obj
+
+    @staticmethod
+    def add_default_faq():
+        faq_editable_html = EditableHTML(
+            editor_name='faq',
+            value=render_template('main/faq_default.html')
+        )
+        db.session.add(faq_editable_html)
+        db.session.commit()

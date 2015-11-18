@@ -242,10 +242,7 @@ def update_editor_contents():
     edit_data = request.form.get('edit_data')
     editor_name = request.form.get('editor_name')
 
-    editor_contents = EditableHTML.query.filter_by(
-        editor_name=editor_name).first()
-    if editor_contents is None:
-        editor_contents = EditableHTML(editor_name=editor_name)
+    editor_contents = EditableHTML.get_editable_html(editor_name)
     editor_contents.value = edit_data
 
     db.session.add(editor_contents)

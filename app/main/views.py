@@ -15,6 +15,8 @@ def about():
                            editable_html_obj=editable_html_obj)
 
 
-@main.route('/faq.html')
+@main.route('/faq')
 def faq():
-    return render_template('main/faq.html')
+    editable_html_obj = EditableHTML.get_editable_html('faq')
+    return render_template('main/faq.html',
+                           editable_html_obj=editable_html_obj)

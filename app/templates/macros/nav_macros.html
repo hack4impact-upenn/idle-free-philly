@@ -17,7 +17,6 @@
         {% set href = url_for(current_user.role.index + '.index') %}
         <a id = "nav_dashboard" class="item" href="{{ href }}"> Dashboard</a>
     {% endif %}
-    <a class="item" href="{{ url_for('main.about') }}">About</a>
 {% endmacro %}
 
 {% macro account_items(current_user) %}

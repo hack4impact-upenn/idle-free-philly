@@ -3,6 +3,8 @@
         {{ editable_html_obj.value|safe }}
     </div>
 
+    <br>
+
     {% if current_user.is_admin() %}
        <button class="ui button start-edit">Edit</button>
        <button class="ui primary button end-edit">Save</button>

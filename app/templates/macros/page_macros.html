@@ -3,6 +3,7 @@
         {{ editable_html_obj.value|safe }}
     </div>
 
+    <div id="save_message"></div>
     <br>
 
     {% if current_user.is_admin() %}
@@ -35,7 +36,30 @@
                         editor_name: "{{ editable_html_obj.editor_name }}",
                         edit_data: CKEDITOR.instances[editorIDName].getData(),
                     };
-                    $.post("{{ url_for('admin.update_editor_contents') }}", json_data);
+                    $.post("{{ url_for('admin.update_editor_contents') }}", json_data)
+                    .done(function() {
+                        var success = '<br> \
+                                       <div id="hey" class="ui success message"> \
+                                         <i class="close icon"></i> \
+                                         Your edits have been saved. \
+                                       </div>';
+                        $("#save_message").html(success);
+                        $('.message .close').on('click', function () {
+                            $(this).closest('.message').transition('fade');
+                        });
+                    })
+                    .fail(function() {
+                        var failure = '<br> \
+                                       <div id="hey" class="ui negative message"> \
+                                         <i class="close icon"></i> \
+                                         Your edits were not saved because of an error. \
+                                       </div>';
+                        $("#save_message").html(failure);
+                        $('.message .close').on('click', function () {
+                            $(this).closest('.message').transition('fade');
+                        });
+                    });
+
                     CKEDITOR.instances[editorIDName].destroy();
                 }
                 $(".end-edit").hide();

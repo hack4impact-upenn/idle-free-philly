@@ -26,6 +26,10 @@
         <tr><td>Email address</td><td>{{ user.email }}</td></tr>
         <tr><td>Phone number</td><td>{{ user.phone_number }}</td></tr>
         <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
+        {% if user.agencies|length > 0 %}
+            <tr><td>Affiliated agencies</td><td>{{ user.agencies|join(',', attribute='name') }}</td></tr>
+        {% endif %}
+
     </table>
 {% endmacro %}
 

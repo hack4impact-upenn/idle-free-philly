@@ -73,6 +73,7 @@ def setup_dev():
 
     # Create a default admin user
     admin = User(email='admin@user.com',
+                 phone_number='+12345678910',
                  password='password',
                  first_name='Admin',
                  last_name='User',
@@ -82,6 +83,7 @@ def setup_dev():
 
     # Create a default agency worker user
     worker = User(email='agency@user.com',
+                  phone_number='+11098764321',
                   password='password',
                   first_name='AgencyWorker',
                   last_name='User',
@@ -93,6 +95,7 @@ def setup_dev():
 
     # Create a default general user
     general = User(email='general@user.com',
+                   phone_number='+15434549876',
                    password='password',
                    first_name='General',
                    last_name='User',

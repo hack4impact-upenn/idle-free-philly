@@ -162,7 +162,7 @@ class User(UserMixin, db.Model):
     def generate_fake(count=10, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
-        from random import seed, choice
+        from random import seed, choice, randint
         from faker import Faker
 
         fake = Faker()
@@ -174,6 +174,8 @@ class User(UserMixin, db.Model):
             u = User(
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
+                phone_number='+1{}'.format(''.join([str(randint(0, 9))
+                                                    for _ in range(0, 10)])),
                 email=fake.email(),
                 password=fake.password(),
                 confirmed=True,

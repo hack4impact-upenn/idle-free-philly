@@ -29,8 +29,8 @@
                     </div>
                 </div>
                 {% elif current_user.is_agency_worker() %}
-                <div class="item" data-value="{{ current_user.agency.name }}">
-                    {{ current_user.agency.name }}'s incident reports
+                <div class="item" data-value="Agency Incident Reports">
+                    Agency incident reports
                 </div>
                 {% elif current_user.is_general_user() %}
                 <div class="item" data-value="{{ current_user.first_name }}">

@@ -18,7 +18,9 @@ def view_reports():
         agencies = Agency.query.all()
 
     elif current_user.is_agency_worker():
-        reports = current_user.agency.reports
+        reports = []
+        for agency in current_user.agencies:
+            reports.extend(agency.incident_reports)
         agencies = None
 
     elif current_user.is_general_user():

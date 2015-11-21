@@ -37,8 +37,9 @@ nav .computer.only.row {
 		color: $white;
 		text-transform: uppercase;
 	}
-	.ui.secondary.pointing.menu > .right.menu > a:hover {
+	.ui.secondary.pointing.menu > .right.menu > a:hover, .ui.dropdown.item:hover {
 		background-color: $light-teal;
+		color: $white;
 		border-radius: 0.5em;
 	}
 	.ui.secondary.pointing.menu > .right.menu > a.active {
@@ -78,6 +79,28 @@ nav .mobile.only.row {
 	}
 }
 
+.ui.dropdown.item, .ui.secondary.pointing.menu .active.item {
+	color: $white;
+	font-weight: 400;
+	text-transform: uppercase;
+}
+
+.ui.dropdown.item > div > .header {
+	color: $dark-gray;
+}
+
+#nav_dashboard {
+	text-align: center;
+	color: $teal !important;
+	text-transform: uppercase !important;
+	border-bottom: solid 1px $light-teal;
+}
+
+.ui.menu .ui.dropdown .menu>.item {
+	color: $dark-gray;
+	font-size: 0.8em !important;
+}
+
 // Flashes
 .flashes > .ui.message:last-of-type {
     margin-bottom: 2rem;
@@ -112,4 +135,3 @@ h3 {
 .sub.header {
 	text-transform: none;
 }
-

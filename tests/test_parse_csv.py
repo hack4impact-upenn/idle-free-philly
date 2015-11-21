@@ -53,7 +53,7 @@ class ParseCsvTestCase(unittest.TestCase):
         desc1 = 'Driver in truck, possibly eating, windows partially down'
         i1 = IncidentReport.query.filter_by(license_plate=license1).first()
         self.assertTrue(i1.vehicle_id == vehicle1)
-        self.assertTrue(i1.agency.name == agency1)
+        self.assertTrue(i1.agency.get_agency_by_name == agency1)
         self.assertTrue(str(i1.duration) == duration1)
         self.assertTrue(i1.picture_url == pic1)
         self.assertTrue(i1.description == desc1)
@@ -66,7 +66,7 @@ class ParseCsvTestCase(unittest.TestCase):
         desc2 = 'Driver sleeping in truck, no work being done.'
         i2 = IncidentReport.query.filter_by(license_plate=license2).first()
         self.assertTrue(i2.vehicle_id == vehicle2)
-        self.assertTrue(i2.agency.name == agency2)
+        self.assertTrue(i2.agency.get_agency_by_name == agency2)
         self.assertTrue(str(i2.duration) == duration2)
         self.assertTrue(i2.picture_url == pic2)
         self.assertTrue(i2.description == desc2)
@@ -80,7 +80,7 @@ class ParseCsvTestCase(unittest.TestCase):
             ' no work being done'
         i3 = IncidentReport.query.filter_by(license_plate=license3).first()
         self.assertTrue(i3.vehicle_id == vehicle3)
-        self.assertTrue(i3.agency.name == agency3)
+        self.assertTrue(i3.agency.get_agency_by_name == agency3)
         self.assertTrue(str(i3.duration) == duration3)
         self.assertTrue(i3.picture_url == pic3)
         self.assertTrue(i3.description == desc3)

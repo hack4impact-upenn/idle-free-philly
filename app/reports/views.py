@@ -18,13 +18,13 @@ def view_reports():
         agencies = Agency.query.all()
 
     elif current_user.is_agency_worker():
-        agencies = current_user.agency
         reports = current_user.agency.reports
+        agencies = None
 
     elif current_user.is_general_user():
-        # TODO general user reports
-        reports = IncidentReport.query.all()
-        agencies = Agency.query.all()
+        reports = current_user.incident_reports
+        agencies = None
 
+    # TODO test using real data
     return render_template('reports/reports.html', reports=reports,
                            agencies=agencies, current_user=current_user)

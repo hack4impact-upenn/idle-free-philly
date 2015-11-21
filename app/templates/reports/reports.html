@@ -28,18 +28,24 @@
                             {% endfor %}
                     </div>
                 </div>
-                {% else %}
+                {% elif current_user.is_agency_worker() %}
                 <div class="item" data-value="{{ current_user.agency.name }}">
                     {{ current_user.agency.name }}'s incident reports
                 </div>
+                {% elif current_user.is_general_user() %}
+                <div class="item" data-value="{{ current_user.first_name }}">
+                    {{ current_user.first_name }}'s incident reports
+                </div>
                 {% endif %}
 
+                {% if current_user.is_admin() %}
                 <div class="ui left item">
                     <div class="ui toggle checkbox">
                         <input id="user-only-reports" type="checkbox">
                         <label>View my reports only</label>
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
@@ -110,6 +116,7 @@
             });
 
             $('#select-agency').dropdown({
+                // filter reports by agency
                 onChange: function (value, text, $selectedItem) {
                     $('td.agency.name').closest('tr').addClass('hidden').hide();
                     $('td.agency.name').filter(function() {
@@ -124,7 +131,7 @@
                     $('tr.report').addClass('hidden').hide();
                     $('tr.report.current-user-report').removeClass('hidden').show();
                 } else {
-                    // unfilter
+                    // reset filter
                     $('tr.report').removeClass('hidden').show();
                 }
             });

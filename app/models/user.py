@@ -174,6 +174,8 @@ class User(UserMixin, db.Model):
             u = User(
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
+                phone_number='+1{}'.format(''.join([str(randint(0, 9))
+                                                    for _ in range(0, 10)])),
                 email=fake.email(),
                 password=fake.password(),
                 confirmed=True,

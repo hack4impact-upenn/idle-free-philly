@@ -1,6 +1,6 @@
 @media -sass-debug-info{filename{}line{font-family:\0000314}}
-nav {
-  margin-bottom: 50px !important;
+.ui.navigation.grid {
+  margin-bottom: 50px;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000318}}
@@ -83,32 +83,38 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000389}}
-ui.red.pointing.label {
+.ui.red.pointing.label {
   background-color: #FF684C !important;
+  border-color: #FF684C !important;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000394}}
-table.selectable tr:hover {
-  cursor: pointer !important;
+.ui.red.label:before {
+  background-color: #FF684C !important;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000399}}
-h1, h2 {
-  color: #1C7592 !important;
-  text-transform: uppercase !important;
+table.selectable tr:hover {
+  cursor: pointer;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003104}}
+h1, h2, .ui.dividing.header {
+  color: #1C7592;
+  text-transform: uppercase;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003109}}
 h3 {
   margin-bottom: 0.3em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003108}}
-p, label, input {
-  font-size: 1.1em !important;
+@media -sass-debug-info{filename{}line{font-family:\00003113}}
+.ui.form .field > label, p, input {
+  font-size: 1.1em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003112}}
+@media -sass-debug-info{filename{}line{font-family:\00003118}}
 .sub.header {
   text-transform: none;
 }

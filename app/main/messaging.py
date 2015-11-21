@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, make_response
 from . import main
 from datetime import datetime, timedelta
 import twilio.twiml
@@ -9,8 +9,8 @@ SECRET_KEY = '7c\xf9\r\xa7\xea\xdc\xef\x96\xf7\x8c\xaf\xdeW!\x81jp\xf7[}%\xda2' 
 @main.route("/report_incident", methods=['GET', 'POST'])
 def handle_message():
     message = str(request.values.get('Body'))  # noqa
-    resp = twilio.twiml.Response()
-    print resp
+    twiml = twilio.twiml.Response()
+    print twiml
 
     step = int(request.cookies.get('messagecount', 0))
 
@@ -27,9 +27,10 @@ def handle_message():
     # else:
     #     resp.message("Thanks!")
     # session.pop('step', None)
-    resp.message(str(step))
+    twiml.message(str(step))
     step += 1
     expires = datetime.utcnow() + timedelta(hours=4)
-    expires_string = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
-    resp.set_cookie('messagecount', value=str(step), expires=expires_string)
-    return str(resp)
+    expires_str = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
+    response = make_response(str(twiml))
+    response.set_cookie('messagecount', value=str(step), expires=expires_str)
+    return response

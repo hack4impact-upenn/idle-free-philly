@@ -15,6 +15,10 @@ nav {
     margin-bottom: 40px !important;
 }
 
+.body.container {
+	min-height: 100%;
+}
+
 #CAC_logo {
 	content: url("../../static/images/CAC_logo.png");
 	height: 2em;
@@ -122,3 +126,29 @@ p, label, input {
 	color: $red;
 }
 
+//Footer
+footer {
+	bottom: 0;
+	width: 100%;
+	text-align: right;
+	padding: 1em;
+	margin-top: 5%;
+	background-color: $dark-teal;
+}
+
+#h4i_logo {
+	content: url("../../static/images/h4i_square_white.png");
+	height: 1.2em;
+	width: auto;
+	margin-right: 0.5em;
+}
+
+footer > div > h3 {
+	color: $white;
+	margin-top: 0;
+	font-weight: 300;
+}
+
+.icon.heart:hover {
+	color: $red;
+}

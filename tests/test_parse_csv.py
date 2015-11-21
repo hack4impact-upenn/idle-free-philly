@@ -1,8 +1,8 @@
 import unittest
-import time
 from app import create_app, db
 from app.models import Location, IncidentReport
-from app.utils import *
+from app.utils import parse_to_db
+
 
 class ParseCsvTestCase(unittest.TestCase):
     def setUp(self):
@@ -43,30 +43,44 @@ class ParseCsvTestCase(unittest.TestCase):
 
     def test_parse_into_db_incident(self):
         parse_to_db(db, 'poll244_sample.csv')
-        incident1_license = 'AG-26081'
-        incident1 = IncidentReport.query.filter_by(license_plate=incident1_license).first()
-        self.assertTrue(incident1.vehicle_id == '250')
-        self.assertTrue(incident1.agency.name == 'ABBONIZIO TRANSFER')
-        self.assertTrue(str(incident1.duration) == '0:03:00')
-        pic_url1 = 'https://textizen-attachments.s3.amazonaws.com/uploads/response/photo_attachment/255089/IMG_2937.jpg'
-        self.assertTrue(incident1.picture_url == pic_url1)
-        self.assertTrue(incident1.description == 'Driver in truck, possibly eating, windows partially down')
+        t_url = 'https://textizen-attachments.s3.amazonaws.com/'
 
-        incident2_license = 'YSK-9618'
-        incident2 = IncidentReport.query.filter_by(license_plate=incident2_license).first()
-        self.assertTrue(incident2.vehicle_id == '220530591')
-        self.assertTrue(incident2.agency.name == 'VERIZON')
-        self.assertTrue(str(incident2.duration) == '0:05:00')
-        pic_url2 = 'https://textizen-attachments.s3.amazonaws.com/uploads/response/photo_attachment/255080/IMG_3656.jpg'
-        self.assertTrue(incident2.picture_url == pic_url2)
-        self.assertTrue(incident2.description == 'Driver sleeping in truck, no work being done.')
+        license1 = 'AG-26081'
+        vehicle1 = '250'
+        agency1 = 'ABBONIZIO TRANSFER'
+        duration1 = '0:03:00'
+        pic1 = t_url+'uploads/response/photo_attachment/255089/IMG_2937.jpg'
+        desc1 = 'Driver in truck, possibly eating, windows partially down'
+        i1 = IncidentReport.query.filter_by(license_plate=license1).first()
+        self.assertTrue(i1.vehicle_id == vehicle1)
+        self.assertTrue(i1.agency.name == agency1)
+        self.assertTrue(str(i1.duration) == duration1)
+        self.assertTrue(i1.picture_url == pic1)
+        self.assertTrue(i1.description == desc1)
 
-        incident3_license = 'MG-0512E'
-        incident3 = IncidentReport.query.filter_by(license_plate=incident3_license).first()
-        self.assertTrue(incident3.vehicle_id == '105014')
-        self.assertTrue(incident3.agency.name == 'STREETS')
-        self.assertTrue(str(incident3.duration) == '0:06:00')
-        pic_url3 = 'https://textizen-attachments.s3.amazonaws.com/uploads/response/photo_attachment/255071/IMG_5074.jpg'
-        self.assertTrue(incident3.picture_url == pic_url3)
-        description3 = 'Driver in truck talking on phone, window partially down, no work being done'
-        self.assertTrue(incident3.description == description3)
+        license2 = 'YSK-9618'
+        vehicle2 = '220530591'
+        agency2 = 'VERIZON'
+        duration2 = '0:05:00'
+        pic2 = t_url+'uploads/response/photo_attachment/255080/IMG_3656.jpg'
+        desc2 = 'Driver sleeping in truck, no work being done.'
+        i2 = IncidentReport.query.filter_by(license_plate=license2).first()
+        self.assertTrue(i2.vehicle_id == vehicle2)
+        self.assertTrue(i2.agency.name == agency2)
+        self.assertTrue(str(i2.duration) == duration2)
+        self.assertTrue(i2.picture_url == pic2)
+        self.assertTrue(i2.description == desc2)
+
+        license3 = 'MG-0512E'
+        vehicle3 = '105014'
+        agency3 = 'STREETS'
+        duration3 = '0:06:00'
+        pic3 = t_url+'uploads/response/photo_attachment/255071/IMG_5074.jpg'
+        desc3 = 'Driver in truck talking on phone, window partially down,' + \
+            ' no work being done'
+        i3 = IncidentReport.query.filter_by(license_plate=license3).first()
+        self.assertTrue(i3.vehicle_id == vehicle3)
+        self.assertTrue(i3.agency.name == agency3)
+        self.assertTrue(str(i3.duration) == duration3)
+        self.assertTrue(i3.picture_url == pic3)
+        self.assertTrue(i3.description == desc3)

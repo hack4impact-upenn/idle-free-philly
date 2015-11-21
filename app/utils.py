@@ -1,4 +1,7 @@
-import re, datetime, csv, requests
+import re
+import datetime
+import csv
+import requests
 from flask import url_for
 from app.models import Location, Agency, IncidentReport
 
@@ -33,7 +36,6 @@ def parse_phone_number(phone_number):
 
 
 def parse_to_db(db, filename):
-    city_default = ', philadelphia, pennsylvania, usa'
     viewport_default = '39.861204,-75.310357|40.138932,-74.928582'
     vehicle_id_index = 8
     license_plate_index = 9
@@ -48,7 +50,7 @@ def parse_to_db(db, filename):
         for row in reader:
             address_text = row[location_index]
             # Viewport-biased geocoding using Google API
-            url="https://maps.googleapis.com/maps/api/geocode/json"
+            url = "https://maps.googleapis.com/maps/api/geocode/json"
             payload = {'address': address_text, 'bounds': viewport_default}
             r = requests.get(url, params=payload)
             coordinates = r.json()['results'][0]['geometry']['location']
@@ -58,8 +60,8 @@ def parse_to_db(db, filename):
                 original_user_text=address_text)
             db.session.add(loc)
             date_format = "%m/%d/%Y %H:%M"
-            start_time = datetime.datetime.strptime(row[date_index], date_format)
-            end_time = datetime.datetime.strptime(row[date_index + 1], date_format)
+            time1 = datetime.datetime.strptime(row[date_index], date_format)
+            time2 = datetime.datetime.strptime(row[date_index+1], date_format)
             # Assign correct agency id
             agency_name = row[agency_index].rstrip().upper()
             if agency_name == 'OTHER':
@@ -71,18 +73,18 @@ def parse_to_db(db, filename):
                 a.is_official = False
                 db.session.add(a)
                 db.session.commit()
-            vehicle_id_text=row[vehicle_id_index].strip()
+            vehicle_id_text = row[vehicle_id_index].strip()
             if len(vehicle_id_text) is 0:
                 vehicle_id_text = None
-            license_plate_text=row[license_plate_index].strip()
+            license_plate_text = row[license_plate_index].strip()
             if len(license_plate_text) is 0:
                 license_plate_text = None
             incident = IncidentReport(
                 vehicle_id=vehicle_id_text,
                 license_plate=license_plate_text,
                 location=loc,
-                date=start_time,
-                duration=end_time - start_time,
+                date=time1,
+                duration=time2 - time1,
                 agency=a,
                 picture_url=row[picture_index],
                 description=row[description_index])

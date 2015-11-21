@@ -11,7 +11,7 @@ def handle_message():
     message = str(request.values.get('Body'))  # noqa
     twiml = twilio.twiml.Response()
     step = int(request.cookies.get('messagecount', 0))
-    print urllib.unquote(request.cookies.get('report', "{}"))
+    print urllib.unquote(request.cookies.get('report', "{}")).decode('utf8')  # noqa
     incident_report = json.loads(request.cookies.get('report', "{}"))
     if step is 0 and "report" in message.lower():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa

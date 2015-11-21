@@ -2,10 +2,11 @@ from flask import render_template
 from flask.ext.login import login_required, current_user
 from . import reports
 from ..models import IncidentReport, Agency
+from ..decorators import admin_or_agency_required
 
 
 @reports.route('/all')
-@login_required
+@admin_or_agency_required
 def view_reports():
     """View all idling incident reports.
     Different roles have access to different reports.
@@ -30,3 +31,9 @@ def view_reports():
     # TODO test using real data
     return render_template('reports/reports.html', reports=reports,
                            agencies=agencies, current_user=current_user)
+
+
+@reports.route('/my-reports')
+@login_required
+def view_my_reports():
+    pass

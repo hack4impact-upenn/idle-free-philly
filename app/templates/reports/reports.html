@@ -116,17 +116,6 @@
                     }).closest('tr').removeClass('hidden').show();
                 }
             });
-
-            $('#user-only-reports').change(function() {
-                if (this.checked) {
-                    // filter reports by current user
-                    $('tr.report').addClass('hidden').hide();
-                    $('tr.report.current-user-report').removeClass('hidden').show();
-                } else {
-                    // reset filter
-                    $('tr.report').removeClass('hidden').show();
-                }
-            });
         });
     </script>
 {% endblock %}

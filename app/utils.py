@@ -64,10 +64,10 @@ def parse_to_db(db, filename):
             time1 = datetime.datetime.strptime(row[date_index], date_format)
             time2 = datetime.datetime.strptime(row[date_index+1], date_format)
             # Assign correct agency id
-            agency_name = row[agency_index].rstrip().upper()
+            agency_name = row[agency_index].rstrip()
             if agency_name == 'OTHER':
-                agency_name = row[agency_index + 1].rstrip().upper()
-            a = Agency.query.filter_by(name=agency_name).first()
+                agency_name = row[agency_index + 1].rstrip()
+            a = Agency.get_agency_by_name(agency_name)
             if a is None:
                 a = Agency(name=agency_name)
                 a.is_public = True

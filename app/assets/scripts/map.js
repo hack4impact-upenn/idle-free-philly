@@ -7,19 +7,21 @@ INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
 initial_coords = new google.maps.LatLng(INITIAL_CENTER_LAT, INITIAL_CENTER_LONG);
 
-// Initial map zoom value
-ZOOM = 17;
-
 // Bounds for the Date Slider. End date is current date.
 var BOUNDS_MIN;
 var BOUNDS_MAX = new Date();
 
+// Make a type for an object that encapsulates a GoogleMaps marker
+// object, the corresponding date, and the corresponding message to
+// display for the marker.
 function MarkerWrapper(actualMarker, incidentDate, contentString) {
     this.actualMarker = actualMarker;
     this.incidentDate = incidentDate;
     this.contentString = contentString;
 }
 
+// Take a list of MarkerWrappers and a map, put them on the map, set the
+// minimum date, and set the location bounds
 function storeMarkerState(markerWrappers, map, minDate, bounds) {
     globalMarkerWrappers = markerWrappers;
     globalMap = map;
@@ -37,21 +39,27 @@ function update_center() {
     geocoder = new google.maps.Geocoder();
     address = $("#address").val();
     if (geocoder) {
-        console.log(address);
         geocoder.geocode( { 'address': address},
         function(results, status) {
-            if (status != google.maps.GeocoderStatus.OK) {
-                alert("Geocode not successful - " + status);
+            if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+                $('#address_error').modal('show');
             }
-            else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-                alert("Address not found!");
+            else if (status != google.maps.GeocoderStatus.OK) {
+                $('#geocode_error').modal('show');
             }
             else {
                 globalMap.setCenter(results[0].geometry.location);
             }
+            $('.close.icon').on('click', function() {
+                $(this).parent().hide();
+            });
         });
     }
 }
+
+$('.close.icon').on('click', function() {
+    $(this).parent().hide();
+});
 
 // Get address submit event
 $(document).ready(function() {

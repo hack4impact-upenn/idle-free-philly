@@ -33,3 +33,15 @@
 #wrapper {
     position:relative;
 }
+
+.ui.modal {
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+}
+
+.ui.approve.button {
+    display: block;
+    margin: 0 auto;
+}

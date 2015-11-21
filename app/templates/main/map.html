@@ -48,8 +48,6 @@
         });
         {% endfor %}
         var mapProp = {
-                center: initial_coords,
-                zoom:ZOOM,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: false,
                 streetViewControl: false
@@ -85,35 +83,26 @@
             <div id="googleMap"></div>
             <div id="slider"></div>
             <form name = "addressForm" id = "addressForm">
-            <div class="ui search" id="addressSearch">
-            <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
-            </div>
-            <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
+                <div class="ui search" id="addressSearch">
+                <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
+                </div>
+                <br><input class="ui button" type="submit" id="submitButton" value="Submit"></br>
             </form>
-        <div id="row">
-            <div class="ui form">
-            <div class="fields">
-                <div class="three wide field">
-                    <label>License Plate Number</label>
-                    <input type="text" placeholder="e.g. MG-1234E">
-                </div>
-                <div class="three wide field">
-                    <label>Vehicle ID</label>
-                    <input type="text" placeholder="e.g. 105014">
-                </div>
-            </div>
-            <div class="fields">
-                <div class="six wide field">
-                    <label>Notes </label>
-                    <input type="text" placeholder="e.g. Driver sleeping">
-                </div>
-                <div class="three wide field">
-                    <label>Idling Duration (in minutes) </label>
-                    <input type="number" placeholder="e.g. 10">
-                </div>
-            </div>
-            </div>
-        </div>
+    </div>
+</div>
+
+<div class="ui centered modal" id="geocode_error">
+    <i class="close icon"></i>
+    <div class="header">Geocode not successful</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
+    </div>
+</div>
+<div class="ui centered modal" id="address_error">
+    <i class="close icon"></i>
+    <div class="header">Address not found</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
     </div>
 </div>
 {% endblock %}

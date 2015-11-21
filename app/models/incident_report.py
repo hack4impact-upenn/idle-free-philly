@@ -12,7 +12,7 @@ class Location(db.Model):
                                    db.ForeignKey('incident_reports.id'))
 
     def __repr__(self):
-        return '<Location \'%s\'>' % self.longitude
+        return '%s, %s' % (self.latitude, self.longitude)
 
 
 class IncidentReport(db.Model):

@@ -12,7 +12,8 @@ class Location(db.Model):
                                    db.ForeignKey('incident_reports.id'))
 
     def __repr__(self):
-        return '%s, %s' % (self.latitude, self.longitude)
+        # TODO: Show address instead?
+        return 'Coordinates: {0}, {1}'.format(self.latitude, self.longitude)
 
 
 class IncidentReport(db.Model):

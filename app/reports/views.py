@@ -13,6 +13,8 @@ def view_reports():
     An Agency worker can all reports for their agency.
     A general user can see all reports submitted by that user."""
 
+    agencies = None
+
     if current_user.is_admin():
         reports = IncidentReport.query.all()
         agencies = Agency.query.all()
@@ -21,11 +23,9 @@ def view_reports():
         reports = []
         for agency in current_user.agencies:
             reports.extend(agency.incident_reports)
-        agencies = None
 
     elif current_user.is_general_user():
         reports = current_user.incident_reports
-        agencies = None
 
     # TODO test using real data
     return render_template('reports/reports.html', reports=reports,

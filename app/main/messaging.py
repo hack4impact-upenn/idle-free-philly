@@ -14,20 +14,18 @@ def handle_message():
 
     step = int(request.cookies.get('messagecount', 0))
 
-    # if step is 0 and "report" in message.lower():
-    #     resp.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
-    # if step is 1:
-    #     resp.message("What is the License Plate Number? (eg.MG-1234E)")
-    # elif step is 2:
-    #     resp.message("What is the Vehicle ID? (eg.105014)")
-    # elif step is 3:
-    #     resp.message("How many minutes has it been Idling for? (eg. 10)")
-    # elif step is 4:
-    #     resp.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
-    # else:
-    #     resp.message("Thanks!")
-    # session.pop('step', None)
-    twiml.message(str(step))
+    if step is 0 and "report" in message.lower():
+        twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
+    if step is 1:
+        twiml.message("What is the License Plate Number? (eg.MG-1234E)")
+    elif step is 2:
+        twiml.message("What is the Vehicle ID? (eg.105014)")
+    elif step is 3:
+        twiml.message("How many minutes has it been Idling for? (eg. 10)")
+    elif step is 4:
+        twiml.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
+    else:
+        twiml.message("Thanks!")
     step += 1
     expires = datetime.utcnow() + timedelta(hours=4)
     expires_str = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')

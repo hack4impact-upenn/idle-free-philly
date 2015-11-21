@@ -4,6 +4,11 @@
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000318}}
+.body.container {
+  min-height: 100%;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000322}}
 #CAC_logo {
   content: url("../../static/images/CAC_logo.png");
   height: 2em;
@@ -12,6 +17,7 @@
   margin-left: 0.5em;
 }
 
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\0000327}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
   border-right: 1px solid rgba(34, 36, 38, 0.09804);
@@ -29,17 +35,55 @@ nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a {
 }
 @media -sass-debug-info{filename{}line{font-family:\0000340}}
 nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a:hover, nav .computer.only.row .ui.dropdown.item:hover {
+=======
+@media -sass-debug-info{filename{}line{font-family:\0000330}}
+.ui.secondary.pointing.menu {
+  background-color: #56A5BF;
+  width: 100%;
+  font-size: 1.3em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000336}}
+.ui.secondary.pointing.menu > .header.item {
+  color: #FFFFFF !important;
+  font-size: 1.4em;
+  font-weight: 400;
+  border: none;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000343}}
+.ui.secondary.pointing.menu > .right.menu {
+  margin-right: 2em;
+  padding-bottom: 1em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000348}}
+.ui.secondary.pointing.menu > .right.menu > a {
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000353}}
+.ui.secondary.pointing.menu > .right.menu > a:hover {
+>>>>>>> master
   background-color: #7CC1D8;
   color: #FFFFFF;
   border-radius: 0.5em;
 }
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\0000345}}
 nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a.active {
+=======
+
+@media -sass-debug-info{filename{}line{font-family:\0000358}}
+.ui.secondary.pointing.menu > .right.menu > a.active {
+>>>>>>> master
   background-color: #7CC1D8;
   color: #FFFFFF;
   border: none;
   font-weight: 400;
 }
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\0000351}}
 nav .computer.only.row .ui.secondary.pointing.menu {
   background-color: #56A5BF;
@@ -55,17 +99,31 @@ nav .computer.only.row .ui.secondary.pointing.menu > .header.item {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000366}}
+=======
+
+@media -sass-debug-info{filename{}line{font-family:\0000366}}
+.ui.fixed.main.menu .right.menu > .item:last-of-type {
+  border-right: 1px solid rgba(34, 36, 38, 0.09804);
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000372}}
+>>>>>>> master
 nav .mobile.only.row .ui.vertical.menu {
   margin-top: 45px;
   display: none;
   background-color: #1C7592;
 }
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\0000371}}
 nav .mobile.only.row .ui.vertical.menu > a, nav .mobile.only.row .ui.vertical.menu > ui.dropdown.item:hover {
   color: #FFFFFF;
   text-transform: uppercase;
 }
 @media -sass-debug-info{filename{}line{font-family:\0000375}}
+=======
+
+@media -sass-debug-info{filename{}line{font-family:\0000380}}
+>>>>>>> master
 nav .mobile.only.row .ui.main.menu {
   background-color: #56A5BF;
 }
@@ -74,6 +132,7 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
   color: #222222;
 }
 
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\0000383}}
 .ui.dropdown.item, .ui.secondary.pointing.menu .active.item {
   color: #FFFFFF;
@@ -101,10 +160,24 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003106}}
+=======
+@media -sass-debug-info{filename{}line{font-family:\0000385}}
+.ui.vertical.menu > a {
+  color: #white;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000389}}
+.ui.vertical.secondary.menu > a {
+  color: #222222;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000394}}
+>>>>>>> master
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\00003109}}
 .ui.red.error {
   color: #FF684C;
@@ -112,20 +185,29 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
 
 @media -sass-debug-info{filename{}line{font-family:\00003112}}
 .ui.red.pointing.label {
+=======
+@media -sass-debug-info{filename{}line{font-family:\0000398}}
+ui.red.pointing.label {
+>>>>>>> master
   background-color: #FF684C !important;
   border-color: #FF684C !important;
 }
 
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\00003116}}
 .ui.red.label:before {
   background-color: #FF684C !important;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003121}}
+=======
+@media -sass-debug-info{filename{}line{font-family:\00003103}}
+>>>>>>> master
 table.selectable tr:hover {
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\00003126}}
 h1, h2, .ui.dividing.header {
   color: #1C7592;
@@ -133,10 +215,20 @@ h1, h2, .ui.dividing.header {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003130}}
+=======
+@media -sass-debug-info{filename{}line{font-family:\00003108}}
+h1, h2 {
+  color: #1C7592 !important;
+  text-transform: uppercase !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003113}}
+>>>>>>> master
 h3 {
   margin-bottom: 0.3em;
 }
 
+<<<<<<< HEAD
 @media -sass-debug-info{filename{}line{font-family:\00003133}}
 .ui.form .field > label, p, input {
   font-size: 1.1em;
@@ -146,3 +238,49 @@ h3 {
 .sub.header {
   text-transform: none;
 }
+=======
+@media -sass-debug-info{filename{}line{font-family:\00003117}}
+p, label, input {
+  font-size: 1.1em !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003121}}
+.sub.header {
+  text-transform: none;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003125}}
+.ui.red.error {
+  color: #FF684C;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003130}}
+footer {
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+  padding: 1em;
+  margin-top: 5%;
+  background-color: #1C7592;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003139}}
+#h4i_logo {
+  content: url("../../static/images/h4i_square_white.png");
+  height: 1.2em;
+  width: auto;
+  margin-right: 0.5em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003146}}
+footer > div > h3 {
+  color: #FFFFFF;
+  margin-top: 0;
+  font-weight: 300;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003152}}
+.icon.heart:hover {
+  color: #FF684C;
+}
+>>>>>>> master

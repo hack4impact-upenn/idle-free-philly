@@ -59,8 +59,9 @@ def registered_users():
     """View all registered users."""
     users = User.query.all()
     roles = Role.query.all()
+    agencies = Agency.query.all()
     return render_template('admin/registered_users.html', users=users,
-                           roles=roles)
+                           roles=roles, agencies=agencies)
 
 
 @admin.route('/user/<int:user_id>')

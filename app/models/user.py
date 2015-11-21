@@ -64,7 +64,7 @@ class User(UserMixin, db.Model):
     reported_incidents = db.relationship('IncidentReport',
                                          backref='user',
                                          lazy='select')
-    agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
+    # also related to agencies via the agency_user_table
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -162,7 +162,7 @@ class User(UserMixin, db.Model):
     def generate_fake(count=10, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
-        from random import seed, choice
+        from random import seed, choice, sample, randint
         from faker import Faker
 
         fake = Faker()
@@ -174,6 +174,8 @@ class User(UserMixin, db.Model):
             u = User(
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
+                phone_number='+1{}'.format(''.join([str(randint(0, 9))
+                                                    for _ in range(0, 10)])),
                 email=fake.email(),
                 password=fake.password(),
                 confirmed=True,
@@ -181,7 +183,7 @@ class User(UserMixin, db.Model):
                 **kwargs
             )
             if u.role.name == 'AgencyWorker':
-                u.agency = choice(agencies)
+                u.agencies = sample(agencies, randint(1, len(agencies)))
             db.session.add(u)
             try:
                 db.session.commit()

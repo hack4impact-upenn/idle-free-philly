@@ -20,3 +20,4 @@ itsdangerous==0.24
 webassets==0.10.1
 wsgiref==0.1.2
 geocoder==1.6.4
+requests==2.8.1

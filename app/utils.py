@@ -1,4 +1,4 @@
-import re, datetime, csv, geocoder
+import re, datetime, csv, requests
 from flask import url_for
 from app.models import Location, Agency, IncidentReport
 
@@ -34,6 +34,7 @@ def parse_phone_number(phone_number):
 
 def parse_to_db(db, filename):
     city_default = ', philadelphia, pennsylvania, usa'
+    viewport_default = '39.861204,-75.310357|40.138932,-74.928582'
     vehicle_id_index = 8
     license_plate_index = 9
     location_index = 4
@@ -46,13 +47,14 @@ def parse_to_db(db, filename):
         columns = reader.next()
         for row in reader:
             address_text = row[location_index]
-            coordinates = geocoder.google(address_text + city_default).latlng
-            # Try arcgis geocode implementation if Google fails
-            if len(coordinates) == 0:
-                coordinates = geocoder.arcgis(address_text + city_default).latlng
+            # Viewport-biased geocoding using Google API
+            url="https://maps.googleapis.com/maps/api/geocode/json"
+            payload = {'address': address_text, 'bounds': viewport_default}
+            r = requests.get(url, params=payload)
+            coordinates = r.json()['results'][0]['geometry']['location']
             loc = Location(
-                latitude=coordinates[0],
-                longitude=coordinates[1],
+                latitude=coordinates['lat'],
+                longitude=coordinates['lng'],
                 original_user_text=address_text)
             db.session.add(loc)
             date_format = "%m/%d/%Y %H:%M"
@@ -81,7 +83,7 @@ def parse_to_db(db, filename):
                 location=loc,
                 date=start_time,
                 duration=end_time - start_time,
-                agency = a,
+                agency=a,
                 picture_url=row[picture_index],
                 description=row[description_index])
             db.session.add(incident)

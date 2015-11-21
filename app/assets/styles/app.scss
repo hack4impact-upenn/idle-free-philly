@@ -3,9 +3,59 @@ $mobile-breakpoint:        768px;
 $tablet-breakpoint:        992px;
 $small-monitor-breakpoint: 1200px;
 
+$teal: #56A5BF;
+$dark-teal: #1C7592;
+$light-teal: #7CC1D8;
+$dark-gray: #222222;
+$white: #FFFFFF;
+$red: #FF684C;
+
 // General nav
 nav {
     margin-bottom: 40px !important;
+}
+
+#CAC_logo {
+	content: url("../../static/images/CAC_logo.png");
+	height: 2em;
+	width: auto;
+	margin-right: 0.5em;
+	margin-left: 0.5em;
+}
+
+.ui.secondary.pointing.menu {
+	background-color: $teal;
+	width: 100%;
+	font-size: 1.3em;
+}
+
+.ui.secondary.pointing.menu > .header.item {
+	color: $white !important;
+	font-size: 1.4em;
+	font-weight: 400;
+	border: none;
+}
+
+.ui.secondary.pointing.menu > .right.menu {
+	margin-right: 2em;
+	padding-bottom: 1em;
+}
+
+.ui.secondary.pointing.menu > .right.menu > a{
+	color: $white;
+	text-transform: uppercase;
+}
+
+.ui.secondary.pointing.menu > .right.menu > a:hover {
+	background-color: $light-teal;
+	border-radius: 0.5em;
+}
+
+.ui.secondary.pointing.menu > .right.menu > a.active {
+	background-color: $light-teal;
+	color: $white;;
+	border: none;
+	font-weight: 400;
 }
 
 // Desktop nav
@@ -18,7 +68,22 @@ nav .mobile.only.row {
     .ui.vertical.menu {
         margin-top: 40px;
         display: none;
+        background-color: $dark-teal;
     }
+}
+
+nav .mobile.only.row {
+    .ui.main.menu {
+    	background-color: $teal;
+    }
+}
+
+.ui.vertical.menu > a {
+	color: #white;
+}
+
+.ui.vertical.secondary.menu > a {
+	color: $dark-gray;
 }
 
 // Flashes
@@ -26,7 +91,34 @@ nav .mobile.only.row {
     margin-bottom: 2rem;
 }
 
+ui.red.pointing.label {
+	background-color: $red !important;
+}
+
 // Tables
 table.selectable tr:hover {
     cursor: pointer !important;
 }
+
+// Text
+h1, h2 {
+	color: $dark-teal !important;
+	text-transform: uppercase !important;
+}
+
+h3 {
+	margin-bottom: 0.3em;
+}
+
+p, label, input {
+	font-size: 1.1em !important;
+}
+
+.sub.header {
+	text-transform: none;
+}
+
+.ui.red.error {
+	color: $red;
+}
+

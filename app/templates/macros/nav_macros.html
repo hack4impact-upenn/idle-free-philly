@@ -48,7 +48,7 @@
 {% endmacro %}
 
 {% macro mobile_nav(current_user, endpoints=None) %}
-    <div class="mobile tablet only row">
+    <div class="mobile only row">
         <div class="ui fixed inverted main menu">
             <div class="left menu">
                 <a class="icon item" id="open-nav"><i class="sidebar icon"></i></a>
@@ -70,7 +70,7 @@
 {# If `count` and `endpoints` are specified, the endpoints will be put into a
  # secondary menu. `count` should be the string (e.g. 'four') number of endpoints. #}
 {% macro desktop_nav(current_user, endpoints=None, count=None) %}
-    <div class="computer only row">
+    <div class="computer tablet only row">
         <div class="ui secondary pointing menu">
          <a class="header item" href="{{ url_for('main.index') }}">
          <img id = "CAC_logo">{{ config.APP_NAME }}</a>

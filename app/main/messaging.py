@@ -10,7 +10,7 @@ def handle_message():
     message = str(request.values.get('Body'))  # noqa
     twiml = twilio.twiml.Response()
     step = int(request.cookies.get('messagecount', 0))
-    incident_report = json.loads(request.cookies.get('i_report', "{}"))
+    incident_report = json.loads(request.cookies.get('report', "{}"))
     if step is 0 and "report" in message.lower():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
     elif step is 1:
@@ -20,7 +20,7 @@ def handle_message():
         incident_report["licensePlate"] = "TRAP"
         twiml.message("What is the Vehicle ID? (eg.105014)")
     elif step is 3:
-        incident_report["ID"] = "COOKOO FOR COCOAPUFFS"
+        incident_report["ID"] = "COOKOOFORCOCOAPUFFS"
         twiml.message("How many minutes has it been Idling for? (eg. 10)")
     elif step is 4:
         twiml.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
@@ -33,5 +33,5 @@ def handle_message():
     response = make_response(str(twiml))
     response.set_cookie('messagecount', value=str(step), expires=expires_str)
     print(json.dumps(incident_report))
-    response.set_cookie('i_report', value=json.dumps(incident_report), expires=expires_str)  # noqa
+    response.set_cookie('report', value=json.dumps(incident_report), expires=expires_str)  # noqa
     return response

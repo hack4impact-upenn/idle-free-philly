@@ -50,19 +50,19 @@
 {% macro mobile_nav(current_user, endpoints=None) %}
     <div class="mobile tablet only row">
         <div class="ui fixed inverted main menu">
-             <a class="header item" href="{{ url_for('main.index') }}">
-             <img id = "CAC_logo">{{ config.APP_NAME }}</a>
-             <div class="right menu">
+            <div class="left menu">
                 <a class="icon item" id="open-nav"><i class="sidebar icon"></i></a>
             </div>
-        </div>
-        {# The menu items which will be shown when open-nav is clicked #}
-        <div class="ui left fixed vertical menu">
-            {% if endpoints %}
-                {{ render_menu_items(endpoints) }}
-            {% endif %}
-            {{ header_items(current_user) }}
-            {{ account_items(current_user) }}
+            {# The menu items which will be shown when open-nav is clicked #}
+            <div class="ui left fixed vertical menu">
+                {% if endpoints %}
+                    {{ render_menu_items(endpoints) }}
+                {% endif %}
+                {{ header_items(current_user) }}
+                {{ account_items(current_user) }}
+            </div>
+             <a class="header item" href="{{ url_for('main.index') }}">
+             <img id = "CAC_logo">{{ config.APP_NAME }}</a>
         </div>
     </div>
 {% endmacro %}

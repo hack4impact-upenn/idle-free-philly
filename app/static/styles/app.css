@@ -61,7 +61,7 @@ nav .mobile.only.row .ui.vertical.menu {
   background-color: #1C7592;
 }
 @media -sass-debug-info{filename{}line{font-family:\0000371}}
-nav .mobile.only.row .ui.vertical.menu > a {
+nav .mobile.only.row .ui.vertical.menu > a, nav .mobile.only.row .ui.vertical.menu > ui.dropdown.item:hover {
   color: #FFFFFF;
 }
 @media -sass-debug-info{filename{}line{font-family:\0000374}}

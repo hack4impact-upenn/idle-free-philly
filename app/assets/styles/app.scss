@@ -68,7 +68,7 @@ nav .mobile.only.row {
         display: none;
         background-color: $dark-teal;
     }
-    .ui.vertical.menu > a{
+    .ui.vertical.menu > a,.ui.vertical.menu > ui.dropdown.item:hover{
     	color: $white;
     } 
     .ui.main.menu {

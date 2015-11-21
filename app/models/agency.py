@@ -23,6 +23,9 @@ class Agency(db.Model):
     # public user sees a report on the map, the report's agency will only be
     # shown if is_public is True.
     is_public = db.Column(db.Boolean, default=False)
+
+    # Many users to many agencies. We use the above agency_user_table to
+    # configure this relationship.
     users = db.relationship('User', secondary=agency_user_table,
                             backref='agencies', lazy='select')
     incident_reports = db.relationship('IncidentReport', backref='agency',

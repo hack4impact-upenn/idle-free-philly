@@ -1,6 +1,14 @@
 from .. import db
 
 
+# Configure many-to-many relationship
+agency_user_table = db.Table(
+    'association',
+    db.Column('agencies_id', db.Integer, db.ForeignKey('agencies.id')),
+    db.Column('users_id', db.Integer, db.ForeignKey('users.id'))
+)
+
+
 class Agency(db.Model):
     __tablename__ = 'agencies'
     id = db.Column(db.Integer, primary_key=True)
@@ -15,9 +23,13 @@ class Agency(db.Model):
     # public user sees a report on the map, the report's agency will only be
     # shown if is_public is True.
     is_public = db.Column(db.Boolean, default=False)
-    users = db.relationship('User', backref='agency', lazy='select')
-    reports = db.relationship('IncidentReport', backref='agency',
-                              lazy='joined')
+
+    # Many users to many agencies. We use the above agency_user_table to
+    # configure this relationship.
+    users = db.relationship('User', secondary=agency_user_table,
+                            backref='agencies', lazy='select')
+    incident_reports = db.relationship('IncidentReport', backref='agency',
+                                       lazy='joined')
 
     @staticmethod
     def insert_agencies():

@@ -141,15 +141,16 @@ class UserModelTestCase(unittest.TestCase):
     def test_agency_worker_role(self):
         Role.insert_roles()
         r = Role.query.filter_by(permissions=Permission.AGENCY_WORKER).first()
-        a = Agency(name='SEPTA')
+        ag_1 = Agency(name='SEPTA')
+        ag_2 = Agency(name='STREETS')
         u = User(email='user@example.com', password='password', role=r,
-                 agency=a)
+                 agencies=[ag_1, ag_2])
         self.assertTrue(u.can(Permission.AGENCY_WORKER))
         self.assertFalse(u.can(Permission.ADMINISTER))
         self.assertFalse(u.is_admin())
-        self.assertEqual(u.agency, a)
+        self.assertEqual(u.agencies, [ag_1, ag_2])
 
-    def test_incident_reports(self):
+    def test_reported_incidents(self):
         u = User(email='user@example.com', password='password')
         incident1 = IncidentReport(
             vehicle_id='123456',
@@ -159,5 +160,5 @@ class UserModelTestCase(unittest.TestCase):
             vehicle_id='654321',
             user=u
         )
-        u.incident_reports = [incident1, incident2]
+        u.reported_incidents = [incident1, incident2]
         self.assertEqual(u.reported_incidents, [incident1, incident2])

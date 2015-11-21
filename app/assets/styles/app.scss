@@ -1,6 +1,6 @@
 // Semantic UI breakpoints
 $mobile-breakpoint:        768px;
-$tablet-breakpoint:        992px;
+$tablet-breakpoint:        956px;
 $small-monitor-breakpoint: 1200px;
 
 $teal: #56A5BF;
@@ -12,7 +12,7 @@ $red: #FF684C;
 
 // General nav
 nav {
-    margin-bottom: 40px !important;
+    margin-bottom: 50px !important;
 }
 
 #CAC_logo {
@@ -23,44 +23,41 @@ nav {
 	margin-left: 0.5em;
 }
 
-.ui.secondary.pointing.menu {
-	background-color: $teal;
-	width: 100%;
-	font-size: 1.3em;
-}
-
-.ui.secondary.pointing.menu > .header.item {
-	color: $white !important;
-	font-size: 1.4em;
-	font-weight: 400;
-	border: none;
-}
-
-.ui.secondary.pointing.menu > .right.menu {
-	margin-right: 2em;
-	padding-bottom: 1em;
-}
-
-.ui.secondary.pointing.menu > .right.menu > a{
-	color: $white;
-	text-transform: uppercase;
-}
-
-.ui.secondary.pointing.menu > .right.menu > a:hover {
-	background-color: $light-teal;
-	border-radius: 0.5em;
-}
-
-.ui.secondary.pointing.menu > .right.menu > a.active {
-	background-color: $light-teal;
-	color: $white;;
-	border: none;
-	font-weight: 400;
-}
-
 // Desktop nav
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
     border-right: 1px solid rgba(34, 36, 38, 0.0980392);
+}
+
+nav .computer.only.row {
+	.ui.secondary.pointing.menu > .right.menu {
+		margin-right: 2em;
+		padding-bottom: 1em;
+	}
+	.ui.secondary.pointing.menu > .right.menu > a{
+		color: $white;
+		text-transform: uppercase;
+	}
+	.ui.secondary.pointing.menu > .right.menu > a:hover {
+		background-color: $light-teal;
+		border-radius: 0.5em;
+	}
+	.ui.secondary.pointing.menu > .right.menu > a.active {
+		background-color: $light-teal;
+		color: $white;;
+		border: none;
+		font-weight: 400;
+	}
+	.ui.secondary.pointing.menu {
+		background-color: $teal;
+		width: 100%;
+		font-size: 1.3em;
+	}
+	.ui.secondary.pointing.menu > .header.item {
+		color: $white !important;
+		font-size: 1.4em;
+		font-weight: 400;
+		border: none;
+	}
 }
 
 // Mobile nav
@@ -76,19 +73,17 @@ nav .mobile.only.row {
     .ui.main.menu {
     	background-color: $teal;
     }
-}
-
-.ui.vertical.menu > a {
-	color: #white;
-}
-
-.ui.vertical.secondary.menu > a {
-	color: $dark-gray;
+    .ui.vertical.secondary.menu > a {
+		color: $dark-gray;
+	}
 }
 
 // Flashes
 .flashes > .ui.message:last-of-type {
     margin-bottom: 2rem;
+}
+.ui.red.error {
+	color: $red;
 }
 
 ui.red.pointing.label {
@@ -116,9 +111,5 @@ p, label, input {
 
 .sub.header {
 	text-transform: none;
-}
-
-.ui.red.error {
-	color: $red;
 }
 

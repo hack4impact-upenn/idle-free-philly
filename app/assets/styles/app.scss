@@ -85,12 +85,10 @@ nav .mobile.only.row {
 .ui.red.error {
 	color: $red;
 }
-
 .ui.red.pointing.label {
 	background-color: $red !important;
 	border-color: $red !important;
 }
-
 .ui.red.label:before {
 	background-color: $red !important;
 }
@@ -105,16 +103,12 @@ h1, h2, .ui.dividing.header {
 	color: $dark-teal;
 	text-transform: uppercase;
 }
-
 h3 {
 	margin-bottom: 0.3em;
 }
-
 .ui.form .field>label, p, input {
 	font-size: 1.1em;
 }
-
-
 .sub.header {
 	text-transform: none;
 }

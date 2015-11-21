@@ -27,6 +27,16 @@
                         {% endfor %}
                     </div>
                 </div>
+                <div id="select-agency-wrapper">
+                    <select id="select-agency" multiple="" class="ui dropdown">
+                        <option value="">Select agency affiliations</option>
+                        <div class="menu">
+                            {% for a in agencies %}
+                                <option class="item" data-value="{{ a.name }}">{{ a.name }}</option>
+                            {% endfor %}
+                        </div>
+                    </select>
+                </div>
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
                         <input id="search-users" type="text" placeholder="Search users…">
@@ -46,6 +56,7 @@
                             <th>Email address</th>
                             <th>Phone number</th>
                             <th>Account type</th>
+                            <th>Affiliated agencies</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +68,7 @@
                             <td>{{ u.email }}</td>
                             <td>{{ u.phone_number }}</td>
                             <td class="user role">{{ u.role.name }}</td>
+                            <td class="agency"> {{ u.agencies|join(', ', attribute='name') }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -67,6 +79,8 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#select-agency-wrapper').hide();
+
             $('#search-users').keyup(function () {
                 var searchText = $(this).val();
                 if (searchText.length > 0) {
@@ -82,9 +96,35 @@
 
             $('#select-role').dropdown({
                 onChange: function (value, text, $selectedItem) {
+                    if (value == 'AgencyWorker') {
+                        $('#select-agency-wrapper').show();
+                    }
+                    else {
+                        $('#select-agency-wrapper').hide();
+                    }
                     $('td.user.role:contains(' + value + ')').closest('tr').removeClass('hidden').show();
                     $('td.user.role').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
                 }
+            });
+            $('#select-agency').change(function(){
+                var agencies = $(this).val();
+                if (agencies == null) {
+                    var currentRole = 'AgencyWorker';
+                    $('td.user.role:contains(' + currentRole + ')').closest('tr').removeClass('hidden').show();
+                    $('td.user.role').not(':contains(' + currentRole + ')').closest('tr').addClass('hidden').hide();
+                    return;
+                }
+                var selectorText = '';
+                for (var i = 0; i < agencies.length; i++) {
+                    if (i == agencies.length - 1) {
+                        selectorText += ':contains(' + agencies[i] + ')';
+                    }
+                    else {
+                        selectorText += ':contains(' + agencies[i] + ')';
+                    }
+                }
+                $('td.agency').filter(selectorText).closest('tr').removeClass('hidden').show();
+                $('td.agency').not(selectorText).closest('tr').addClass('hidden').hide();
             });
         });
     </script>

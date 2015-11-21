@@ -8,7 +8,6 @@
                 Add New Incident Report
                 <div class="sub header">Create a new user account</div>
             </h2>
-
             {% set flashes = {
                 'error':   get_flashed_messages(category_filter=['form-error']),
                 'warning': get_flashed_messages(category_filter=['form-check-email']),
@@ -18,14 +17,14 @@
 
             {{ f.begin_form(form, flashes) }}
 
-                {{ f.render_form_field(form.vehicle_ID) }}
                 {{ f.render_form_field(form.license_plate_number) }}
+                {{ f.render_form_field(form.vehicle_ID) }}
                 {{ f.render_form_field(form.notes) }}
                 {{ f.render_form_field(form.idling_duration) }}
                 {{ f.render_form_field(form.longitude)}}
                 {{ f.render_form_field(form.latitude)}}
                 {{ f.render_form_field(form.location)}}
-
+                {{ f.render_form_field(form.agency)}}
                 {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
                 {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
                 {{ f.form_message(flashes['info'], header='Information', class='info') }}
@@ -33,27 +32,22 @@
                 {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
                     {{ f.render_form_field(field) }}
                 {% endfor %}
+
             {{ f.end_form() }}
         </div>
     </div>
        <p><button onclick="geoFindMe()">Use Current location</button></p>
-        <div class="ui divider">
-             <div class="row">
-                 <div class="four wide column">
-                     <div class="ui small form">
-                         <div id="slider"</div>
-                            <input type="ui text" name="address" id="address" value="Enter Address">
-                            <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
-                     </div>
-                    <div class="row">
-                        <form name = "addressForm" id = "addressForm">
-                            <input type="ui text" name="address" id="address" value="Enter Address">
-                            <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
-                        </form>
+        <div class ="column">
+            <div id="wrapper">
+                    <div id="googleMap"></div>
+                    <div id="slider"></div>
+                    <form name = "addressForm" id = "addressForm">
+                    <div class="ui search" id="addressSearch">
+                    <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
                     </div>
-             </div>
+                    <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
+                    </form>
             </div>
-            <div id="googleMap"></div>
         </div>
     <script type="text/javascript">
     function initializeMapAndMarkers() {
@@ -175,17 +169,6 @@
       navigator.geolocation.getCurrentPosition(success, error);
     }
     </script>
-    <div class ="column">
-        <div id="wrapper">
-                <div id="googleMap"></div>
-                <div id="slider"></div>
-                <form name = "addressForm" id = "addressForm">
-                <div class="ui search" id="addressSearch">
-                <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
-                </div>
-                <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
-                </form>
-        </div>
-    </div>
+
     </html>
 {% endblock %}

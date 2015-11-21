@@ -78,7 +78,7 @@
                         {% else %}
                         <tr class="report">
                         {% endif %}
-                            <td>{{ r.date }}</td>
+                            <td class="single line">{{ r.date.strftime('%m-%d-%Y') }}</td>
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.license_plate }}</td>

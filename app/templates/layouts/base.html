@@ -5,20 +5,23 @@
     {% include 'partials/_head.html' %}
 
     <body>
-        {% block nav %}
-            {{ nav.render_nav(current_user) }}
-        {% endblock %}
+        <div class = "body container">
+            {% block nav %}
+                {{ nav.render_nav(current_user) }}
+            {% endblock %}
 
-        {% include 'partials/_flashes.html' %}
+            {% include 'partials/_flashes.html' %}
 
-        {% block content %}
-        {% endblock %}
+            {% block content %}
+            {% endblock %}
 
-        {# Implement CSRF protection for site #}
-        {% if csrf_token() %}
-            <div style="visibility: hidden; display: none">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            </div>
-        {% endif %}
+            {# Implement CSRF protection for site #}
+            {% if csrf_token() %}
+                <div style="visibility: hidden; display: none">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                </div>
+            {% endif %}
+        </div>
+        {% include 'partials/_footer.html' %}
     </body>
 </html>

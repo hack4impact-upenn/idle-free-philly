@@ -20,6 +20,7 @@ class Config:
     EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(app_name=APP_NAME,
                                                        email=MAIL_USERNAME)
+    VIEWPORT = '39.861204,-75.310357|40.138932,-74.928582'
 
     @staticmethod
     def init_app(app):

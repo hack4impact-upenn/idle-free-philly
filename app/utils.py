@@ -4,6 +4,7 @@ import csv
 import requests
 from flask import url_for
 from app.models import Location, Agency, IncidentReport
+from config import config
 
 
 def register_template_utils(app):
@@ -36,7 +37,6 @@ def parse_phone_number(phone_number):
 
 
 def parse_to_db(db, filename):
-    viewport_default = '39.861204,-75.310357|40.138932,-74.928582'
     vehicle_id_index = 8
     license_plate_index = 9
     location_index = 4
@@ -51,7 +51,8 @@ def parse_to_db(db, filename):
             address_text = row[location_index]
             # Viewport-biased geocoding using Google API
             url = "https://maps.googleapis.com/maps/api/geocode/json"
-            payload = {'address': address_text, 'bounds': viewport_default}
+            payload = {'address': address_text,
+                       'bounds': config['default'].VIEWPORT}
             r = requests.get(url, params=payload)
             coordinates = r.json()['results'][0]['geometry']['location']
             loc = Location(

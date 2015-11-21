@@ -1,0 +1,35 @@
+
+.ui.text.container {
+    text-align: center;
+}
+
+#addressSearch {
+    position: absolute;
+    left: 30px;
+    top: 20px;
+    z-index: 99;
+}
+#submitButton {
+    position: absolute;
+    left: 40px;
+    top: 60px;
+    z-index: 99;
+}
+
+#slider {
+    position: absolute;
+    width: 20%;
+    right: 80px;
+    top:10px;
+    z-index: 99;
+}
+
+#googleMap {
+    width:100%;
+    left: 0px;
+    top: 0px; 
+}
+
+#wrapper {
+    position:relative;
+}

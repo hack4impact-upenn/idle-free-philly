@@ -9,7 +9,7 @@ from flask.ext.assets import Environment
 from flask.ext.wtf import CsrfProtect
 from flask.ext.compress import Compress
 from config import config
-from assets import app_css, app_js, vendor_css, vendor_js, iThing_css, jqueryui_js, jQDateRangeSlidermin_js
+from assets import app_css, app_js, vendor_css, vendor_js
 
 mail = Mail()
 db = SQLAlchemy()
@@ -49,10 +49,7 @@ def create_app(config_name):
     assets_env.register('app_js', app_js)
     assets_env.register('vendor_css', vendor_css)
     assets_env.register('vendor_js', vendor_js)
-    assets_env.register('iThing_css', iThing_css)
-    assets_env.register('jqueryui_js', jqueryui_js)
-    assets_env.register('jQDateRangeSlidermin_js', jQDateRangeSlidermin_js)
-
+    
     # Configure SSL if platform supports it
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
         from flask.ext.sslify import SSLify

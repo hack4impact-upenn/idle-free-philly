@@ -26,6 +26,7 @@ def handle_message():
         twiml.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
     else:
         twiml.message("Thanks!")
+        step = -1
     step += 1
     expires = datetime.utcnow() + timedelta(hours=4)
     expires_str = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')

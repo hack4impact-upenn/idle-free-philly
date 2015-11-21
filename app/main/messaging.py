@@ -16,7 +16,7 @@ def handle_message():
 
     if step is 0 and "report" in message.lower():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
-    if step is 1:
+    elif step is 1:
         twiml.message("What is the License Plate Number? (eg.MG-1234E)")
     elif step is 2:
         twiml.message("What is the Vehicle ID? (eg.105014)")

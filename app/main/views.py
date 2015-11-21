@@ -49,4 +49,4 @@ def get_map():
         )
         db.session.add(new_incident)
         db.session.commit()
-    return render_template('main/map.html', incident_reports=IncidentReport.query.all())
+    return render_template('main/map.html', form=form, incident_reports=IncidentReport.query.all())

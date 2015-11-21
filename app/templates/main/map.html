@@ -2,10 +2,9 @@
 {% import 'macros/form_macros.html' as f %}
 
 {% block content %}
-<<<<<<< HEAD
 <html>
     <head>
-        <link rel="stylesheet" href="static/styles/iThing.css" type="text/css" />
+        <link rel="stylesheet" href="assets/styles/iThing.css" type="text/css" />
         <link rel="stylesheet" href="static/styles/map.css" type="text/css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="http://maps.googleapis.com/maps/api/js"></script>
@@ -105,7 +104,11 @@
             streetViewControl: false
         };
         map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-
+        google.maps.event.addListener(map, 'click', function(event) {
+            $('#latitude').val(event.latLng.lat());
+            $('#longitude').val(event.latLng.lng());
+            getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
+        });
         // Use HTML geolocation to center map if possible
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -174,6 +177,42 @@
     $(function () {
         $("#googleMap").css("height", $(window).height());
     });
+
+
+    function getReverseGeocodingData(lat, lng) {
+        var latlng = new google.maps.LatLng(lat, lng);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                alert(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+                console.log(results);
+                 $('#location').val(results[0].formatted_address);
+            }
+        });
+    }
+
+    function geoFindMe() {
+
+      if (!navigator.geolocation){
+          return;
+        }
+
+      function success(position) {
+        var geocoder = new google.maps.Geocoder;
+
+        $('#latitude').val(position.coords.latitude);
+        $('#longitude').val(position.coords.longitude);
+        getReverseGeocodingData(position.coords.latitude, position.coords.longitude)
+      };
+
+      function error() {
+      };
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
 </script>
 <div class ="column">
     <div id="wrapper">
@@ -211,5 +250,4 @@
         </div>
     </div>
 </div>
->>>>>>> 32bf622f96734e593a0d6b24f3cda1060815e1ac
 {% endblock %}

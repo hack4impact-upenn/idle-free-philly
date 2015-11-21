@@ -3,23 +3,23 @@
     text-align: center;
 }
 
-#address {
+#addressSearch {
     position: absolute;
-    left: 120px;
-    top: 10px;
+    left: 30px;
+    top: 20px;
     z-index: 99;
 }
 #submitButton {
     position: absolute;
-    left: 120px;
-    top: 40px;
+    left: 40px;
+    top: 60px;
     z-index: 99;
 }
 
 #slider {
     position: absolute;
     width: 20%;
-    right: 120px;
+    right: 80px;
     top:10px;
     z-index: 99;
 }

@@ -1,78 +1,29 @@
 geocoder = new google.maps.Geocoder();
 address = document.getElementById("address");
-//Initial map center coordinates
+
+// Global array for map markers
+var markers = []
+
+// Global Marker Wrappers and Map
+var globalMarkerWrappers = null;
+var globalMap = null;
+
+// Initial map center coordinates
 INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
 initial_coords = new google.maps.LatLng(INITIAL_CENTER_LAT, INITIAL_CENTER_LONG);
-//Initial map zoom value
-ZOOM = 17;
-//An integer for the offset between the actual window size and the
-//JavaScript-determined Window size in order to size the map
-WINDOW_OFFSET = 70
 
-//Bounds for the Date Slider. End date is current date.
+// Initial map zoom value
+ZOOM = 17;
+
+// Bounds for the Date Slider. End date is current date.
 var BOUNDS_MIN = new Date(2015, 0, 1);
 var BOUNDS_MAX = new Date();
 
-//Get Incident Report information through HTML and Jinja2 and add markers
-//to the map.
-function addMarkers(map) {
-    var vehicle_ids_str = $("#vehicle_ids").data();
-    var license_plates_str = $("#license_plates").data();
-    var latitudes = $("#latitudes").data();
-    var longitudes = $("#longitudes").data();
-    var dates_str = $("#dates").data();
-    var durations_str = $("#durations").data();
-    var agencies_str = $("#agencies").data();
-    var pictures_str = $("#pictures").data();
-    var descriptions_str = $("#descriptions").data();
-    //Tokenize the strings representing arrays that are given through HTML
-    //by Jinja2
-    var vehicle_ids = (vehicle_ids_str.name).split('\'');
-    var license_plates = (license_plates_str.name).split('\'');
-    var dates = (dates_str.name).split('\'');
-    var durations = (durations_str.name).split('\'');
-    var agencies = (agencies_str.name).split('\'');
-    var pictures = (pictures_str.name).split('\'');
-    var descriptions = (descriptions_str.name).split('\'');
-    for (i = 0; i < (latitudes.name).length; i = i + 1) {
-        //In order that the same marker isn't modified every time,
-        //we create a new function here to create and design each marker
-        $(function() {
-            var marker = new google.maps.Marker({
-                //Use latitude and longitude values from incident report
-                //to set position of marker
-                position:{lat: latitudes.name[i], lng: longitudes.name[i]}
-            });
-
-            //Tie marker to map passed as an argument
-            
-            marker.setMap(map);
-            
-            //Information presented when marker is clicked
-            var contentString = '<div id="content">' +
-                '<div id="siteNotice">' +
-                '</div>' +
-                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + vehicle_ids[2*i+1] +'</h1>' +
-                '<div id="bodyContent">' +
-                '<p>License Plate: ' + license_plates[2*i+1] + '</p>' +
-                '<p>Date: ' + dates[2*i+1] + '</p>' +
-                '<p>Duration: ' + durations[2*i+1] + '</p>' +
-                '<p>Agency: ' + agencies[2*i+1] + '</p>' +
-                '<p>Link to Picture: ' + pictures[2*i+1] + '</p>' +
-                '<p>Description: ' + descriptions[2*i+1] + '</p>' +
-                '</div>' +
-                '</div>';
-            var infoWindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
-            //Add click listener to marker for displaying infoWindow
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });
-        });
-    }
+function MarkerWrapper(actualMarker, incidentDate, contentString) {
+    this.actualMarker = actualMarker;
+    this.incidentDate = incidentDate;
+    this.contentString = contentString;
 }
 
 //Initialize map and add markers
@@ -99,11 +50,15 @@ function initialize() {
 
                 map.setCenter(pos_center);
             });
+function storeMarkerState(markerWrappers, map, minDate) {
+    globalMarkerWrappers = markerWrappers;
+    globalMap = map;
+    console.log(markerWrappers[0].actualMarker);
+    for (mw = 0; mw < globalMarkerWrappers.length; mw++)
+    {
+        (globalMarkerWrappers[mw].actualMarker).setMap(globalMap);
     }
-    else {
-        console.log("Browser is not supporting geolocation.");
-    }
-    addMarkers(map);
+    BOUNDS_MIN = minDate;
 }
 
 function getReverseGeocodingData(lat, lng) {
@@ -143,6 +98,8 @@ function geoFindMe() {
 
 //Use Google geocoder to update geolocation given an address through
 //the address search box
+// Use Google geocoder to update geolocation given an address through
+// the address search box
 function update_center() {
     geocoder = new google.maps.Geocoder();
     address = $("#address").val();
@@ -157,13 +114,13 @@ function update_center() {
                 alert("Address not found!");
             }
             else {
-                map.setCenter(results[0].geometry.location);
+                globalMap.setCenter(results[0].geometry.location);
             }
         });
     }
 }
 
-//Get address submit event
+// Get address submit event
 $(document).ready(function() {
     $('#addressForm').on('submit', function (event) {
         update_center();
@@ -171,8 +128,7 @@ $(document).ready(function() {
     });
 });
 
-//Date Slider - TODO
-$(function() {
+function initializeDateSlider() {
     $("#slider").dateRangeSlider({
         bounds: {
             min: BOUNDS_MIN,
@@ -184,12 +140,41 @@ $(function() {
             max: BOUNDS_MAX,
         },
     });
-});
-
-//Add the map to the window
-google.maps.event.addDomListener(window, 'load', initialize)
-
-//Set the map's height to be (hopefully) full window height
-$(function() {
-    $("#googleMap").css("height", $(window).height()-WINDOW_OFFSET);
-});
+    $("#slider").bind("valuesChanged", function(e, data) {
+    	console.log("Values just changed. min: " + String(data.values.min).substring(4, 15) + " max: " + String(data.values.max).substring(4, 15));
+        var beginYear = parseInt(String(data.values.min).substring(11, 15), 10);
+        var beginDay = parseInt(String(data.values.min).substring(8, 10), 10);
+        var endYear = parseInt(String(data.values.max).substring(11, 15), 10);
+        var endDay = parseInt(String(data.values.min).substring(8, 10), 10);
+        var beginMonth = 0;
+        var endMonth = 0;
+        monthObj = {
+            "Jan": 0,
+            "Feb": 1,
+            "Mar": 2,
+            "Apr": 3,
+            "May": 4,
+            "Jun": 5,
+            "Jul": 6,
+            "Aug": 7,
+            "Sep": 8,
+            "Oct": 9,
+            "Nov": 10,
+            "Dec": 11
+        };
+        beginMonth = monthObj[String(data.values.min).substring(4, 7)];
+        endMonth = monthObj[String(data.values.max).substring(4, 7)];
+        beginDate = new Date(beginYear, beginMonth, beginDay);
+        endDate = new Date(endYear, endMonth, endDay);
+        for (mw = 0; mw < globalMarkerWrappers.length; mw++) {
+            if ((globalMarkerWrappers[mw].incidentDate.getTime() < beginDate.getTime()) ||
+                (globalMarkerWrappers[mw].incidentDate.getTime() > endDate.getTime())) {
+                globalMarkerWrappers[mw].actualMarker.setMap(null);
+            }
+            else
+            {
+                globalMarkerWrappers[mw].actualMarker.setMap(globalMap);
+            }
+        }
+    });
+}

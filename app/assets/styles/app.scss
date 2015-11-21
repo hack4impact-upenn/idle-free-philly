@@ -1,6 +1,6 @@
 // Semantic UI breakpoints
 $mobile-breakpoint:        768px;
-$tablet-breakpoint:        956px;
+$tablet-breakpoint:        992px;
 $small-monitor-breakpoint: 1200px;
 
 $teal: #56A5BF;
@@ -70,6 +70,7 @@ nav .mobile.only.row {
     }
     .ui.vertical.menu > a,.ui.vertical.menu > ui.dropdown.item:hover{
     	color: $white;
+    	text-transform: uppercase;
     } 
     .ui.main.menu {
     	background-color: $teal;

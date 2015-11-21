@@ -17,15 +17,14 @@
         <div class="ui dropdown item"> 
             Dashboard <i class="dropdown icon"></i>
             <div class = "menu">
-            
                 {% set href = url_for(current_user.role.index + '.index') %}
                 <a class="item" id="nav_dashboard" href="{{ href }}">Dashboard</a>
-              
                 <div class="header">Reports</div>
                 <a href="/" class="item">All Reports</a>
                 <a href="/" class="item">My Reports</a>
                 <div class="header">Account</div>
                 <a href="{{ url_for('account.manage') }}" class="item"> My Account</a>
+                {% if current_user.is_admin() %}
                 <div class="header">Admin</div>
                 <a class="item" href="{{ url_for(current_user.role.index + '.all_agencies') }}">
                 Manage Agencies</a>
@@ -33,6 +32,7 @@
                 Manage Users</a>
                 <a class="item" href="{{ url_for(current_user.role.index + '.invite_user') }}">
                 Invite New User</a>
+                {% endif %}
             </div>
         </div>
     {% endif %}

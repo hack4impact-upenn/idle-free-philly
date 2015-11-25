@@ -83,10 +83,10 @@ class User(UserMixin, db.Model):
             (self.role.permissions & permissions) == permissions
 
     def is_admin(self):
-        return self.can(Permission.ADMINISTER)
+        return self.role.permissions == Permission.ADMINISTER
 
     def is_worker(self):
-        return self.can(Permission.AGENCY_WORKER)
+        return self.role.permissions == Permission.AGENCY_WORKER
 
     @property
     def password(self):

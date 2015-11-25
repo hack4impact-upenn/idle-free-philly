@@ -1,14 +1,17 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, SelectField
 from wtforms.fields.html5 import EmailField, TelField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.ext.sqlalchemy.fields import (
+    QuerySelectField,
+    QuerySelectMultipleField
+)
 from wtforms.validators import Length, Email, Optional, InputRequired
 from ..custom_validators import (
     UniqueEmail,
     UniquePhoneNumber,
     PhoneNumberLength,
 )
-from ..models import Role
+from ..models import Role, Agency
 from .. import db
 
 
@@ -38,6 +41,16 @@ class ChangeAccountTypeForm(Form):
                             query_factory=lambda: db.session.query(Role).
                             order_by('permissions'))
     submit = SubmitField('Update role')
+
+
+class ChangeAgencyAffiliationsForm(Form):
+    agency_affiliations = QuerySelectMultipleField(
+        'Agency affiliations',
+        validators=[InputRequired()],
+        get_label='name',
+        query_factory=lambda: db.session.query(Agency).order_by('name')
+    )
+    submit = SubmitField('Update agency affiliations')
 
 
 class InviteUserForm(Form):

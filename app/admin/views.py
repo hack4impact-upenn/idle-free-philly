@@ -6,6 +6,7 @@ from flask.ext.login import login_required, current_user
 from forms import (
     ChangeUserEmailForm,
     ChangeUserPhoneNumberForm,
+    ChangeAgencyAffiliationsForm,
     ChangeAccountTypeForm,
     InviteUserForm,
     ChangeAgencyOfficialStatusForm,
@@ -137,6 +138,35 @@ def change_account_type(user_id):
         flash('Role for user {} successfully changed to {}.'
               .format(user.full_name(), user.role.name),
               'form-success')
+    form.role.default = user.role
+    form.process()
+    return render_template('admin/manage_user.html', user=user, form=form)
+
+
+@admin.route('/user/<int:user_id>/change-agency-affiliations',
+             methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_agency_affiliations(user_id):
+    """Change a worker's agency affiliations."""
+    user = User.query.get(user_id)
+    if user is None:
+        abort(404)
+    if not user.is_worker():
+        abort(404)
+
+    form = ChangeAgencyAffiliationsForm()
+    if form.validate_on_submit():
+        user.agencies = form.agency_affiliations.data
+        db.session.add(user)
+        db.session.commit()
+        flash('Agencies for user {} successfully changed to {}.'
+              .format(user.full_name(),
+                      ', '.join([a.name for a in user.agencies])),
+              'form-success')
+    form.agency_affiliations.default = sorted(user.agencies,
+                                              key=lambda agency: agency.name)
+    form.process()
     return render_template('admin/manage_user.html', user=user, form=form)
 
 

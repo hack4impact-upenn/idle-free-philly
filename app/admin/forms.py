@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, PasswordField, SubmitField
+from wtforms.fields import StringField, SubmitField, SelectField
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
+from wtforms.validators import Length, Email, Optional, InputRequired
 from ..custom_validators import (
     UniqueEmail,
     UniquePhoneNumber,
@@ -14,7 +14,7 @@ from .. import db
 
 class ChangeUserEmailForm(Form):
     email = EmailField('New email', validators=[
-        DataRequired(),
+        InputRequired(),
         Length(1, 64),
         Email(),
         UniqueEmail(),
@@ -24,7 +24,7 @@ class ChangeUserEmailForm(Form):
 
 class ChangeUserPhoneNumberForm(Form):
     phone_number = TelField('New phone number', validators=[
-        DataRequired(),
+        InputRequired(),
         PhoneNumberLength(10, 15),
         UniquePhoneNumber(),
     ])
@@ -33,7 +33,7 @@ class ChangeUserPhoneNumberForm(Form):
 
 class ChangeAccountTypeForm(Form):
     role = QuerySelectField('New account type',
-                            validators=[DataRequired()],
+                            validators=[InputRequired()],
                             get_label='name',
                             query_factory=lambda: db.session.query(Role).
                             order_by('permissions'))
@@ -42,16 +42,16 @@ class ChangeAccountTypeForm(Form):
 
 class InviteUserForm(Form):
     role = QuerySelectField('Account type',
-                            validators=[DataRequired()],
+                            validators=[InputRequired()],
                             get_label='name',
                             query_factory=lambda: db.session.query(Role).
                             order_by('permissions'))
-    first_name = StringField('First name', validators=[DataRequired(),
+    first_name = StringField('First name', validators=[InputRequired(),
                                                        Length(1, 64)])
-    last_name = StringField('Last name', validators=[DataRequired(),
+    last_name = StringField('Last name', validators=[InputRequired(),
                                                      Length(1, 64)])
     email = EmailField('Email', validators=[
-        DataRequired(),
+        InputRequired(),
         Length(1, 64),
         Email(),
         UniqueEmail()
@@ -64,11 +64,36 @@ class InviteUserForm(Form):
     submit = SubmitField('Invite')
 
 
-class NewUserForm(InviteUserForm):
-    password = PasswordField('Password', validators=[
-        DataRequired(),
-        EqualTo('password2', 'Passwords must match.')
-    ])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+class ChangeAgencyOfficialStatusForm(Form):
+    is_official = SelectField(
+        'Officially Approved',
+        description='Officially approved agencies show up on the reporting '
+                    'form in the \"agency\" dropdown and can be linked to '
+                    'Agency Workers. Agencies which are not officially '
+                    'approved were added by users in the \"other\" option of '
+                    'the reporting form.',
+        choices=[('y', 'Yes'), ('n', 'No')],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField('Update status')
 
-    submit = SubmitField('Create')
+
+class ChangeAgencyPublicStatusForm(Form):
+    is_public = SelectField(
+        'Publicly visible',
+        description='If an agency is set as public, then all new incident '
+                    'reports created for that agency will show this agency to '
+                    'the general public by default. That is, the marker on '
+                    'the map will name this particular agency as the type of '
+                    'vehicle which was idling. If an agency is not set as '
+                    'public, then all new incident reports created for that '
+                    'agency will not show this agency by default. Note: this '
+                    'setting will not change anything for reports which were '
+                    'created in the past. To change whether the agency is '
+                    'displayed for past reports, you must edit that report '
+                    'individually on the reports page.',
+        # TODO add a link here once we know the route to the reports page
+        choices=[('y', 'Yes'), ('n', 'No')],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField('Update status')

@@ -14,7 +14,9 @@ def get_map():
     """Get information on all Incident Reports in the db, and
     pass to map.html
     """
-    return render_template('main/map.html', incident_reports=IncidentReport.query.all())
+    return render_template('main/map.html',
+                           incident_reports=IncidentReport.query.all())
+
 
 @main.route('/about')
 def about():

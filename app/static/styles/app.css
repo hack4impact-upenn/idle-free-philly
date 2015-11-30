@@ -23,3 +23,59 @@ nav .mobile.only.row .ui.vertical.menu {
 table.selectable tr:hover {
   cursor: pointer !important;
 }
+
+@media -sass-debug-info{filename{}line{font-family:\000032}}
+.ui.text.container {
+  text-align: center;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\000036}}
+#addressSearch {
+  position: absolute;
+  left: 30px;
+  top: 20px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000312}}
+#submitButton {
+  position: absolute;
+  left: 40px;
+  top: 60px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000319}}
+#slider {
+  position: absolute;
+  width: 20%;
+  right: 80px;
+  top: 10px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000327}}
+#googleMap {
+  width: 100%;
+  left: 0px;
+  top: 0px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000333}}
+#wrapper {
+  position: relative;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000337}}
+.ui.modal {
+  position: fixed;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000344}}
+.ui.approve.button {
+  display: block;
+  margin: 0 auto;
+}

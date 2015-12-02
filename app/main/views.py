@@ -3,22 +3,21 @@ from . import main
 from app import models, db
 from forms import NewIncidentForm
 from app.models import IncidentReport, Agency
-from faker import Faker
 from datetime import timedelta
-from random import  choice
 
 
 @main.route('/')
 def index():
     return render_template('main/index.html')
 
+
 @main.route('/map', methods =['GET','POST'])
 def get_map():
     form = NewIncidentForm()
     agencies = Agency.query.all()
 
-    if form.validate_on_submit():
-        l = models.Location(original_user_text =form.location.data, latitude= form.latitude.data,
+    if form.validate_on_submit() :
+        l = models.Location(original_user_text =form.location.data, latitude=form.latitude.data,
                             longitude= form.longitude.data)
 
         new_incident = models.IncidentReport(

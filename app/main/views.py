@@ -18,7 +18,8 @@ def get_map():
 
     if form.validate_on_submit():
         l = models.Location(original_user_text=form.location.data,
-                            latitude=form.latitude.data, longitude=form.longitude.data)
+                            latitude=form.latitude.data,
+                            longitude=form.longitude.data)
 
         new_incident = models.IncidentReport(
             vehicle_id=form.vehicle_ID.data,
@@ -31,5 +32,7 @@ def get_map():
         )
         db.session.add(new_incident)
         db.session.commit()
-    return render_template('main/map.html', agencies=agencies, form=form,
+    return render_template('main/map.html',
+                           agencies=agencies,
+                           form=form,
                            incident_reports=IncidentReport.query.all())

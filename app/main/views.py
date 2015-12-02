@@ -1,4 +1,5 @@
 from flask import render_template
+from ..models import EditableHTML
 from . import main
 from app import models, db
 from forms import NewIncidentForm
@@ -36,3 +37,15 @@ def get_map():
                            agencies=agencies,
                            form=form,
                            incident_reports=IncidentReport.query.all())
+@main.route('/about')
+def about():
+    editable_html_obj = EditableHTML.get_editable_html('about')
+    return render_template('main/about.html',
+                           editable_html_obj=editable_html_obj)
+
+
+@main.route('/faq')
+def faq():
+    editable_html_obj = EditableHTML.get_editable_html('faq')
+    return render_template('main/faq.html',
+                           editable_html_obj=editable_html_obj)

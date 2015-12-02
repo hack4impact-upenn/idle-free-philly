@@ -37,6 +37,8 @@ def get_map():
                            agencies=agencies,
                            form=form,
                            incident_reports=IncidentReport.query.all())
+
+
 @main.route('/about')
 def about():
     editable_html_obj = EditableHTML.get_editable_html('about')

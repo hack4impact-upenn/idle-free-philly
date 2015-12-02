@@ -6,8 +6,8 @@
 }
 #submitButton {
     position: absolute;
-    left: 40px;
-    top: 60px;
+    left: 250px;
+    top: 20px;
     z-index: 99;
 }
 
@@ -27,13 +27,21 @@
 
 #wrapper {
     position:relative;
+    margin-top: -40px;
 }
 
-.ui.modal {
+#address_error {
     position: fixed;
     text-align: center;
-    top: 50%;
-    left: 50%;
+    margin: 0px 0px 0px -150px;
+    width: 300px;
+}
+
+#geocode_error {
+    position: fixed;
+    text-align: center;
+    margin: 0px 0px 0px -150px;
+    width: 300px;
 }
 
 .ui.approve.button {

@@ -1,14 +1,9 @@
-@media -sass-debug-info{filename{}line{font-family:\0000314}}
-nav {
-  margin-bottom: 40px !important;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000318}}
+@media -sass-debug-info{filename{}line{font-family:\0000317}}
 .body.container {
   min-height: 100%;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000322}}
+@media -sass-debug-info{filename{}line{font-family:\0000321}}
 #CAC_logo {
   content: url("../../static/images/CAC_logo.png");
   height: 2em;
@@ -17,14 +12,14 @@ nav {
   margin-left: 0.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000330}}
+@media -sass-debug-info{filename{}line{font-family:\0000329}}
 .ui.secondary.pointing.menu {
   background-color: #56A5BF;
   width: 100%;
   font-size: 1.3em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000336}}
+@media -sass-debug-info{filename{}line{font-family:\0000335}}
 .ui.secondary.pointing.menu > .header.item {
   color: #FFFFFF !important;
   font-size: 1.4em;
@@ -32,25 +27,25 @@ nav {
   border: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000343}}
+@media -sass-debug-info{filename{}line{font-family:\0000342}}
 .ui.secondary.pointing.menu > .right.menu {
   margin-right: 2em;
   padding-bottom: 1em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000348}}
+@media -sass-debug-info{filename{}line{font-family:\0000347}}
 .ui.secondary.pointing.menu > .right.menu > a {
   color: #FFFFFF;
   text-transform: uppercase;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000353}}
+@media -sass-debug-info{filename{}line{font-family:\0000352}}
 .ui.secondary.pointing.menu > .right.menu > a:hover {
   background-color: #7CC1D8;
   border-radius: 0.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000358}}
+@media -sass-debug-info{filename{}line{font-family:\0000357}}
 .ui.secondary.pointing.menu > .right.menu > a.active {
   background-color: #7CC1D8;
   color: #FFFFFF;
@@ -58,131 +53,75 @@ nav {
   font-weight: 400;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000366}}
+@media -sass-debug-info{filename{}line{font-family:\0000365}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
   border-right: 1px solid rgba(34, 36, 38, 0.09804);
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000372}}
+@media -sass-debug-info{filename{}line{font-family:\0000371}}
 nav .mobile.only.row .ui.vertical.menu {
   margin-top: 40px;
   display: none;
   background-color: #1C7592;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000380}}
+@media -sass-debug-info{filename{}line{font-family:\0000379}}
 nav .mobile.only.row .ui.main.menu {
   background-color: #56A5BF;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000385}}
+@media -sass-debug-info{filename{}line{font-family:\0000384}}
 .ui.vertical.menu > a {
   color: #white;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000389}}
+@media -sass-debug-info{filename{}line{font-family:\0000388}}
 .ui.vertical.secondary.menu > a {
   color: #222222;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000394}}
+@media -sass-debug-info{filename{}line{font-family:\0000393}}
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000398}}
+@media -sass-debug-info{filename{}line{font-family:\0000397}}
 ui.red.pointing.label {
   background-color: #FF684C !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003103}}
+@media -sass-debug-info{filename{}line{font-family:\00003102}}
 table.selectable tr:hover {
   cursor: pointer !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\000032}}
-.ui.text.container {
-  text-align: center;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\000036}}
-#addressSearch {
-  position: absolute;
-  left: 30px;
-  top: 20px;
-  z-index: 99;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000312}}
-#submitButton {
-  position: absolute;
-  left: 40px;
-  top: 60px;
-  z-index: 99;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000319}}
-#slider {
-  position: absolute;
-  width: 20%;
-  right: 80px;
-  top: 10px;
-  z-index: 99;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000327}}
-#googleMap {
-  width: 100%;
-  left: 0px;
-  top: 0px;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000333}}
-#wrapper {
-  position: relative;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000337}}
-.ui.modal {
-  position: fixed;
-  text-align: center;
-  top: 50%;
-  left: 50%;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000344}}
-.ui.approve.button {
-  display: block;
-  margin: 0 auto;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003108}}
+@media -sass-debug-info{filename{}line{font-family:\00003107}}
 h1, h2 {
   color: #1C7592 !important;
   text-transform: uppercase !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003113}}
+@media -sass-debug-info{filename{}line{font-family:\00003112}}
 h3 {
   margin-bottom: 0.3em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003117}}
+@media -sass-debug-info{filename{}line{font-family:\00003116}}
 p, label, input {
   font-size: 1.1em !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003121}}
+@media -sass-debug-info{filename{}line{font-family:\00003120}}
 .sub.header {
   text-transform: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003125}}
+@media -sass-debug-info{filename{}line{font-family:\00003124}}
 .ui.red.error {
   color: #FF684C;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003130}}
+@media -sass-debug-info{filename{}line{font-family:\00003129}}
 footer {
   bottom: 0;
   width: 100%;
@@ -192,7 +131,7 @@ footer {
   background-color: #1C7592;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003139}}
+@media -sass-debug-info{filename{}line{font-family:\00003138}}
 #h4i_logo {
   content: url("../../static/images/h4i_square_white.png");
   height: 1.2em;
@@ -200,14 +139,74 @@ footer {
   margin-right: 0.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003146}}
+@media -sass-debug-info{filename{}line{font-family:\00003145}}
 footer > div > h3 {
   color: #FFFFFF;
   margin-top: 0;
   font-weight: 300;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003152}}
+@media -sass-debug-info{filename{}line{font-family:\00003151}}
 .icon.heart:hover {
   color: #FF684C;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\000031}}
+#addressSearch {
+  position: absolute;
+  left: 30px;
+  top: 20px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\000037}}
+#submitButton {
+  position: absolute;
+  left: 250px;
+  top: 20px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000314}}
+#slider {
+  position: absolute;
+  width: 20%;
+  right: 80px;
+  top: 10px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000322}}
+#googleMap {
+  width: 100%;
+  left: 0px;
+  top: 0px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000328}}
+#wrapper {
+  position: relative;
+  margin-top: -40px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000333}}
+#address_error {
+  position: fixed;
+  text-align: center;
+  margin: 0px 0px 0px -150px;
+  width: 300px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000340}}
+#geocode_error {
+  position: fixed;
+  text-align: center;
+  margin: 0px 0px 0px -150px;
+  width: 300px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000347}}
+.ui.approve.button {
+  display: block;
+  margin: 0 auto;
 }

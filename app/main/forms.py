@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, IntegerField, \
-    FloatField, DateField
+    FloatField, DateField, FileField
 from wtforms import validators
 from ..models import Agency
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -42,4 +42,6 @@ class NewIncidentForm(Form):
                                max=1000,
                                message='invalid duration range!')
     ])
+    picture = FileField('Upload a picture of the truck/driver',
+                        validators=[validators.optional()])
     submit = SubmitField('Create Report')

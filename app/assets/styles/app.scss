@@ -11,7 +11,9 @@ $white: #FFFFFF;
 $red: #FF684C;
 
 // General nav
-nav {
+
+.ui.navigation.grid {
+    margin-bottom: 50px;
 }
 
 .body.container {
@@ -26,103 +28,119 @@ nav {
 	margin-left: 0.5em;
 }
 
-.ui.secondary.pointing.menu {
-	background-color: $teal;
-	width: 100%;
-	font-size: 1.3em;
-}
-
-.ui.secondary.pointing.menu > .header.item {
-	color: $white !important;
-	font-size: 1.4em;
-	font-weight: 400;
-	border: none;
-}
-
-.ui.secondary.pointing.menu > .right.menu {
-	margin-right: 2em;
-	padding-bottom: 1em;
-}
-
-.ui.secondary.pointing.menu > .right.menu > a{
-	color: $white;
-	text-transform: uppercase;
-}
-
-.ui.secondary.pointing.menu > .right.menu > a:hover {
-	background-color: $light-teal;
-	border-radius: 0.5em;
-}
-
-.ui.secondary.pointing.menu > .right.menu > a.active {
-	background-color: $light-teal;
-	color: $white;;
-	border: none;
-	font-weight: 400;
-}
-
 // Desktop nav
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
     border-right: 1px solid rgba(34, 36, 38, 0.0980392);
 }
 
+nav .computer.only.row {
+    padding: 0;
+	.ui.secondary.pointing.menu > .right.menu {
+		margin-right: 2em;
+		padding-bottom: 1em;
+	}
+	.ui.secondary.pointing.menu > .right.menu > a{
+		color: $white;
+		text-transform: uppercase;
+	}
+	.ui.secondary.pointing.menu > .right.menu > a:hover, .ui.dropdown.item:hover {
+		background-color: $light-teal;
+		color: $white;
+		border-radius: 0.5em;
+	}
+	.ui.secondary.pointing.menu > .right.menu > a.active {
+		background-color: $light-teal;
+		color: $white;;
+		border: none;
+		font-weight: 400;
+	}
+	.ui.secondary.pointing.menu {
+		background-color: $teal;
+		width: 100%;
+		font-size: 1.3em;
+	}
+	.ui.secondary.pointing.menu > .header.item {
+		color: $white !important;
+		font-size: 1.4em;
+		font-weight: 400;
+		border: none;
+	}
+}
+
 // Mobile nav
 nav .mobile.only.row {
     .ui.vertical.menu {
-        margin-top: 40px;
+    	margin-top: 45px;
         display: none;
         background-color: $dark-teal;
     }
-}
-
-nav .mobile.only.row {
+    .ui.vertical.menu > a,.ui.vertical.menu > ui.dropdown.item:hover{
+    	color: $white;
+    	text-transform: uppercase;
+    } 
     .ui.main.menu {
     	background-color: $teal;
     }
+    .ui.vertical.secondary.menu > a {
+		color: $dark-gray;
+	}
 }
 
-.ui.vertical.menu > a {
-	color: #white;
+.ui.dropdown.item, .ui.secondary.pointing.menu .active.item {
+	color: $white;
+	font-weight: 400;
+	text-transform: uppercase;
 }
 
-.ui.vertical.secondary.menu > a {
+.ui.dropdown.item > div > .header {
 	color: $dark-gray;
+}
+
+#nav_dashboard {
+	text-align: center;
+	color: $teal !important;
+	text-transform: uppercase !important;
+	border-bottom: solid 1px $light-teal;
+}
+
+.ui.menu .ui.dropdown .menu>.item {
+	color: $dark-gray;
+	font-size: 0.8em !important;
 }
 
 // Flashes
 .flashes > .ui.message:last-of-type {
     margin-bottom: 2rem;
 }
-
-ui.red.pointing.label {
+.ui.red.error {
+	color: $red;
+}
+.ui.red.pointing.label {
+	background-color: $red !important;
+	border-color: $red !important;
+}
+.ui.red.label:before {
 	background-color: $red !important;
 }
 
 // Tables
 table.selectable tr:hover {
-    cursor: pointer !important;
+    cursor: pointer;
 }
 
 // Text
-h1, h2 {
-	color: $dark-teal !important;
-	text-transform: uppercase !important;
+h1, h2, .ui.dividing.header {
+	color: $dark-teal;
+	text-transform: uppercase;
 }
-
 h3 {
 	margin-bottom: 0.3em;
 }
-
-p, label, input {
-	font-size: 1.1em !important;
+.ui.form .field>label, p, input {
+	font-size: 1.1em;
 }
-
 .sub.header {
 	text-transform: none;
-}
-
-.ui.red.error {
-	color: $red;
 }
 
 //Footer

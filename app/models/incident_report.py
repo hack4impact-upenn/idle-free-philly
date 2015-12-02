@@ -26,6 +26,7 @@ class IncidentReport(db.Model):
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     @staticmethod
     def generate_fake(count=100, **kwargs):

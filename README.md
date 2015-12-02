@@ -1,4 +1,4 @@
-# Clean Air Council
+# Clean Air Council [![Circle CI](https://circleci.com/gh/hack4impact/clean-air-council.svg?style=svg)](https://circleci.com/gh/hack4impact/clean-air-council)
 
 ## Setting up
 
@@ -21,7 +21,7 @@
 
     ```
     $ pip install -r requirements/common.txt
-    $ pip install -r requirements/dev.  txt
+    $ pip install -r requirements/dev.txt
     ```
 
 4. Create the database

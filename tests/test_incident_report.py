@@ -1,7 +1,7 @@
 import unittest
 import datetime
 from app import create_app, db
-from app.models import IncidentReport, Location, Agency
+from app.models import IncidentReport, Location, Agency, User
 
 
 class IncidentReportTestCase(unittest.TestCase):
@@ -97,3 +97,69 @@ class IncidentReportTestCase(unittest.TestCase):
         self.assertEqual(incident.agency, agency1)
         incident.agency = agency2
         self.assertEqual(incident.agency, agency2)
+
+    def test_incident_report_with_user(self):
+        u1 = User(email='user@example.com', password='password')
+        u2 = User(email='otheruser@example.org', password='notpassword')
+        incident = IncidentReport(
+            user=u1
+        )
+        self.assertEqual(incident.user, u1)
+        incident.user = u2
+        self.assertEqual(incident.user, u2)
+
+    def test_incident_report_show_agency_publicly_inherits(self):
+        agency1 = Agency(name='SEPTA', is_public=False)
+        agency2 = Agency(name='PECO', is_public=True)
+
+        incident1 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency1
+        )
+
+        incident2 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency2
+        )
+
+        self.assertFalse(incident1.show_agency_publicly)
+        self.assertTrue(incident2.show_agency_publicly)
+
+    def test_incident_report_show_agency_publicly_overwritten(self):
+        agency1 = Agency(name='SEPTA', is_public=False)
+        agency2 = Agency(name='PECO', is_public=True)
+
+        incident1 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency1,
+            show_agency_publicly=True,
+        )
+
+        incident2 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency2,
+            show_agency_publicly=False,
+        )
+
+        self.assertTrue(incident1.show_agency_publicly)
+        self.assertFalse(incident2.show_agency_publicly)

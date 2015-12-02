@@ -15,16 +15,22 @@ class AgencyTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    def test_agency_case_insensitive(self):
+        db.session.add(Agency(name='sEpTa'))
+        db.session.commit()
+        agency = Agency.get_agency_by_name('septa')
+        self.assertEqual(agency.name, 'SEPTA')
+
     def test_agency_no_user_no_incident_report(self):
         Agency.insert_agencies()
-        agency = Agency.query.filter_by(name='SEPTA').first()
+        agency = Agency.get_agency_by_name('SEPTA')
         self.assertEqual(agency.name, 'SEPTA')
         self.assertTrue(agency.is_official)
         self.assertFalse(agency.is_public)
 
     def test_agency_with_user_no_incident_report(self):
         Agency.insert_agencies()
-        agency = Agency.query.filter_by(name='SEPTA').first()
+        agency = Agency.get_agency_by_name('SEPTA')
         u1 = User(email='user@example.com', password='password')
         u2 = User(email='user2@example.com', password='password')
         agency.users = [u1, u2]
@@ -35,7 +41,7 @@ class AgencyTestCase(unittest.TestCase):
 
     def test_agency_with_incident_report_no_user(self):
         Agency.insert_agencies()
-        agency = Agency.query.filter_by(name='SEPTA').first()
+        agency = Agency.get_agency_by_name('SEPTA')
         incident1 = IncidentReport(description='Truck idling on the road!')
         incident2 = IncidentReport(description='Another one!')
         agency.incident_reports = [incident1, incident2]
@@ -43,4 +49,3 @@ class AgencyTestCase(unittest.TestCase):
         self.assertTrue(agency.is_official)
         self.assertFalse(agency.is_public)
         self.assertEqual(agency.incident_reports, [incident1, incident2])
-

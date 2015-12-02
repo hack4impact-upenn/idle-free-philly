@@ -64,9 +64,6 @@
                 map.setCenter(pos_center);
             });
         }
-        else {
-            console.log("Browser is not supporting geolocation.");
-        }
         storeMarkerState(markerWrappers, map, minDate, bounds);
         initializeDateSlider();
         console.log("Done\n");
@@ -74,6 +71,8 @@
     // Add the map to the window
     google.maps.event.addDomListener(window, 'load', initializeMapAndMarkers);
 
+    // Set the height of the googleMap to the height of the window (less
+    // any elements above the googleMap)
     $(function () {
         $("#googleMap").css("height", $(window).height());
     });
@@ -82,7 +81,7 @@
     <div id="wrapper">
             <div id="googleMap"></div>
             <div id="slider"></div>
-            <form name = "addressForm" id = "addressForm">
+            <form name="addressForm" id="addressForm">
                 <div class="ui search" id="addressSearch">
                 <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
                 </div>

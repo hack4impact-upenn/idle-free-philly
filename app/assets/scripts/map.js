@@ -50,16 +50,16 @@ function update_center() {
             else {
                 globalMap.setCenter(results[0].geometry.location);
             }
-            $('.close.icon').on('click', function() {
+            /*$('.close.icon').on('click', function() {
                 $(this).parent().hide();
-            });
+            });*/
         });
     }
 }
 
-$('.close.icon').on('click', function() {
+/*$('.close.icon').on('click', function() {
     $(this).parent().hide();
-});
+});*/
 
 // Get address submit event
 $(document).ready(function() {

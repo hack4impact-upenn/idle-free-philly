@@ -1,13 +1,35 @@
+@import "app";
+
+.ui-rangeSlider-bar {
+    background: $teal;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+}
+
+.ui-rangeSlider-container {
+    -moz-border-radius: 30px !important;
+    border-radius: 30px !important;
+}
+
+.ui-rangeSlider-innerBar {
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+}
+
 #addressSearch {
     position: absolute;
     left: 30px;
-    top: 20px;
+    top: 49px;
     z-index: 99;
 }
 #submitButton {
     position: absolute;
-    left: 230px;
-    top: 20px;
+    background-color: $teal;
+    color: $white;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    left: 220px;
+    top: 49px;
     z-index: 99;
 }
 

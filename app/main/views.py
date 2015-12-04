@@ -1,7 +1,6 @@
 from flask import render_template
-from ..models import EditableHTML
+from ..models import EditableHTML, IncidentReport
 from . import main
-from app.models import IncidentReport
 
 
 @main.route('/')

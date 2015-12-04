@@ -66,16 +66,17 @@
         }
         storeMarkerState(markerWrappers, map, minDate, bounds);
         initializeDateSlider();
-        console.log("Done\n");
     }
-    // Add the map to the window
-    google.maps.event.addDomListener(window, 'load', initializeMapAndMarkers);
+    $(document).ready(function() {
+        // Add the map to the window
+        google.maps.event.addDomListener(window, 'load', initializeMapAndMarkers);
 
-    // Set the height of the googleMap to the height of the window (less
-    // any elements above the googleMap)
-    $(function () {
-        $("#googleMap").css("height", $(window).height());
-        $(".ui.navigation.grid").css("margin-bottom", "0");
+        // Set the height of the googleMap to the height of the window (less
+        // any elements above the googleMap)
+        $(function () {
+            $("#googleMap").css("height", $(window).height());
+            $(".ui.navigation.grid").css("margin-bottom", "0");
+        });
     });
 </script>
 <div id="wrapper">
@@ -85,7 +86,7 @@
             <div class="ui search" id="addressSearch">
             <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
             </div>
-            <br><input class="ui button" type="submit" id="submitButton" value="Submit"></br>
+            <br><input class="ui round button" type="submit" id="submitButton" value="Submit"></br>
         </form>
 </div>
 

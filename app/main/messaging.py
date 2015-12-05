@@ -19,7 +19,8 @@ def handle_message():
     duration = int(request.cookies.get('duration', 0))
     description = str(request.cookies.get('description'))
     body = request.values.get('Body')
-
+    print("MESSAGE BODY")
+    print(body)
     if step is 0 and "report" in message.lower():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
     elif step is 1:

@@ -26,11 +26,15 @@ def view_reports():
 
     # TODO test using real data
     return render_template('reports/reports.html', reports=reports,
-                           agencies=agencies, current_user=current_user)
+                           agencies=agencies, is_individual=False)
 
 
 @reports.route('/my-reports')
 @login_required
 def view_my_reports():
     """View all idling incident reports for this user."""
-    pass
+    reports = current_user.incident_reports
+    agencies = None
+
+    return render_template('reports/reports.html', reports=reports,
+                           agencies=agencies, is_individual=True)

@@ -15,7 +15,11 @@
             </h2>
 
             <div class="ui menu">
-                {% if current_user.is_admin() %}
+                {% if is_individual %}
+                <div class="item" data-value="{{ current_user.first_name }}">
+                    {{ current_user.first_name }}'s incident reports
+                </div>
+                {% elif current_user.is_admin() %}
                 <div id="select-agency" class="ui dropdown item">
                     <div class="text">
                             All incident reports
@@ -31,10 +35,6 @@
                 {% elif current_user.is_agency_worker() %}
                 <div class="item" data-value="Agency Incident Reports">
                     Agency incident reports
-                </div>
-                {% elif current_user.is_general_user() %}
-                <div class="item" data-value="{{ current_user.first_name }}">
-                    {{ current_user.first_name }}'s incident reports
                 </div>
                 {% endif %}
 
@@ -64,11 +64,6 @@
                     {% for r in reports | sort(attribute='date') %}
                     <!-- TODO url_for report
                         <tr onclick="window.location.href = '';"> -->
-                        {% if r.user == current_user %}
-                        <tr class="report current-user-report">
-                        {% else %}
-                        <tr class="report">
-                        {% endif %}
                             <td class="single line">{{ r.date.strftime('%m-%d-%Y') }}</td>
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>

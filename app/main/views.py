@@ -4,12 +4,8 @@ from . import main
 
 
 @main.route('/')
-def index():
-    return render_template('main/index.html')
-
-
 @main.route('/map')
-def get_map():
+def index():
     """Get information on all Incident Reports in the db, and
     pass to map.html
     """

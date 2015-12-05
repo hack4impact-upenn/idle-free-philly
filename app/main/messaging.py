@@ -63,17 +63,17 @@ def set_cookie(resp, key, val):
 
 
 def agency_letter_to_name(letter):
-    if letter is 'A':
+    if letter == 'A':
         return "SEPTA Bus"
-    elif letter is 'B':
+    elif letter == 'B':
         return "SEPTA CCT"
-    elif letter is 'C':
+    elif letter == 'C':
         return "SEPTA"
-    elif letter is 'D':
+    elif letter == 'D':
         return "PWD"
-    elif letter is 'E':
+    elif letter == 'E':
         return "PECO"
-    elif letter is 'F':
+    elif letter == 'F':
         return "Streets"
     else:
         return "TESTESTESTESTESTESTESt"

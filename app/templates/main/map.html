@@ -2,55 +2,70 @@
 {% import 'macros/form_macros.html' as f %}
 
 {% block content %}
-       <div class="ui stackable centered grid container">
-        <div class="twelve wide column">
-            <h2 class="ui header">
-                Add New Incident Report
-                <div class="sub header">Create a new user account</div>
-            </h2>
-            {% set flashes = {
-                'error':   get_flashed_messages(category_filter=['form-error']),
+<div class="ui two column grid">
+    <div class="row">
+        <div class="ten wide column">
+
+            <div class="column">
+                <div id="wrapper">
+                    <div id="googleMap"></div>
+                    <div id="slider"></div>
+                    <form name="addressForm" id="addressForm">
+                        <div class="ui search" id="addressSearch">
+                            <input class="prompt" placeholder="Enter Address" type="text" name="address" id="address">
+                        </div>
+                        <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="six wide column">
+            <div class="ui top attached red button ">REPORT!!
+            </div>
+
+            <div id="form_container">
+
+                {% set flashes = {
+                'error': get_flashed_messages(category_filter=['form-error']),
                 'warning': get_flashed_messages(category_filter=['form-check-email']),
-                'info':    get_flashed_messages(category_filter=['form-info']),
+                'info': get_flashed_messages(category_filter=['form-info']),
                 'success': get_flashed_messages(category_filter=['form-success'])
-            } %}
+                } %}
 
-            {{ f.begin_form(form, flashes) }}
-
-                {{ f.render_form_field(form.license_plate_number) }}
-                {{ f.render_form_field(form.vehicle_ID) }}
-                {{ f.render_form_field(form.picture) }}
+                {{ f.begin_form(form, flashes) }}
+                <div class="fields">
+                    {{ f.render_form_field(form.license_plate_number) }}
+                    {{ f.render_form_field(form.vehicle_ID) }}
+                </div>
                 {{ f.render_form_field(form.notes) }}
                 {{ f.render_form_field(form.idling_duration) }}
-                {{ f.render_form_field(form.longitude)}}
-                {{ f.render_form_field(form.latitude)}}
-                {{ f.render_form_field(form.location)}}
+                <div class="fields">
+                        <button onclick="geoFindMe()">Use Current location</button>
+                    {{ f.render_form_field(form.location)}}
                 {{ f.render_form_field(form.agency)}}
+
+                </div>
                 {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
                 {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
                 {{ f.form_message(flashes['info'], header='Information', class='info') }}
                 {{ f.form_message(flashes['success'], header='Success!', class='success') }}
                 {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
-                    {{ f.render_form_field(field) }}
+                {{ f.render_form_field(field) }}
                 {% endfor %}
-
-            {{ f.end_form() }}
-        </div>
-    </div>
-       <p><button onclick="geoFindMe()">Use Current location</button></p>
-        <div class ="column">
-            <div id="wrapper">
-                    <div id="googleMap"></div>
-                    <div id="slider"></div>
-                    <form name = "addressForm" id = "addressForm">
-                    <div class="ui search" id="addressSearch">
-                    <input class = "prompt" placeholder="Enter Address" type="text" name="address" id="address">
-                    </div>
-                    <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
-                    </form>
+                {{ f.end_form() }}
             </div>
         </div>
-    <script type="text/javascript">
+    </div>
+</div>
+<script type="text/javascript">
+  $('#form_container').hide()
+
+$('.red.button').click(function(){
+    $('#form_container').toggle();
+});
+
+
+
     function initializeMapAndMarkers() {
         markerWrappers = [];
         var minDate = new Date(2015, 0, 1);
@@ -169,7 +184,34 @@
       };
       navigator.geolocation.getCurrentPosition(success, error);
     }
-    </script>
 
-    </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>
 {% endblock %}

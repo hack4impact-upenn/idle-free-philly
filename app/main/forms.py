@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, SubmitField, IntegerField, \
+from wtforms.fields import StringField, SubmitField, IntegerField, TextAreaField, HiddenField, \
     FloatField, DateField, FileField
 from wtforms import validators
 from ..models import Agency
@@ -27,15 +27,15 @@ class NewIncidentForm(Form):
                           message='vehicle id must consist of only digits!'),
         validators.Length(min=2, max=10)
     ])
-    notes = StringField('Notes', [
+    notes = TextAreaField('Notes', [
         validators.optional(),
         validators.Length(max=100)
     ])
-    latitude = FloatField('latitude')
+    latitude = HiddenField()
     date = DateField('date', default=datetime.date.today(),
                      validators=[validators.DataRequired()])
     location = StringField('Location')
-    longitude = FloatField('longitude')
+    longitude = HiddenField('longitude')
     idling_duration = IntegerField('Idling Duration (in minutes)', [
         validators.required('idling duration (in minutes) is required!'),
         validators.NumberRange(min=0,

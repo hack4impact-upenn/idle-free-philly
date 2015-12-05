@@ -81,10 +81,18 @@ class ChangeAgencyOfficialStatusForm(Form):
 class ChangeAgencyPublicStatusForm(Form):
     is_public = SelectField(
         'Publicly visible',
-        description='The public does not see the agency connected to an '
-                    'idling incident if that agency is not publicly visible. '
-                    'Agencies which are not publicly visible still have '
-                    'anonymized reports which the public can see.',
+        description='If an agency is set as public, then all new incident '
+                    'reports created for that agency will show this agency to '
+                    'the general public by default. That is, the marker on '
+                    'the map will name this particular agency as the type of '
+                    'vehicle which was idling. If an agency is not set as '
+                    'public, then all new incident reports created for that '
+                    'agency will not show this agency by default. Note: this '
+                    'setting will not change anything for reports which were '
+                    'created in the past. To change whether the agency is '
+                    'displayed for past reports, you must edit that report '
+                    'individually on the reports page.',
+        # TODO add a link here once we know the route to the reports page
         choices=[('y', 'Yes'), ('n', 'No')],
         validators=[InputRequired()],
     )

@@ -45,7 +45,7 @@ def handle_message():
         print(duration)
         print(description)
         twiml.message("Thanks!")
-        agency = Agency.query.filter_by(name=agency_name).first()
+        agency = Agency.query.filter_by(name="SEPTA").first()
         print(agency)
         new_incident = IncidentReport(
             vehicle_id=vehicle_id,
@@ -78,7 +78,7 @@ def set_cookie(resp, key, val):
 
 def agency_letter_to_name(letter):
     if letter == 'A':
-        return "SEPTA Bus"
+        return "SEPTA BUS"
     elif letter == 'B':
         return "SEPTA CCT"
     elif letter == 'C':

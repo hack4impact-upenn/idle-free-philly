@@ -31,6 +31,15 @@ class Agency(db.Model):
     incident_reports = db.relationship('IncidentReport', backref='agency',
                                        lazy='joined')
 
+    def __init__(self, **kwargs):
+        super(Agency, self).__init__(**kwargs)
+        if self.name is not None:
+            self.name = self.name.upper()
+
+    @staticmethod
+    def get_agency_by_name(name):
+        return Agency.query.filter_by(name=name.upper()).first()
+
     @staticmethod
     def insert_agencies():
         agencies = {
@@ -54,7 +63,7 @@ class Agency(db.Model):
             ),
         }
         for a in agencies:
-            agency = Agency.query.filter_by(name=a).first()
+            agency = Agency.get_agency_by_name(a)
             if agency is None:
                 agency = Agency(name=a)
             agency.is_public = agencies[a][0]

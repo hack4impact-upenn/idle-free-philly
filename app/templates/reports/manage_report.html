@@ -1,20 +1,18 @@
 {% extends 'layouts/base.html' %}
 {% import 'macros/form_macros.html' as f %}
 
-{% set deletion_endpoint = 'admin.delete_user_request' %}
+{% set deletion_endpoint = 'reports.delete_report' %}
 
 {% set endpoints = [
-    ('admin.user_info', 'User information'),
-    ('admin.change_user_email', 'Change email address'),
-    ('admin.change_user_phone_number', 'Change phone number'),
-    ('admin.change_account_type', 'Change account type'),
-    (deletion_endpoint, 'Delete user')
+    ('reports.report_info', 'Report information'),
+    ('reports.edit_report_info', 'Edit report'),
+    (deletion_endpoint, 'Delete report')
 ] %}
 
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
         {% for route, name in items %}
-            {% set href = url_for(route, user_id=user.id) %}
+            {% set href = url_for(route, report_id=report.id) %}
             <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
                 {{ name }}
             </a>
@@ -22,12 +20,18 @@
     </div>
 {% endmacro %}
 
-{% macro user_info(user) %}
+{% macro report_info(report) %}
     <table class="ui compact definition table">
-        <tr><td>Full name</td><td>{{ '%s %s' % (user.first_name, user.last_name) }}</td></tr>
-        <tr><td>Email address</td><td>{{ user.email }}</td></tr>
-        <tr><td>Phone number</td><td>{{ user.phone_number }}</td></tr>
-        <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
+        <tr><td>Report ID</td><td>{{ report.id }}</td></tr>
+        <tr><td>Vehicle ID</td><td>{{ report.vehicle_id }}</td></tr>
+        <tr><td>License Plate</td><td>{{ report.license_plate }}</td></tr>
+        <tr><td>Location</td><td>{{ report.location }}</td></tr>
+        <tr><td>Date</td><td>{{ report.date }}</td></tr>
+        <tr><td>Duration</td><td>{{ report.duration}}</td></tr>
+        <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
+        <tr><td>Picture</td><td><img src="{{ report.picture_url }}" alt="report picture" width="200"</td></tr>
+        <!-- TODO add width attr to styles -->
+        <tr><td>Description</td><td>{{ report.description }}</td></tr>
     </table>
 {% endmacro %}
 
@@ -36,11 +40,11 @@
         <div class="twelve wide column">
             <a class="ui basic compact button" href="{{ url_for('admin.registered_users') }}">
                 <i class="caret left icon"></i>
-                Back to all users
+                Back to all reports
             </a>
             <h2 class="ui header">
-                {{ user.full_name() }}
-                <div class="sub header">View and manage {{ user.first_name }}’s account.</div>
+                {{ '%s\'s report on %s' % (report.user.full_name(), report.agency.name) }}
+                <div class="sub header">View and manage this report.</div>
             </h2>
         </div>
         <div class="stretched divided very relaxed row">
@@ -54,8 +58,8 @@
                         <div class="content">
                             This action is permanent
                             <div class="sub header">
-                                Deleting a user account is not a reversible change. Any information associated
-                                with this account will be removed, and cannot be recovered.
+                                Deleting a report is not a reversible change. Any information associated
+                                with this report will be removed, and cannot be recovered.
                             </div>
                         </div>
                     </h3>
@@ -68,14 +72,14 @@
                             </div>
                         </div>
                         <a class="ui disabled negative deletion button">
-                            Delete this user
+                            Delete this report
                         </a>
                     </div>
                     </div>
                 {% elif form %}
                     {{ f.render_form(form) }}
                 {% else %}
-                    {{ user_info(user) }}
+                    {{ report_info(report) }}
                 {% endif %}
             </div>
         </div>
@@ -85,7 +89,7 @@
         $('.deletion.checkbox').checkbox({
             onChecked: function() {
                 $('.deletion.button').removeClass('disabled')
-                        .attr('href', '{{ url_for('admin.delete_user', user_id=user.id) }}');
+                        .attr('href', '{{ url_for('reports.delete_report', report_id=report.id) }}');
             },
             onUnchecked: function() {
                 $('.deletion.button').addClass('disabled').removeAttr('href');

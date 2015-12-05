@@ -62,8 +62,7 @@
                     </thead>
                     <tbody>
                     {% for r in reports | sort(attribute='date') %}
-                    <!-- TODO url_for report
-                        <tr onclick="window.location.href = '';"> -->
+                        <tr onclick="window.location.href = '{{ url_for('reports.report_info', report_id=r.id) }}';">
                             <td class="single line">{{ r.date.strftime('%m-%d-%Y') }}</td>
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>

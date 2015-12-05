@@ -22,21 +22,21 @@ def handle_message():
 
     if step is 0 and "report" in message.lower():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
-        agency_name = agency_letter_to_name(body)
-        agency_id = Agency.query.filter_by(name=agency_name).first()
     elif step is 1:
         twiml.message("What is the License Plate Number? (eg.MG-1234E)")
-        license_plate = body
+        agency_name = agency_letter_to_name(body)
+        agency_id = Agency.query.filter_by(name=agency_name).first()
     elif step is 2:
         twiml.message("What is the Vehicle ID? (eg.105014)")
-        vehicle_id = int(body)
+        license_plate = body
     elif step is 3:
         twiml.message("How many minutes has it been Idling for? (eg. 10)")
-        duration = int(body)
+        vehicle_id = int(body)
     elif step is 4:
         twiml.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
-        description = body
+        duration = int(body)
     else:
+        description = body
         print(vehicle_id)
         print(agency_id)
         print(license_plate)

@@ -50,7 +50,6 @@ def handle_message():
         new_incident = IncidentReport(
             vehicle_id=vehicle_id,
             license_plate=license_plate,
-            date=datetime.now(),
             duration=duration,
             description=description,
         )

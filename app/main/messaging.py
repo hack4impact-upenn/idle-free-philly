@@ -16,7 +16,7 @@ def handle_message():
     # Retrieve incident cookies
     step = int(request.cookies.get('messagecount', 0))
     vehicle_id = int(request.cookies.get('vehicle_id', 0))
-    agency_id = int(request.cookies.get('agency_id', 0))
+    agency_name = str(request.cookies.get('agency_name', ""))
     license_plate = str(request.cookies.get('license_plate', ""))
     duration = int(request.cookies.get('duration', 0))
     description = str(request.cookies.get('description'))
@@ -27,8 +27,7 @@ def handle_message():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
     elif step is 1:
         twiml.message("What is the License Plate Number? (eg.MG-1234E)")
-        # agency_name = agency_letter_to_name(body)
-        # agency_id = Agency.query.filter_by(name=agency_name).first()
+        agency_name = agency_letter_to_name(body)
     elif step is 2:
         twiml.message("What is the Vehicle ID? (eg.105014)")
         license_plate = body
@@ -41,18 +40,20 @@ def handle_message():
     else:
         description = body
         print(vehicle_id)
-        print(agency_id)
+        print(agency_name)
         print(license_plate)
         print(duration)
         print(description)
         twiml.message("Thanks!")
+        agency = Agency.query.filter_by(name=agency_name).first()
+        print(agency)
         new_incident = IncidentReport(
             vehicle_id=vehicle_id,
             license_plate=license_plate,
             location=None,
             date=datetime.now(),
             duration=duration,
-            agency=Agency,
+            agency=agency,
             description=description,
         )
         db.session.add(new_incident)
@@ -61,7 +62,7 @@ def handle_message():
     step += 1
     response = make_response(str(twiml))
     set_cookie(response, 'messagecount', str(step))
-    set_cookie(response, 'agency_id', str(agency_id))
+    set_cookie(response, 'agency_name', agency_name)
     set_cookie(response, 'vehicle_id', str(vehicle_id))
     set_cookie(response, 'license_plate', license_plate)
     set_cookie(response, 'duration', str(duration))

@@ -271,12 +271,11 @@ def get_reports():
     wr.writerow(['VEHICLE ID', 'LICENSE PLATE', 'LOCATION', 'DATE', 'DURATION', 'AGENCY ID', 'DESCRIPTION'])
     for r in reports:
         print('vehicle id:', r.vehicle_id)
-        print ('description:', r.description)
-        wr.writerow([r.vehicle_id, r.license_plate, r.location, r.date,
+        wr.writerow([r.date, r.location, r.agency_id, r.vehicle_id,
                      r.duration,
-                     r.agency_id,
-                     r.description,
-                     ])
+                     r.license_plate,
+                     r.description])
+
     endfile = open('mydump.csv', 'r+')
     data = endfile.read()
     return Response(

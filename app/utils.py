@@ -47,25 +47,38 @@ def parse_to_db(db, filename):
     with open(filename, 'rb') as file:
         reader = csv.reader(file)
         columns = reader.next()
+        count = 0
+        addresses = ''
         for row in reader:
+            print count
+            print addresses
             address_text = row[location_index]
             # Viewport-biased geocoding using Google API
             url = "https://maps.googleapis.com/maps/api/geocode/json"
             payload = {'address': address_text,
                        'bounds': config['default'].VIEWPORT}
             r = requests.get(url, params=payload)
-            coordinates = r.json()['results'][0]['geometry']['location']
-            loc = Location(
-                latitude=coordinates['lat'],
-                longitude=coordinates['lng'],
-                original_user_text=address_text)
+            if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+                print address_text
+                count = count + 1
+                addresses += address_text + '.    '
+                loc = Location(
+                    latitude=None,
+                    longitude=None,
+                    original_user_text=address_text)
+            else:
+                coordinates = r.json()['results'][0]['geometry']['location']
+                loc = Location(
+                    latitude=coordinates['lat'],
+                    longitude=coordinates['lng'],
+                    original_user_text=address_text)
             db.session.add(loc)
             date_format = "%m/%d/%Y %H:%M"
             time1 = datetime.datetime.strptime(row[date_index], date_format)
             time2 = datetime.datetime.strptime(row[date_index+1], date_format)
             # Assign correct agency id
             agency_name = row[agency_index].rstrip()
-            if agency_name == 'OTHER':
+            if agency_name.upper() == 'OTHER':
                 agency_name = row[agency_index + 1].rstrip()
             a = Agency.get_agency_by_name(agency_name)
             if a is None:
@@ -91,4 +104,6 @@ def parse_to_db(db, filename):
                 description=row[description_index])
             db.session.add(incident)
             db.session.commit()
+        print count
+        print addresses
         return columns

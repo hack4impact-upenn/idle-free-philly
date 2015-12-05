@@ -38,15 +38,6 @@
                 </div>
                 {% endif %}
 
-                {% if current_user.is_admin() %}
-                <div class="ui left item">
-                    <div class="ui toggle checkbox">
-                        <input id="user-only-reports" type="checkbox">
-                        <label>View my reports only</label>
-                    </div>
-                </div>
-                {% endif %}
-
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
                         <input id="search-reports" type="text" placeholder="Search reports…">
@@ -110,10 +101,17 @@
             $('#select-agency').dropdown({
                 // filter reports by agency
                 onChange: function (value, text, $selectedItem) {
-                    $('td.agency.name').closest('tr').addClass('hidden').hide();
-                    $('td.agency.name').filter(function() {
-                        return $(this).text() === value
-                    }).closest('tr').removeClass('hidden').show();
+                    if (text == 'All incident reports') {
+                        // reset filter for all listings
+                        $('td.agency.name').closest('tr').removeClass('hidden').show();
+                    } else {
+                        // hide all listings
+                        $('td.agency.name').closest('tr').addClass('hidden').hide();
+                        // only show those selected by filter
+                        $('td.agency.name').filter(function() {
+                            return $(this).text() === value
+                        }).closest('tr').removeClass('hidden').show();
+                    }
                 }
             });
         });

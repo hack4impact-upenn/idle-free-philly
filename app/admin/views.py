@@ -1,6 +1,6 @@
 from ..decorators import admin_required
 
-from flask import render_template, abort, redirect, flash, url_for
+from flask import render_template, abort, redirect, flash, url_for, request
 from flask.ext.login import login_required, current_user
 
 from forms import (
@@ -12,7 +12,7 @@ from forms import (
     ChangeAgencyPublicStatusForm,
 )
 from . import admin
-from ..models import User, Role, Agency
+from ..models import User, Role, Agency, EditableHTML
 from .. import db
 from ..utils import parse_phone_number
 from ..email import send_email
@@ -59,8 +59,9 @@ def registered_users():
     """View all registered users."""
     users = User.query.all()
     roles = Role.query.all()
+    agencies = Agency.query.all()
     return render_template('admin/registered_users.html', users=users,
-                           roles=roles)
+                           roles=roles, agencies=agencies)
 
 
 @admin.route('/user/<int:user_id>')
@@ -231,3 +232,21 @@ def change_agency_public_status(agency_id):
     form.process()
     return render_template('admin/manage_agency.html', agency=agency,
                            form=form)
+
+
+@admin.route('/_update_editor_contents', methods=['POST'])
+@login_required
+@admin_required
+def update_editor_contents():
+    """Update the contents of an editor."""
+
+    edit_data = request.form.get('edit_data')
+    editor_name = request.form.get('editor_name')
+
+    editor_contents = EditableHTML.get_editable_html(editor_name)
+    editor_contents.value = edit_data
+
+    db.session.add(editor_contents)
+    db.session.commit()
+
+    return 'OK', 200

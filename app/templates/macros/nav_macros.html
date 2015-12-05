@@ -14,14 +14,32 @@
     <a id = "nav_about" class="item" href="{{ url_for('main.about') }}">About</a>
     <a id = "nav_faq" class="item" href="{{ url_for('main.faq') }}">FAQ</a>
     {% if current_user.is_authenticated() %}
-        {% set href = url_for(current_user.role.index + '.index') %}
-        <a id = "nav_dashboard" class="item" href="{{ href }}"> Dashboard</a>
+        <div class="ui dropdown item"> 
+            Dashboard <i class="dropdown icon"></i>
+            <div class = "menu">
+                {% set href = url_for(current_user.role.index + '.index') %}
+                <a class="item" id="nav_dashboard" href="{{ href }}">Dashboard</a>
+                <div class="header">Reports</div>
+                <a href="/" class="item">All Reports</a>
+                <a href="/" class="item">My Reports</a>
+                <div class="header">Account</div>
+                <a href="{{ url_for('account.manage') }}" class="item"> My Account</a>
+                {% if current_user.is_admin() %}
+                <div class="header">Admin</div>
+                <a class="item" href="{{ url_for(current_user.role.index + '.all_agencies') }}">
+                Manage Agencies</a>
+                <a class="item" href="{{ url_for(current_user.role.index + '.registered_users') }}">
+                Manage Users</a>
+                <a class="item" href="{{ url_for(current_user.role.index + '.invite_user') }}">
+                Invite New User</a>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 {% endmacro %}
 
 {% macro account_items(current_user) %}
     {% if current_user.is_authenticated() %}
-        <a href="{{ url_for('account.manage') }}" class="item">Account</a>
         <a href="{{ url_for('account.logout') }}" class="item">Log out</a>
     {% else %}
         <a id = "nav_register" href="{{ url_for('account.register') }}" class="item">Register</a>
@@ -31,19 +49,20 @@
 
 {% macro mobile_nav(current_user, endpoints=None) %}
     <div class="mobile only row">
-        <div class="ui fixed inverted black main menu">
-            {{ header_items(current_user) }}
-            <div class="right menu">
+        <div class="ui fixed inverted main menu">
+            <div class="left menu">
                 <a class="icon item" id="open-nav"><i class="sidebar icon"></i></a>
             </div>
-        </div>
-
-        {# The menu items which will be shown when open-nav is clicked #}
-        <div class="ui fixed vertical fluid menu">
-            {% if endpoints %}
-                {{ render_menu_items(endpoints) }}
-            {% endif %}
-            {{ account_items(current_user) }}
+            {# The menu items which will be shown when open-nav is clicked #}
+            <div class="ui left fixed vertical menu">
+                {% if endpoints %}
+                    {{ render_menu_items(endpoints) }}
+                {% endif %}
+                {{ header_items(current_user) }}
+                {{ account_items(current_user) }}
+            </div>
+             <a class="header item" href="{{ url_for('main.index') }}">
+             <img id = "CAC_logo">{{ config.APP_NAME }}</a>
         </div>
     </div>
 {% endmacro %}
@@ -59,7 +78,6 @@
                 {{ header_items(current_user) }}
                 {{ account_items(current_user) }}
             </div>
-            
         </div>
 
         {# Endpoints go into a submenu #}

@@ -26,7 +26,7 @@ def view_reports():
 
     # TODO test using real data
     return render_template('reports/reports.html', reports=reports,
-                           agencies=agencies, is_individual=False)
+                           agencies=agencies, show_dropdown=True)
 
 
 @reports.route('/my-reports')
@@ -37,4 +37,4 @@ def view_my_reports():
     agencies = None
 
     return render_template('reports/reports.html', reports=reports,
-                           agencies=agencies, is_individual=True)
+                           agencies=agencies, show_dropdown=False)

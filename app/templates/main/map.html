@@ -29,7 +29,9 @@
                                 '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
                                 '<p>Date: ' + '{{ report.date }}' + '</p>' +
                                 '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
+                                {% if current_user.is_admin() or report.agency in current_user.agencies %}
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
+                                {% endif %}
                                 '<p>Link to Picture: ' + '{{ report.picture_url }}' + '</p>' +
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>' +

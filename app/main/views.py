@@ -1,4 +1,5 @@
 from flask import render_template
+from flask.ext.login import current_user
 from ..models import EditableHTML
 from . import main
 from app.models import IncidentReport
@@ -14,7 +15,7 @@ def get_map():
     """Get information on all Incident Reports in the db, and
     pass to map.html
     """
-    return render_template('main/map.html',
+    return render_template('main/map.html', current_user=current_user,
                            incident_reports=IncidentReport.query.all())
 
 

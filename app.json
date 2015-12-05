@@ -1,0 +1,21 @@
+{
+  "name": "Clean Air Council",
+  "repository": "github.com/hack4impact/clean-air-council",
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "env": {
+    "FLASK_CONFIG": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "required": true
+    },
+    "MAIL_USERNAME": {
+      "required": true
+    },
+    "MAIL_PASSWORD": {
+      "required": true
+    }
+  }
+}

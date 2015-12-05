@@ -1,6 +1,8 @@
 from flask import request, make_response
 from . import main
+from .. import db
 from ..models import Agency
+from ..models import IncidentReport
 from datetime import datetime, timedelta
 import twilio.twiml
 # import json
@@ -25,8 +27,8 @@ def handle_message():
         twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
     elif step is 1:
         twiml.message("What is the License Plate Number? (eg.MG-1234E)")
-        agency_name = agency_letter_to_name(body)
-        agency_id = Agency.query.filter_by(name=agency_name).first()
+        # agency_name = agency_letter_to_name(body)
+        # agency_id = Agency.query.filter_by(name=agency_name).first()
     elif step is 2:
         twiml.message("What is the Vehicle ID? (eg.105014)")
         license_plate = body
@@ -44,6 +46,17 @@ def handle_message():
         print(duration)
         print(description)
         twiml.message("Thanks!")
+        new_incident = IncidentReport(
+            vehicle_id=vehicle_id,
+            license_plate=license_plate,
+            location=None,
+            date=datetime.now(),
+            duration=duration,
+            agency=Agency,
+            description=description,
+        )
+        db.session.add(new_incident)
+        db.session.commit()
         step = -1
     step += 1
     response = make_response(str(twiml))
@@ -73,7 +86,5 @@ def agency_letter_to_name(letter):
         return "PWD"
     elif letter == 'E':
         return "PECO"
-    elif letter == 'F':
-        return "Streets"
     else:
-        return "TESTESTESTESTESTESTESt"
+        return "STREETS"

@@ -15,7 +15,7 @@
             </h2>
 
             <div class="ui menu">
-                {% if is_individual %}
+                {% if not show_dropdown %}
                 <div class="item" data-value="{{ current_user.first_name }}">
                     {{ current_user.first_name }}'s incident reports
                 </div>

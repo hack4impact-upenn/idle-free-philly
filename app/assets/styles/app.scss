@@ -84,13 +84,13 @@ nav .mobile.only.row {
 	}
 }
 
-.ui.dropdown.item, .ui.secondary.pointing.menu .active.item {
+#dashboard_dropdown {
 	color: $white;
 	font-weight: 400;
 	text-transform: uppercase;
 }
 
-.ui.dropdown.item > div > .header {
+#dashboard_dropdown > div > .header {
 	color: $dark-gray;
 }
 

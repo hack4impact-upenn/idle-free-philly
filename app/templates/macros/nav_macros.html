@@ -14,7 +14,7 @@
     <a id = "nav_about" class="item" href="{{ url_for('main.about') }}">About</a>
     <a id = "nav_faq" class="item" href="{{ url_for('main.faq') }}">FAQ</a>
     {% if current_user.is_authenticated() %}
-        <div class="ui simple dropdown item"> 
+        <div id = "dashboard_dropdown" class="ui simple dropdown item">
             Dashboard <i class="dropdown icon"></i>
             <div class = "menu">
                 {% set href = url_for(current_user.role.index + '.index') %}

@@ -14,16 +14,16 @@
     <a id = "nav_about" class="item" href="{{ url_for('main.about') }}">About</a>
     <a id = "nav_faq" class="item" href="{{ url_for('main.faq') }}">FAQ</a>
     {% if current_user.is_authenticated() %}
-        <div class="ui dropdown item"> 
+        <div id = "dashboard_dropdown" class="ui simple dropdown item">
             Dashboard <i class="dropdown icon"></i>
             <div class = "menu">
                 {% set href = url_for(current_user.role.index + '.index') %}
                 <a class="item" id="nav_dashboard" href="{{ href }}">Dashboard</a>
                 <div class="header">Reports</div>
-                <a href="/" class="item">All Reports</a>
-                <a href="/" class="item">My Reports</a>
-                <div class="header">Account</div>
-                <a href="{{ url_for('account.manage') }}" class="item"> My Account</a>
+                {% if current_user.is_admin() %}
+                <a href="{{ url_for('reports.view_reports') }}" class="item">All Reports</a>
+                {% endif %}
+                <a href="{{ url_for('reports.view_my_reports') }}" class="item">My Reports</a>
                 {% if current_user.is_admin() %}
                 <div class="header">Admin</div>
                 <a class="item" href="{{ url_for(current_user.role.index + '.all_agencies') }}">
@@ -33,6 +33,8 @@
                 <a class="item" href="{{ url_for(current_user.role.index + '.invite_user') }}">
                 Invite New User</a>
                 {% endif %}
+                <div class="header">Account</div>
+                <a href="{{ url_for('account.manage') }}" class="item"> My Account</a>
             </div>
         </div>
     {% endif %}

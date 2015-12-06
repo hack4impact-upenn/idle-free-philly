@@ -1,5 +1,5 @@
 from .. import db
-from . import Agency
+from . import Agency, User
 
 
 class Location(db.Model):
@@ -10,6 +10,10 @@ class Location(db.Model):
     original_user_text = db.Column(db.Text)  # the raw text which we geocoded
     incident_report_id = db.Column(db.Integer,
                                    db.ForeignKey('incident_reports.id'))
+
+    def __repr__(self):
+        # TODO: Show address instead?
+        return 'Coordinates: {0}, {1}'.format(self.latitude, self.longitude)
 
 
 class IncidentReport(db.Model):
@@ -53,6 +57,7 @@ class IncidentReport(db.Model):
             return choice([True, False])
 
         agencies = Agency.query.all()
+        users = User.query.all()
         fake = Faker()
 
         seed()
@@ -73,6 +78,7 @@ class IncidentReport(db.Model):
                 date=fake.date_time_between(start_date="-1y", end_date="now"),
                 duration=timedelta(minutes=randint(1, 30)),
                 agency=choice(agencies),
+                user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
                 **kwargs

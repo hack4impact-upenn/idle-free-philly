@@ -62,6 +62,9 @@ def create_app(config_name):
     from account import account as account_blueprint
     app.register_blueprint(account_blueprint, url_prefix='/account')
 
+    from reports import reports as reports_blueprint
+    app.register_blueprint(reports_blueprint, url_prefix='/reports')
+
     from admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 

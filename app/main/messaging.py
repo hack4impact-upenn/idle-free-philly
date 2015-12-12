@@ -22,8 +22,9 @@ def handle_message():
     duration = int(request.cookies.get('duration', 0))
     description = str(request.cookies.get('description'))
     location = str(request.cookies.get('location', ""))
-    body = request.values.get('Body')
+    body = str(request.values.get('Body'))
     print(body)
+    print(step)
     if step == 0 and "report" in message.lower():
         twiml.message("What is your location?")
     elif step == 1:

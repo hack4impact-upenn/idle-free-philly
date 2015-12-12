@@ -28,8 +28,8 @@ class IncidentReport(db.Model):
     date = db.Column(db.DateTime)  # hour the incident occurred
     duration = db.Column(db.Interval)  # like timedelta object
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
-    picture_url = db.Column(db.Text)
-    description = db.Column(db.Text)
+    picture_url = db.Column(db.Text(100))
+    description = db.Column(db.Text(200))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # True if this report's agency will be publicly shown alongside it. That

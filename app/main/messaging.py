@@ -62,14 +62,27 @@ def handle_message():
     response = make_response(str(twiml))
 
     # Set cookies
-    set_cookie(response, 'messagecount', str(step))
-    set_cookie(response, 'agency_name', agency_name)
-    set_cookie(response, 'vehicle_id', str(vehicle_id))
-    set_cookie(response, 'license_plate', license_plate)
-    set_cookie(response, 'duration', str(duration))
-    set_cookie(response, 'description', description)
-    set_cookie(response, 'location', location)
+    if step == 0:
+        reset_cookies(response)
+    else:
+        set_cookie(response, 'messagecount', str(step))
+        set_cookie(response, 'agency_name', agency_name)
+        set_cookie(response, 'vehicle_id', str(vehicle_id))
+        set_cookie(response, 'license_plate', license_plate)
+        set_cookie(response, 'duration', str(duration))
+        set_cookie(response, 'description', description)
+        set_cookie(response, 'location', location)
     return response
+
+
+def reset_cookies(resp):
+    resp.set_cookie('messagecount', expires=0)
+    resp.set_cookie('agency_name', expires=0)
+    resp.set_cookie('vehicle_id', expires=0)
+    resp.set_cookie('license_plate', expires=0)
+    resp.set_cookie('duration', expires=0)
+    resp.set_cookie('description', expires=0)
+    resp.set_cookie('location', expires=0)
 
 
 def set_cookie(resp, key, val):

@@ -50,7 +50,7 @@ def handle_message():
             agency=agency,
             vehicle_id=vehicle_id,
             license_plate=license_plate,
-            duration=duration,
+            duration=timedelta(minutes=duration),
             description=description,
         )
         print(new_incident)

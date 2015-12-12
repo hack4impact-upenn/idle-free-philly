@@ -10,7 +10,7 @@
 {% endmacro %}
 
 {% macro header_items(current_user) %}
-    <a id = "nav_map" class="item" href="{{ url_for('main.index') }}">Map</a>
+    <a id = "nav_map" class="item" href="{{ url_for('main.get_map') }}">Map</a>
     <a id = "nav_about" class="item" href="{{ url_for('main.about') }}">About</a>
     <a id = "nav_faq" class="item" href="{{ url_for('main.faq') }}">FAQ</a>
     {% if current_user.is_authenticated() %}
@@ -63,7 +63,7 @@
                 {{ header_items(current_user) }}
                 {{ account_items(current_user) }}
             </div>
-             <a class="header item" href="{{ url_for('main.index') }}">
+             <a class="header item" href="{{ url_for('main.get_map') }}">
              <img id = "CAC_logo">{{ config.APP_NAME }}</a>
         </div>
     </div>
@@ -74,7 +74,7 @@
 {% macro desktop_nav(current_user, endpoints=None, count=None) %}
     <div class="computer tablet only row">
         <div class="ui secondary pointing menu">
-         <a class="header item" href="{{ url_for('main.index') }}">
+         <a class="header item" href="{{ url_for('main.get_map') }}">
          <img id = "CAC_logo">{{ config.APP_NAME }}</a>
         <div class="right menu">
                 {{ header_items(current_user) }}

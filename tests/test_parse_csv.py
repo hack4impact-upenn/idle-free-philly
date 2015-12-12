@@ -1,5 +1,6 @@
 import unittest
 from app import create_app, db
+from app.models import Location, IncidentReport
 from app.utils import parse_to_db
 
 

@@ -1,6 +1,9 @@
 import re
 import requests
+import datetime
+import csv
 from flask import url_for, current_app
+from app.models import Location, Agency, IncidentReport
 
 
 def register_template_utils(app):
@@ -43,3 +46,72 @@ def geocode(address):
     else:
         coords = r.json()['results'][0]['geometry']['location']
         return coords['lat'], coords['lng']
+
+
+def parse_to_db(db, filename):
+    dt = datetime.datetime
+    vehicle_id_index = 8
+    license_plate_index = 9
+    location_index = 4
+    date_index = 0
+    agency_index = 6
+    picture_index = 13
+    description_index = 11
+    with open(filename, 'rb') as file:
+        reader = csv.reader(file)
+        columns = reader.next()
+        fail_count = 0
+        fail_addresses = ''
+        i = 1  # Count for current row
+        for row in reader:
+            i += 1
+            address_text = row[location_index]
+            coords = geocode(address_text)
+            # Ignore rows that do not have correct geocoding
+            if coords[0] is None or coords[1] is None:
+                fail_count += 1
+                fail_addresses += '%i. %s \n' % (i, address_text)
+                print 'Geocode failure on address: %s' % address_text
+                print 'Geocode failure count: %s' % fail_count
+            # Insert correctly geocoded row to database
+            else:
+                loc = Location(
+                    latitude=coords[0],
+                    longitude=coords[1],
+                    original_user_text=address_text)
+                db.session.add(loc)
+                date_format = "%m/%d/%Y %H:%M"
+                time1 = dt.strptime(row[date_index], date_format)
+                time2 = dt.strptime(row[date_index+1], date_format)
+                # Assign correct agency id
+                agency_name = row[agency_index].rstrip()
+                if agency_name.upper() == 'OTHER':
+                    agency_name = row[agency_index + 1].rstrip()
+                a = Agency.get_agency_by_name(agency_name)
+                # Create new agency object if not in database
+                if a is None:
+                    a = Agency(name=agency_name)
+                    a.is_public = True
+                    a.is_official = False
+                    db.session.add(a)
+                    db.session.commit()
+                vehicle_id_text = row[vehicle_id_index].strip()
+                if len(vehicle_id_text) is 0:
+                    vehicle_id_text = None
+                license_plate_text = row[license_plate_index].strip()
+                if len(license_plate_text) is 0:
+                    license_plate_text = None
+                incident = IncidentReport(
+                    vehicle_id=vehicle_id_text,
+                    license_plate=license_plate_text,
+                    location=loc,
+                    date=time1,
+                    duration=time2 - time1,
+                    agency=a,
+                    picture_url=row[picture_index],
+                    description=row[description_index])
+                db.session.add(incident)
+                db.session.commit()
+        print 'Geocode failure count: %s' % fail_count
+        print 'Geocode failed addresses: \n %s' % fail_addresses
+        return columns

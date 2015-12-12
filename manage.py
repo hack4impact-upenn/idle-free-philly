@@ -11,6 +11,7 @@ from app.models import (
 )
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+from app.utils import parse_to_db
 
 # Import settings from .env file. Must define FLASK_CONFIG
 if os.path.exists('.env'):
@@ -115,6 +116,17 @@ def setup_dev():
     db.session.add(general)
 
     db.session.commit()
+
+
+@manager.option('-f',
+                '--filename',
+                default='poll244.csv',
+                type=str,
+                help='Filename of csv to parse',
+                dest='filename')
+def parse_csv(filename):
+    """Parses the given csv file into the database."""
+    parse_to_db(db, filename)
 
 
 @manager.command

@@ -1,7 +1,8 @@
 import re
+import requests
 import datetime
 import csv
-from flask import url_for
+from flask import url_for, current_app
 from app.models import Location, Agency, IncidentReport
 
 
@@ -34,6 +35,19 @@ def parse_phone_number(phone_number):
     return stripped
 
 
+# Viewport-biased geocoding using Google API
+# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+def geocode(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
+    r = requests.get(url, params=payload)
+    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        return None, None
+    else:
+        coords = r.json()['results'][0]['geometry']['location']
+        return coords['lat'], coords['lng']
+
+
 def parse_to_db(db, filename):
     dt = datetime.datetime
     vehicle_id_index = 8
@@ -55,10 +69,10 @@ def parse_to_db(db, filename):
             coords = geocode(address_text)
             # Ignore rows that do not have correct geocoding
             if coords[0] is None or coords[1] is None:
+                fail_count += 1
+                fail_addresses += '%i. %s \n' % (i, address_text)
                 print 'Geocode failure on address: %s' % address_text
                 print 'Geocode failure count: %s' % fail_count
-                fail_count += 1
-                fail_addresses += i + '. ' + address_text + '\n'
             # Insert correctly geocoded row to database
             else:
                 loc = Location(

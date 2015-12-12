@@ -1,5 +1,5 @@
 from .. import db
-from . import Agency
+from . import Agency, User
 
 
 class Location(db.Model):
@@ -10,6 +10,10 @@ class Location(db.Model):
     original_user_text = db.Column(db.Text)  # the raw text which we geocoded
     incident_report_id = db.Column(db.Integer,
                                    db.ForeignKey('incident_reports.id'))
+
+    def __repr__(self):
+        # TODO: Show address instead?
+        return 'Coordinates: {0}, {1}'.format(self.latitude, self.longitude)
 
 
 class IncidentReport(db.Model):
@@ -28,6 +32,18 @@ class IncidentReport(db.Model):
     description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    # True if this report's agency will be publicly shown alongside it. That
+    # is, when a general user sees a report on the map, this report's agency
+    # will only be shown if show_agency_publicly is True. The
+    # show_agency_publicly attribute is inherited from a report's agency's
+    # is_public field.
+    show_agency_publicly = db.Column(db.Boolean, default=False)
+
+    def __init__(self, **kwargs):
+        super(IncidentReport, self).__init__(**kwargs)
+        if self.agency is not None and 'show_agency_publicly' not in kwargs:
+            self.show_agency_publicly = self.agency.is_public
+
     @staticmethod
     def generate_fake(count=100, **kwargs):
         """Generate a number of fake reports for testing."""
@@ -41,6 +57,7 @@ class IncidentReport(db.Model):
             return choice([True, False])
 
         agencies = Agency.query.all()
+        users = User.query.all()
         fake = Faker()
 
         seed()
@@ -61,6 +78,7 @@ class IncidentReport(db.Model):
                 date=fake.date_time_between(start_date="-1y", end_date="now"),
                 duration=timedelta(minutes=randint(1, 30)),
                 agency=choice(agencies),
+                user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
                 **kwargs

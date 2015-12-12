@@ -17,12 +17,12 @@ class ParseCsvTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_parse_columns(self):
-        columns = parse_to_db(db, 'poll244_sample.csv', True)
+        columns = parse_to_db(db, 'poll244_sample.csv')
         self.assertTrue(columns[0] == 'Timestamp:first')
         self.assertTrue(columns[15] == 'Phone Prefix')
 
     def test_parse_into_db_location(self):
-        parse_to_db(db, 'poll244_sample.csv', True)
+        parse_to_db(db, 'poll244_sample.csv')
         loc1_text = '15 & chestnut '
         loc1 = Location.query.filter_by(original_user_text=loc1_text).first()
         # Check that geocoded coordinates match expected 39.951304, -75.165601
@@ -42,7 +42,7 @@ class ParseCsvTestCase(unittest.TestCase):
         self.assertAlmostEqual(float(loc3.longitude), -75.163059, places=3)
 
     def test_parse_into_db_incident(self):
-        parse_to_db(db, 'poll244_sample.csv', True)
+        parse_to_db(db, 'poll244_sample.csv')
         t_url = 'https://textizen-attachments.s3.amazonaws.com/'
 
         license1 = 'AG-26081'

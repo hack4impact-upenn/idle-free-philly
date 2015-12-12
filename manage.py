@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role, Agency, Permission, IncidentReport
+from app.models import (
+    User,
+    Role,
+    Agency,
+    Permission,
+    IncidentReport,
+    EditableHTML
+)
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 from app.utils import parse_to_db
@@ -92,7 +99,7 @@ def setup_dev():
                   .filter_by(permissions=Permission.AGENCY_WORKER)
                   .first(),
                   confirmed=True)
-    worker.agencies = Agency.get_agency_by_name('SEPTA')
+    worker.agencies = [Agency.get_agency_by_name('SEPTA')]
 
     # Create a default general user
     general = User(email='general@user.com',
@@ -132,6 +139,7 @@ def setup_general():
     """Runs the set-up needed for both local development and production."""
     Role.insert_roles()
     Agency.insert_agencies()
+    EditableHTML.add_default_faq()
 
 if __name__ == '__main__':
     manager.run()

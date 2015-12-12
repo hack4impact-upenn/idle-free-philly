@@ -1,59 +1,67 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, IntegerField, TextAreaField, \
     HiddenField, DateField, FileField
-from wtforms import validators
 from ..models import Agency
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired
 from .. import db
 import datetime as datetime
+from wtforms.validators import (
+    InputRequired,
+    Regexp,
+    Length,
+    Optional,
+    NumberRange
+)
 
 
 class NewIncidentForm(Form):
-    license_plate_number = StringField('License Plate Number', [
-        validators.required('license plate is required'),
-        validators.Regexp('^\w+$',
-                          message='license plate number must '
-                                  'consist of only letters and numbers!'),
-        validators.Length(min=6, max=7)
+    vehicle_ID = IntegerField('Vehicle ID', validators=[
+        InputRequired('Vehicle ID is required.'),
+        Length(min=2, max=10)
     ])
-    agency = QuerySelectField('Truck Agency ',
-                              validators=[DataRequired()],
+
+    license_plate_number = StringField('License Plate Number', validators=[
+        InputRequired('License plate is required.'),
+        Regexp("^[a-zA-Z0-9]*$",
+               message='License plate number must '
+                       'consist of only letters and numbers.'),
+        Length(min=6, max=7)
+    ])
+
+    bus_number = IntegerField('Bus Number', validators=[
+        Optional()
+    ])
+
+    led_screen_number = IntegerField('LED Screen Number', validators=[
+        Optional()
+    ])
+
+    latitude = HiddenField('Latitude')
+    longitude = HiddenField('Longitude')
+    location = StringField('Address')
+
+    date = DateField('Date', default=datetime.date.today(),
+                     validators=[InputRequired()])
+
+    duration = IntegerField('Idling Duration (in minutes)', [
+        InputRequired('Idling duration (in minutes) is required.'),
+        NumberRange(min=0,
+                    max=10000,
+                    message='Idling duration must be between'
+                            '0 and 10000 minutes.')
+    ])
+
+    agency = QuerySelectField('Vehicle Agency ',
+                              validators=[InputRequired()],
                               get_label='name',
                               query_factory=lambda: db.session.query(Agency))
-    bus_number = IntegerField('Bus Number', [
-        validators.optional(),
-        validators.NumberRange(min=0,
-                               max=100000000,
-                               message='invalid bus number entered!')
+
+    picture = FileField('Upload a picture of the vehicle and/or driver.',
+                        validators=[Optional()])
+
+    notes = TextAreaField('Additional Notes', [
+        Optional(),
+        Length(max=5000)
     ])
-    led_screen_number = IntegerField('LED Screen Number', [
-        validators.optional(),
-        validators.NumberRange(min=0,
-                               max=100000000,
-                               message='invalid LED Screen Number entered!')
-    ])
-    vehicle_ID = StringField('Vehicle ID', [
-        validators.required('vehicleID is required'),
-        validators.Regexp('^[0-9]*$',
-                          message='vehicle id must consist of only digits!'),
-        validators.Length(min=2, max=10)
-    ])
-    notes = TextAreaField('Notes', [
-        validators.optional(),
-        validators.Length(max=100)
-    ])
-    latitude = HiddenField()
-    date = DateField('date', default=datetime.date.today(),
-                     validators=[validators.DataRequired()])
-    location = StringField('Location')
-    longitude = HiddenField('longitude')
-    idling_duration = IntegerField('Idling Duration (in minutes)', [
-        validators.required('idling duration (in minutes) is required!'),
-        validators.NumberRange(min=0,
-                               max=1000,
-                               message='invalid duration entered!')
-    ])
-    picture = FileField('Upload a picture of the truck/driver',
-                        validators=[validators.optional()])
+
     submit = SubmitField('Create Report')

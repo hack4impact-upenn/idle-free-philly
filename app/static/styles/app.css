@@ -403,32 +403,52 @@ footer > div > h3 {
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000313}}
+@media -sass-debug-info{filename{}line{font-family:\0000316}}
 #submitButton {
-  background-color: #7CC1D8;
   color: #FFFFFF;
   left: 220px;
   top: 49px;
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000321}}
+@media -sass-debug-info{filename{}line{font-family:\0000323}}
 #form_button {
   position: absolute;
   background-color: #FF684C;
   width: 25%;
   color: white;
   right: 100px;
-  top: 49px;
+  top: 60px;
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000330}}
+@media -sass-debug-info{filename{}line{font-family:\0000333}}
+#slider {
+  position: absolute;
+  top: 49px;
+  width: 20%;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000340}}
 html, body {
   height: 100%;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000334}}
+@media -sass-debug-info{filename{}line{font-family:\0000344}}
+.ui.button {
+  width: 100%;
+  background-color: #56A5BF;
+  color: white;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000350}}
+.ui.button:hover {
+  background-color: #7CC1D8;
+  color: white;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000355}}
 #form_container {
   position: absolute;
   background-color: white;
@@ -441,18 +461,18 @@ html, body {
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000346}}
+@media -sass-debug-info{filename{}line{font-family:\0000367}}
 #bodyContent {
-  height: 50%;
+  height: 60%;
   overflow-y: scroll;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000351}}
+@media -sass-debug-info{filename{}line{font-family:\0000372}}
 #bodyContent > p {
   margin-bottom: 0.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000358}}
+@media -sass-debug-info{filename{}line{font-family:\0000379}}
 #info_container {
   position: absolute;
   background-color: white;
@@ -463,33 +483,30 @@ html, body {
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000369}}
+@media -sass-debug-info{filename{}line{font-family:\0000390}}
 #current_location_button {
-  background-color: #1C7592;
+  background-color: #56A5BF;
+  margin-bottom: 1em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000373}}
-#slider {
-  position: absolute;
-  width: 20%;
-  left: 300px;
-  top: 10px;
-  z-index: 99;
+@media -sass-debug-info{filename{}line{font-family:\0000395}}
+#current_location_button:hover {
+  background-color: #7CC1D8;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000381}}
+@media -sass-debug-info{filename{}line{font-family:\00003101}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000387}}
+@media -sass-debug-info{filename{}line{font-family:\00003107}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000391}}
+@media -sass-debug-info{filename{}line{font-family:\00003111}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -497,7 +514,7 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000398}}
+@media -sass-debug-info{filename{}line{font-family:\00003118}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -505,7 +522,7 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003105}}
+@media -sass-debug-info{filename{}line{font-family:\00003125}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;

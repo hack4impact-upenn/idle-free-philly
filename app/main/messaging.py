@@ -9,9 +9,9 @@ import twilio.twiml
 # import json
 
 
-@main.route("/report_incident", methods=['GET', 'POST'])
+@main.route("/report_incident", methods=['POST'])
 def handle_message():
-    message = str(request.values.get('Body'))  # noqa
+    message = str(request.values.get('Body'))
     twiml = twilio.twiml.Response()
 
     # Retrieve incident cookies
@@ -28,7 +28,7 @@ def handle_message():
         twiml.message("What is your location?")
     elif step == 1:
         location = body
-        twiml.message("Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others")  # noqa
+        twiml.message("""Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others""")  # noqa
     elif step == 2:
         twiml.message("What is the License Plate Number? (eg.MG-1234E)")
         agency_name = agency_letter_to_name(body)
@@ -60,6 +60,7 @@ def handle_message():
         step = -1
     step += 1
     response = make_response(str(twiml))
+
     # Set cookies
     set_cookie(response, 'messagecount', str(step))
     set_cookie(response, 'agency_name', agency_name)
@@ -67,6 +68,7 @@ def handle_message():
     set_cookie(response, 'license_plate', license_plate)
     set_cookie(response, 'duration', str(duration))
     set_cookie(response, 'description', description)
+    set_cookie(response, 'location', location)
     return response
 
 

@@ -150,3 +150,7 @@ html, body{
     display: block;
     margin: 0 auto;
 }
+
+#dashboard_dropdown > .menu {
+    z-index: 100;
+}

@@ -1,7 +1,13 @@
 import unittest
 import time
 from app import create_app, db
-from app.models import User, AnonymousUser, Permission, Role
+from app.models import (
+    User,
+    AnonymousUser,
+    Permission,
+    Role,
+    Agency,
+    IncidentReport)
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -110,6 +116,7 @@ class UserModelTestCase(unittest.TestCase):
         u = User(email='user@example.com', password='password')
         self.assertTrue(u.can(Permission.GENERAL))
         self.assertFalse(u.can(Permission.ADMINISTER))
+        self.assertFalse(u.can(Permission.AGENCY_WORKER))
 
     def test_make_administrator(self):
         Role.insert_roles()
@@ -130,3 +137,28 @@ class UserModelTestCase(unittest.TestCase):
     def test_anonymous(self):
         u = AnonymousUser()
         self.assertFalse(u.can(Permission.GENERAL))
+
+    def test_agency_worker_role(self):
+        Role.insert_roles()
+        r = Role.query.filter_by(permissions=Permission.AGENCY_WORKER).first()
+        ag_1 = Agency(name='SEPTA')
+        ag_2 = Agency(name='STREETS')
+        u = User(email='user@example.com', password='password', role=r,
+                 agencies=[ag_1, ag_2])
+        self.assertTrue(u.can(Permission.AGENCY_WORKER))
+        self.assertFalse(u.can(Permission.ADMINISTER))
+        self.assertFalse(u.is_admin())
+        self.assertEqual(u.agencies, [ag_1, ag_2])
+
+    def test_reported_incidents(self):
+        u = User(email='user@example.com', password='password')
+        incident1 = IncidentReport(
+            vehicle_id='123456',
+            user=u
+        )
+        incident2 = IncidentReport(
+            vehicle_id='654321',
+            user=u
+        )
+        u.reported_incidents = [incident1, incident2]
+        self.assertEqual(u.reported_incidents, [incident1, incident2])

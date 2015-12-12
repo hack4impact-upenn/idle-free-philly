@@ -1,25 +1,183 @@
-@media -sass-debug-info{filename{}line{font-family:\000037}}
-nav {
-  margin-bottom: 40px !important;
+@media -sass-debug-info{filename{}line{font-family:\0000314}}
+.ui.navigation.grid {
+  margin-bottom: 50px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000312}}
+@media -sass-debug-info{filename{}line{font-family:\0000318}}
+.body.container {
+  min-height: 100%;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000322}}
+#CAC_logo {
+  content: url("../../static/images/CAC_logo.png");
+  height: 2em;
+  width: auto;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000331}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
   border-right: 1px solid rgba(34, 36, 38, 0.09804);
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000318}}
-nav .mobile.only.row .ui.vertical.menu {
-  margin-top: 40px;
-  display: none;
+@media -sass-debug-info{filename{}line{font-family:\0000336}}
+nav .computer.only.row .ui.secondary.pointing.menu > .right.menu {
+  margin-right: 2em;
+  padding-bottom: 1em;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000340}}
+nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a {
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000344}}
+nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a:hover, nav .computer.only.row .ui.dropdown.item:hover {
+  background-color: #7CC1D8;
+  color: #FFFFFF;
+  border-radius: 0.5em;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000349}}
+nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a.active {
+  background-color: #7CC1D8;
+  color: #FFFFFF;
+  border: none;
+  font-weight: 400;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000355}}
+nav .computer.only.row .ui.secondary.pointing.menu {
+  background-color: #56A5BF;
+  width: 100%;
+  font-size: 1.3em;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000360}}
+nav .computer.only.row .ui.secondary.pointing.menu > .header.item {
+  color: #FFFFFF !important;
+  font-size: 1.4em;
+  font-weight: 400;
+  border: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000325}}
+@media -sass-debug-info{filename{}line{font-family:\0000370}}
+nav .mobile.only.row .ui.vertical.menu {
+  margin-top: 45px;
+  display: none;
+  background-color: #1C7592;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000375}}
+nav .mobile.only.row .ui.vertical.menu > a, nav .mobile.only.row .ui.vertical.menu > ui.dropdown.item:hover {
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000379}}
+nav .mobile.only.row .ui.main.menu {
+  background-color: #56A5BF;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000382}}
+nav .mobile.only.row .ui.vertical.secondary.menu > a {
+  color: #222222;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000387}}
+#dashboard_dropdown {
+  color: #FFFFFF;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000393}}
+#dashboard_dropdown > div > .header {
+  color: #222222;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000397}}
+#nav_dashboard {
+  text-align: center;
+  color: #56A5BF !important;
+  text-transform: uppercase !important;
+  border-bottom: solid 1px #7CC1D8;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003104}}
+.ui.menu .ui.dropdown .menu > .item {
+  color: #222222;
+  font-size: 0.8em !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003110}}
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000330}}
+@media -sass-debug-info{filename{}line{font-family:\00003113}}
+.ui.red.error {
+  color: #FF684C;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003116}}
+.ui.red.pointing.label {
+  background-color: #FF684C !important;
+  border-color: #FF684C !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003120}}
+.ui.red.label:before {
+  background-color: #FF684C !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003125}}
 table.selectable tr:hover {
-  cursor: pointer !important;
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003130}}
+h1, h2, .ui.dividing.header {
+  color: #1C7592;
+  text-transform: uppercase;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003134}}
+h3 {
+  margin-bottom: 0.3em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003137}}
+.ui.form .field > label, p, input {
+  font-size: 1.1em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003140}}
+.sub.header {
+  text-transform: none;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003145}}
+footer {
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+  padding: 1em;
+  margin-top: 5%;
+  background-color: #1C7592;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003154}}
+#h4i_logo {
+  content: url("../../static/images/h4i_square_white.png");
+  height: 1.2em;
+  width: auto;
+  margin-right: 0.5em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003161}}
+footer > div > h3 {
+  color: #FFFFFF;
+  margin-top: 0;
+  font-weight: 300;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003167}}
+.icon.heart:hover {
+  color: #FF684C;
 }

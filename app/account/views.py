@@ -7,12 +7,15 @@ from flask.ext.login import (
 )
 from . import account
 from .. import db
+from ..utils import parse_phone_number
 from ..email import send_email
 from ..models import User
 from .forms import (
     LoginForm,
     RegistrationForm,
+    CreatePasswordForm,
     ChangePasswordForm,
+    ChangePhoneNumberForm,
     ChangeEmailForm,
     RequestResetPasswordForm,
     ResetPasswordForm
@@ -123,10 +126,29 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.new_password.data
             db.session.add(current_user)
+            db.session.commit()
             flash('Your password has been updated.', 'form-success')
             return redirect(url_for('main.index'))
         else:
             flash('Original password is invalid.', 'form-error')
+    return render_template('account/manage.html', form=form)
+
+
+@account.route('/manage/change-phone-number', methods=['GET', 'POST'])
+@login_required
+def change_phone_number():
+    """Change an existing user's phone number."""
+    form = ChangePhoneNumberForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.password.data):
+            raw_phone_data = form.phone_number.data
+            current_user.phone_number = parse_phone_number(raw_phone_data)
+            db.session.add(current_user)
+            db.session.commit()
+            flash('Your phone number has been updated.', 'success')
+            return redirect(url_for('main.index'))
+        else:
+            flash('Invalid password.', 'form-error')
     return render_template('account/manage.html', form=form)
 
 
@@ -186,6 +208,49 @@ def confirm(token):
         flash('Your account has been confirmed.', 'success')
     else:
         flash('The confirmation link is invalid or has expired.', 'error')
+    return redirect(url_for('main.index'))
+
+
+@account.route('/join-from-invite/<int:user_id>/<token>',
+               methods=['GET', 'POST'])
+def join_from_invite(user_id, token):
+    """
+    Confirm new user's account with provided token and prompt them to set
+    a password.
+    """
+    if current_user is not None and current_user.is_authenticated():
+        flash('You are already logged in.', 'error')
+        return redirect(url_for('main.index'))
+
+    new_user = User.query.get(user_id)
+    if new_user is None:
+        return redirect(404)
+
+    if new_user.password_hash is not None:
+        flash('You have already joined.', 'error')
+        return redirect(url_for('main.index'))
+
+    if new_user.confirm_account(token):
+            form = CreatePasswordForm()
+            if form.validate_on_submit():
+                new_user.password = form.password.data
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Your password has been set. After you log in, you can '
+                      'go to the "Your Account" page to review your account '
+                      'information and settings.', 'success')
+                return redirect(url_for('account.login'))
+            return render_template('account/join_invite.html', form=form)
+    else:
+        flash('The confirmation link is invalid or has expired. Another '
+              'invite email with a new link has been sent to you.', 'error')
+        token = new_user.generate_confirmation_token()
+        send_email(new_user.email,
+                   'You Are Invited To Join',
+                   'account/email/invite',
+                   user=new_user,
+                   user_id=new_user.id,
+                   token=token)
     return redirect(url_for('main.index'))
 
 

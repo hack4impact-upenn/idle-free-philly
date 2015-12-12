@@ -4,6 +4,7 @@
 {% set endpoints = [
     ('account.manage', 'Account information'),
     ('account.change_email_request', 'Change email address'),
+    ('account.change_phone_number', 'Change phone number'),
     ('account.change_password', 'Change password'),
     ('account.logout', 'Log out')
 ] %}
@@ -23,7 +24,12 @@
     <table class="ui compact definition table">
         <tr><td>Full name</td><td>{{ '%s %s' % (user.first_name, user.last_name) }}</td></tr>
         <tr><td>Email address</td><td>{{ user.email }}</td></tr>
+        <tr><td>Phone number</td><td>{{ user.phone_number }}</td></tr>
         <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
+        {% if user.agencies|length > 0 %}
+            <tr><td>Agency affiliations</td><td>{{ user.agencies|join(',', attribute='name') }}</td></tr>
+        {% endif %}
+
     </table>
 {% endmacro %}
 

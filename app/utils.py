@@ -1,3 +1,4 @@
+import re
 from flask import url_for
 
 
@@ -17,11 +18,28 @@ def register_template_utils(app):
 
 
 def index_for_role(role):
-    return url_for(role.name + '.index')
+    return url_for(role.index)
 
 
-def parse_to_db(db, filename):
-    import csv
-    with open(filename, 'rb') as file:
-        reader = csv.reader(file, delimiter=',')
-        return reader.next()
+def parse_phone_number(phone_number):
+    """Make phone number conform to E.164 (https://en.wikipedia.org/wiki/E.164)
+    """
+    stripped = re.sub(r'\D', '', phone_number)
+    if len(stripped) == 10:
+        stripped = '1' + stripped
+    stripped = '+' + stripped
+    return stripped
+
+
+# Viewport-biased geocoding using Google API
+# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+def geocode(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    payload = {'address': address_text,
+                'bounds': config['default'].VIEWPORT}
+    r = requests.get(url, params=payload)
+    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        return (None, None)
+    else:
+        coords = r.json()['results'][0]['geometry']['location']
+        return (coords['lat'], coords['lng'])

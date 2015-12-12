@@ -3,11 +3,13 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
     BadSignature, SignatureExpired
-from . import db, login_manager
+from .. import db, login_manager
+from . import Agency
 
 
 class Permission:
     GENERAL = 0x01
+    AGENCY_WORKER = 0x10
     ADMINISTER = 0xff
 
 
@@ -15,7 +17,9 @@ class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    index = db.Column(db.String(64), unique=True)
+    index = db.Column(db.String(64))
+
+    # True if user is assigned this role by default
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
@@ -25,6 +29,9 @@ class Role(db.Model):
         roles = {
             'User': (
                 Permission.GENERAL, 'main', True
+            ),
+            'AgencyWorker': (
+                Permission.AGENCY_WORKER, 'main', False
             ),
             'Administrator': (
                 Permission.ADMINISTER, 'admin', False  # grants all permissions
@@ -51,8 +58,13 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
     email = db.Column(db.String(64), unique=True, index=True)
+    phone_number = db.Column(db.String(16), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    incident_reports = db.relationship('IncidentReport',
+                                       backref='user',
+                                       lazy='select')
+    # also related to agencies via the agency_user_table
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -71,7 +83,16 @@ class User(UserMixin, db.Model):
             (self.role.permissions & permissions) == permissions
 
     def is_admin(self):
-        return self.can(Permission.ADMINISTER)
+        return self.role.permissions == Permission.ADMINISTER
+
+    def is_worker(self):
+        return self.role.permissions == Permission.AGENCY_WORKER
+
+    def is_agency_worker(self):
+        return self.can(Permission.AGENCY_WORKER)
+
+    def is_general_user(self):
+        return self.can(Permission.GENERAL)
 
     @property
     def password(self):
@@ -84,8 +105,9 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def generate_confirmation_token(self, expiration=3600):
+    def generate_confirmation_token(self, expiration=604800):
         """Generate a confirmation token to email a new user."""
+
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
@@ -146,22 +168,31 @@ class User(UserMixin, db.Model):
         return True
 
     @staticmethod
-    def generate_fake(count=100, **kwargs):
+    def generate_fake(count=10, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
-        from random import seed
-        import forgery_py
+        from random import seed, choice, sample, randint
+        from faker import Faker
+
+        fake = Faker()
+        roles = Role.query.all()
+        agencies = Agency.query.all()
 
         seed()
         for i in range(count):
             u = User(
-                first_name=forgery_py.name.first_name(),
-                last_name=forgery_py.name.last_name(),
-                email=forgery_py.internet.email_address(),
-                password=forgery_py.lorem_ipsum.word(),
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                phone_number='+1{}'.format(''.join([str(randint(0, 9))
+                                                    for _ in range(0, 10)])),
+                email=fake.email(),
+                password=fake.password(),
                 confirmed=True,
+                role=choice(roles),
                 **kwargs
             )
+            if u.role.name == 'AgencyWorker':
+                u.agencies = sample(agencies, randint(1, len(agencies)))
             db.session.add(u)
             try:
                 db.session.commit()

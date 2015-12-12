@@ -179,6 +179,7 @@ def change_email_request():
 def change_email(token):
     """Change existing user's email with provided token."""
     if current_user.change_email(token):
+        db.session.commit()
         flash('Your email address has been updated.', 'success')
     else:
         flash('The confirmation link is invalid or has expired.', 'error')
@@ -205,6 +206,7 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm_account(token):
+        db.session.commit()
         flash('Your account has been confirmed.', 'success')
     else:
         flash('The confirmation link is invalid or has expired.', 'error')

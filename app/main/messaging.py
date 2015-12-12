@@ -1,6 +1,6 @@
 from flask import request, make_response
 from . import main
-# from .. import db
+from .. import db
 from ..models import Agency
 from ..models import IncidentReport
 from datetime import datetime, timedelta
@@ -54,8 +54,9 @@ def handle_message():
             description=description,
         )
         print(new_incident)
-        # db.session.add(new_incident)
-        # db.session.commit()
+        db.session.add(new_incident)
+        db.session.commit()
+        print 'HERE!'
         step = -1
     step += 1
     response = make_response(str(twiml))

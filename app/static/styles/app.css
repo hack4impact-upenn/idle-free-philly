@@ -409,8 +409,8 @@ footer > div > h3 {
 
 @media -sass-debug-info{filename{}line{font-family:\000039}}
 .ui-rangeSlider-bar {
-  background: #7CC1D8;
-  height: 100% !important;
+  background: #56A5BF;
+  height: 99% !important;
   width: 100%;
   top: -1px !important;
   -webkit-box-shadow: inset 0 -2px 6px RGBA(0, 0, 0, 0.5);
@@ -428,7 +428,7 @@ footer > div > h3 {
 
 @media -sass-debug-info{filename{}line{font-family:\0000326}}
 #submitButton {
-  background-color: #7CC1D8;
+  background-color: #56A5BF;
   color: #FFFFFF;
   left: 220px;
   top: 49px;
@@ -436,6 +436,11 @@ footer > div > h3 {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000334}}
+#submitButton:hover {
+  background-color: #7CC1D8;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000338}}
 #form_button {
   position: absolute;
   background-color: #FF684C;
@@ -448,7 +453,7 @@ footer > div > h3 {
 }
 
 @media all and (min-width: 769px) {
-@media -sass-debug-info{filename{}line{font-family:\0000346}}
+@media -sass-debug-info{filename{}line{font-family:\0000350}}
   #slider {
     position: absolute;
     top: 8px;
@@ -458,7 +463,7 @@ footer > div > h3 {
   }
 }
 @media all and (max-width: 768px) {
-@media -sass-debug-info{filename{}line{font-family:\0000356}}
+@media -sass-debug-info{filename{}line{font-family:\0000360}}
   #slider {
     position: absolute;
     width: 45%;
@@ -467,12 +472,12 @@ footer > div > h3 {
     z-index: 99;
   }
 }
-@media -sass-debug-info{filename{}line{font-family:\0000365}}
+@media -sass-debug-info{filename{}line{font-family:\0000369}}
 html, body {
   height: 100%;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000369}}
+@media -sass-debug-info{filename{}line{font-family:\0000373}}
 #form_container {
   position: absolute;
   background-color: white;
@@ -485,12 +490,12 @@ html, body {
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000381}}
+@media -sass-debug-info{filename{}line{font-family:\0000385}}
 #bodyContent > p {
   margin-bottom: 0.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000388}}
+@media -sass-debug-info{filename{}line{font-family:\0000392}}
 #info_container {
   position: absolute;
   background-color: white;
@@ -504,7 +509,7 @@ html, body {
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003102}}
+@media -sass-debug-info{filename{}line{font-family:\00003106}}
 #current_location_button {
   width: 100%;
   background-color: #56A5BF;
@@ -512,37 +517,37 @@ html, body {
   margin-bottom: 1em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003109}}
+@media -sass-debug-info{filename{}line{font-family:\00003113}}
 #current_location_button:hover {
   background-color: #7CC1D8;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003113}}
+@media -sass-debug-info{filename{}line{font-family:\00003117}}
 #submit {
   width: 100%;
   background-color: #56A5BF;
   color: #FFFFFF;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003119}}
+@media -sass-debug-info{filename{}line{font-family:\00003123}}
 #submit:hover {
   background-color: #7CC1D8;
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003126}}
+@media -sass-debug-info{filename{}line{font-family:\00003130}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003132}}
+@media -sass-debug-info{filename{}line{font-family:\00003136}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003136}}
+@media -sass-debug-info{filename{}line{font-family:\00003140}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -550,7 +555,7 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003143}}
+@media -sass-debug-info{filename{}line{font-family:\00003147}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -558,13 +563,13 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003150}}
+@media -sass-debug-info{filename{}line{font-family:\00003154}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003155}}
+@media -sass-debug-info{filename{}line{font-family:\00003159}}
 #dashboard_dropdown > .menu {
   z-index: 100;
 }

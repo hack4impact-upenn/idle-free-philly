@@ -477,7 +477,7 @@ html, body {
   position: absolute;
   background-color: white;
   width: 25%;
-  height: 50%;
+  height: 60%;
   overflow-y: scroll;
   color: white;
   top: 110px;
@@ -495,7 +495,7 @@ html, body {
   position: absolute;
   background-color: white;
   width: 25%;
-  height: 50%;
+  height: 60%;
   overflow-y: scroll;
   color: black;
   top: 110px;

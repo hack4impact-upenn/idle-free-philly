@@ -123,9 +123,14 @@
 
             // Add click listener to marker for displaying infoWindow
             marker.addListener('click', function() {
-                $('#form_container').hide()
-                $('#info_container').show()
-                $('#replaceable').replaceWith(contentString)
+                $('#form_container').hide();
+                $('#info_container').show();
+                $('#replaceable').replaceWith(contentString);
+                if (selectedMarker) {
+                    selectedMarker.setIcon("../static/images/marker.png");
+                }
+                marker.setIcon("../static/images/marker_selected.png");
+                selectedMarker = marker;
             });
         });
         {% endfor %}
@@ -140,11 +145,6 @@
                 $('#latitude').val(event.latLng.lat());
                 $('#replaceable').hide()
                 $('#longitude').val(event.latLng.lng());
-                 if (selectedMarker) {
-                    selectedMarker.setIcon("../static/images/marker.png");
-                }
-                marker.setIcon("../static/images/marker_selected.png");
-                selectedMarker = marker;
                 getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
           });
         storeMarkerState(markerWrappers, map, minDate, bounds);

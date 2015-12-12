@@ -186,17 +186,17 @@ footer > div > h3 {
   color: #FF684C;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000315}}
 .ui.navigation.grid {
   margin-bottom: 50px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000319}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000319}}
 .body.container {
   min-height: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000323}}
 #CAC_logo {
   content: url("../../static/images/CAC_logo.png");
   height: 2em;
@@ -205,45 +205,45 @@ footer > div > h3 {
   margin-left: 0.5em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000332}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000332}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
   border-right: 1px solid rgba(34, 36, 38, 0.09804);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000336}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000336}}
 nav .computer.only.row {
   padding: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000338}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000338}}
 nav .computer.only.row .ui.secondary.pointing.menu > .right.menu {
   margin-right: 2em;
   padding-bottom: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000342}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000342}}
 nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a {
   color: #FFFFFF;
   text-transform: uppercase;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000346}}
 nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a:hover, nav .computer.only.row .ui.dropdown.item:hover {
   background-color: #7CC1D8;
   color: #FFFFFF;
   border-radius: 0.5em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000351}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000351}}
 nav .computer.only.row .ui.secondary.pointing.menu > .right.menu > a.active {
   background-color: #7CC1D8;
   color: #FFFFFF;
   border: none;
   font-weight: 400;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000357}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000357}}
 nav .computer.only.row .ui.secondary.pointing.menu {
   background-color: #56A5BF;
   width: 100%;
   font-size: 1.3em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000362}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000362}}
 nav .computer.only.row .ui.secondary.pointing.menu > .header.item {
   color: #FFFFFF !important;
   font-size: 1.4em;
@@ -251,39 +251,39 @@ nav .computer.only.row .ui.secondary.pointing.menu > .header.item {
   border: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000372}}
 nav .mobile.only.row .ui.vertical.menu {
   margin-top: 45px;
   display: none;
   background-color: #1C7592;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000377}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000377}}
 nav .mobile.only.row .ui.vertical.menu > a, nav .mobile.only.row .ui.vertical.menu > ui.dropdown.item:hover {
   color: #FFFFFF;
   text-transform: uppercase;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000381}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000381}}
 nav .mobile.only.row .ui.main.menu {
   background-color: #56A5BF;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000384}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000384}}
 nav .mobile.only.row .ui.vertical.secondary.menu > a {
   color: #222222;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000389}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000389}}
 .ui.dropdown.item, .ui.secondary.pointing.menu .active.item {
   color: #FFFFFF;
   font-weight: 400;
   text-transform: uppercase;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000395}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000395}}
 .ui.dropdown.item > div > .header {
   color: #222222;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000399}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\0000399}}
 #nav_dashboard {
   text-align: center;
   color: #56A5BF !important;
@@ -291,60 +291,60 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
   border-bottom: solid 1px #7CC1D8;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003106}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003106}}
 .ui.menu .ui.dropdown .menu > .item {
   color: #222222;
   font-size: 0.8em !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003112}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003112}}
 .flashes > .ui.message:last-of-type {
   margin-bottom: 2rem;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003115}}
 .ui.red.error {
   color: #FF684C;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003118}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003118}}
 .ui.red.pointing.label {
   background-color: #FF684C !important;
   border-color: #FF684C !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003122}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003122}}
 .ui.red.label:before {
   background-color: #FF684C !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003127}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003127}}
 table.selectable tr:hover {
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003132}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003132}}
 h1, h2, .ui.dividing.header {
   color: #1C7592;
   text-transform: uppercase;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003136}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003136}}
 h3 {
   margin-bottom: 0.3em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003139}}
 .ui.form .field > label, p, input {
   font-size: 1.1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003142}}
 .sub.header {
   text-transform: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003147}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003147}}
 footer {
   bottom: 0;
   width: 100%;
@@ -354,7 +354,7 @@ footer {
   background-color: #1C7592;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003156}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003156}}
 #h4i_logo {
   content: url("../../static/images/h4i_square_white.png");
   height: 1.2em;
@@ -362,24 +362,37 @@ footer {
   margin-right: 0.5em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003163}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003163}}
 footer > div > h3 {
   color: #FFFFFF;
   margin-top: 0;
   font-weight: 300;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/Ben\/Code\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003169}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sanjays1\/Documents\/hack4impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003169}}
 .icon.heart:hover {
   color: #FF684C;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\000033}}
-.ui-rangeSlider-bar {
-  background: #1C7592;
+.ui-rangeSlider-innerBar {
+  width: 100% !important;
+  height: 100%;
+  left: 0px !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\000037}}
+@media -sass-debug-info{filename{}line{font-family:\000039}}
+.ui-rangeSlider-bar {
+  background: #56A5BF;
+  height: 110% !important;
+  width: 100%;
+  top: -1px !important;
+  -webkit-box-shadow: inset 0 -2px 6px RGBA(0, 0, 0, 0.5);
+  -mox-box-shadow: inset 0 -2px 6px RGBA(0, 0, 0, 0.5);
+  box-shadow: inset 0 -2px 6px RGBA(0, 0, 0, 0.5);
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000319}}
 #addressSearch {
   position: absolute;
   left: 30px;
@@ -387,37 +400,48 @@ footer > div > h3 {
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000313}}
+@media -sass-debug-info{filename{}line{font-family:\0000326}}
 #submitButton {
-  background-color: #1C7592;
+  background-color: #56A5BF;
   color: #FFFFFF;
   left: 220px;
   top: 49px;
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000321}}
-#slider {
-  position: absolute;
-  width: 20%;
-  right: 80px;
-  top: 10px;
-  z-index: 99;
+@media all and (min-width: 769px) {
+@media -sass-debug-info{filename{}line{font-family:\0000335}}
+  #slider {
+    position: absolute;
+    width: 20%;
+    right: 80px;
+    top: 10px;
+    z-index: 99;
+  }
 }
-
-@media -sass-debug-info{filename{}line{font-family:\0000329}}
+@media all and (max-width: 768px) {
+@media -sass-debug-info{filename{}line{font-family:\0000345}}
+  #slider {
+    position: absolute;
+    width: 45%;
+    left: 60px;
+    top: 100px;
+    z-index: 99;
+  }
+}
+@media -sass-debug-info{filename{}line{font-family:\0000354}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000335}}
+@media -sass-debug-info{filename{}line{font-family:\0000360}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000339}}
+@media -sass-debug-info{filename{}line{font-family:\0000364}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -425,7 +449,7 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000346}}
+@media -sass-debug-info{filename{}line{font-family:\0000371}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -433,7 +457,7 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000353}}
+@media -sass-debug-info{filename{}line{font-family:\0000378}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;

@@ -30,7 +30,7 @@
                                 '<p>Date: ' + '{{ report.date }}' + '</p>' +
                                 '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
-                                '<p>Link to Picture: ' + '{{ report.picture_url }}' + '</p>' +
+                                '<p>Link to Picture: <a href=' + '{{ report.picture_url }}' + '>' + '{{ report.picture_url }}' + '</a></p>' +
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>' +
                                 '</div>';
@@ -73,7 +73,7 @@
 </script>
 <div id="wrapper">
     <div id="googleMap"></div>
-        <div id="slider"></div>
+        <div class="computer only row"><div id="slider"></div></div>
         <form name="addressForm" id="addressForm">
             <div class="ui action input" id="addressSearch">
                 <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">

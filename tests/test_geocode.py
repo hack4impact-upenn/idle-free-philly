@@ -18,7 +18,7 @@ class ParseCsvTestCase(unittest.TestCase):
         self.assertAlmostEqual(float(loc3[0]), 39.954659, places=3)
         self.assertAlmostEqual(float(loc3[1]), -75.163059, places=3)
 
-    # Check that failed geocode returns (None, None)
+    # Check that failed geocode returns None, None
     def test_geocode_fail(self):
         loc4 = geocode('I am happy!')
         self.assertTrue(loc4[0] is None)

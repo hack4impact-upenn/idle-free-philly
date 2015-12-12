@@ -1,3 +1,4 @@
+from datetime import datetime
 from .. import db
 from . import Agency, User
 
@@ -19,8 +20,8 @@ class Location(db.Model):
 class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_id = db.Column(db.String(8))
-    license_plate = db.Column(db.String(8))
+    vehicle_id = db.Column(db.String(200))
+    license_plate = db.Column(db.String(200))
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',
@@ -31,6 +32,21 @@ class IncidentReport(db.Model):
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # True if this report's agency will be publicly shown alongside it. That
+    # is, when a general user sees a report on the map, this report's agency
+    # will only be shown if show_agency_publicly is True. The
+    # show_agency_publicly attribute is inherited from a report's agency's
+    # is_public field.
+    show_agency_publicly = db.Column(db.Boolean, default=False)
+
+    def __init__(self, **kwargs):
+        super(IncidentReport, self).__init__(**kwargs)
+        if self.agency is not None and 'show_agency_publicly' not in kwargs:
+            self.show_agency_publicly = self.agency.is_public
+
+        if self.date is None:
+            self.date = datetime.now()
 
     @staticmethod
     def generate_fake(count=100, **kwargs):

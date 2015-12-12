@@ -1,12 +1,9 @@
 from flask import request, make_response
 from . import main
 from .. import db
-from ..models import Agency
-from ..models import IncidentReport
-from ..models import Location
+from ..models import Agency, IncidentReport, Location
 from datetime import datetime, timedelta
 import twilio.twiml
-# import json
 
 
 @main.route("/report_incident", methods=['GET', 'POST'])

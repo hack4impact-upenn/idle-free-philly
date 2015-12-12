@@ -2,6 +2,9 @@
 var globalMarkerWrappers = null;
 var globalMap = null;
 
+// Geographic bounds centered according to incident report locations
+var geographicBounds = null;
+
 // Initial map center coordinates
 INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
@@ -30,6 +33,7 @@ function storeMarkerState(markerWrappers, map, minDate, bounds) {
         (globalMarkerWrappers[mw].actualMarker).setMap(globalMap);
     }
     BOUNDS_MIN = minDate;
+    geographicBounds = bounds;
     map.fitBounds(bounds);
 }
 

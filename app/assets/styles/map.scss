@@ -1,7 +1,19 @@
 @import "app";
 
+.ui-rangeSlider-innerBar {
+    width: 100% !important;
+    height: 100%;
+    left: 0px !important;
+}
+
 .ui-rangeSlider-bar {
     background: $light-teal;
+    height: 110% !important;
+    width: 100%;
+    top: -1px !important;
+    -webkit-box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+    -mox-box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+    box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
 }
 
 #addressSearch {
@@ -30,12 +42,24 @@
     text-transform: uppercase;
 }
 
-#slider {
-    position: absolute;
-    top: 8px;
-    right: 100px;
-    width: 25%;
-    z-index: 99;
+@media all and (min-width: $mobile-breakpoint+1) {
+    #slider {
+        position: absolute;
+        top: 8px;
+        right: 100px;
+        width: 25%;
+        z-index: 99;
+    }
+}
+
+@media all and (max-width: $mobile-breakpoint) {
+    #slider {
+        position: absolute;
+        width: 45%;
+        left: 60px;
+        top: 100px;
+        z-index: 99;
+    }
 }
 
 html, body{

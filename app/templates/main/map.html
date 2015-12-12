@@ -106,7 +106,7 @@
                                 '<p>Date: ' + '{{ report.date }}' + '</p>' +
                                 '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
-                                '<p>Link to Picture: ' + '{{ report.picture_url }}' + '</p>' +
+                                '<p>Link to Picture: <a href=' + '{{ report.picture_url }}' + '>' + '{{ report.picture_url }}' + '</a></p>' +
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>' +
                                 '</div>';
@@ -155,7 +155,6 @@
         });
     });
 
-
     function getReverseGeocodingData(lat, lng) {
         var latlng = new google.maps.LatLng(lat, lng);
         // This is making the Geocode request
@@ -199,13 +198,24 @@
         <div class="actions">
             <div class="ui approve button">Okay</div>
         </div>
-    </div>
-    <div class="ui centered modal" id="address_error">
-        <i class="close icon"></i>
 
-        <div class="header">Address not found</div>
-        <div class="actions">
-            <div class="ui approve button">Okay</div>
+<div id="wrapper">
+    <div id="googleMap"></div>
+        <div class="computer only row"><div id="slider"></div></div>
+        <form name="addressForm" id="addressForm">
+            <div class="ui action input" id="addressSearch">
+                <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">
+                <!--<input class="ui button" type="submit" id="submitButton" value="Search">-->
+                <button id="submitButton" class="ui button">Search</button>
+            </div>
+        </form>
+</div>
+
+<div class="ui centered modal" id="geocode_error">
+    <i class="close icon"></i>
+    <div class="header">Geocode not successful</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
         </div>
     </div>
     {% endblock %}

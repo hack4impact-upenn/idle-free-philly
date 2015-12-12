@@ -9,7 +9,7 @@ from datetime import timedelta
 
 @main.route('/')
 @main.route('/map', methods=['GET', 'POST'])
-def get_map():
+def index():
     form = NewIncidentForm()
     agencies = Agency.query.all()
 

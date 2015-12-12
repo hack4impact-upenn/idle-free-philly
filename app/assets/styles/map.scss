@@ -27,6 +27,7 @@
     right: 100px;
     top: 90px;
     z-index: 99;
+    text-transform: uppercase;
 }
 
 #slider {
@@ -68,7 +69,7 @@ html, body{
     overflow-y: scroll;
     color: black;
     top: 110px;
-    padding: 0.5em;
+    padding: 1em;
     right: 100px;
     z-index: 95;
 

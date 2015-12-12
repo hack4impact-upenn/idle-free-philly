@@ -94,9 +94,15 @@ class UnixConfig(ProductionConfig):
         app.logger.addHandler(syslog_handler)
 
 
+class ProductionWithDebug(ProductionConfig):
+    DEBUG = True
+    ASSETS_DEBUG = True
+
+
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'production_debug': ProductionWithDebug,
     'default': DevelopmentConfig
 }

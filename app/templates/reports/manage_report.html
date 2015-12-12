@@ -43,7 +43,11 @@
                 Back to all reports
             </a>
             <h2 class="ui header">
-                {{ '%s\'s report on %s' % (report.user.full_name(), report.agency.name) }}
+                {% if report.user %}
+                    {{ '%s\'s report on %s' % (report.user.full_name(), report.agency.name) }}
+                {% else %}
+                    {{ Report on %s' % (report.agency.name) }}
+                {% endif %}
                 <div class="sub header">View and manage this report.</div>
             </h2>
         </div>

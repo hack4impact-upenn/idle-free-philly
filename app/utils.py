@@ -1,5 +1,7 @@
 import re
+import requests
 from flask import url_for
+from config import config
 
 
 def register_template_utils(app):
@@ -35,8 +37,7 @@ def parse_phone_number(phone_number):
 # Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
 def geocode(address):
     url = "https://maps.googleapis.com/maps/api/geocode/json"
-    payload = {'address': address_text,
-                'bounds': config['default'].VIEWPORT}
+    payload = {'address': address, 'bounds': config['default'].VIEWPORT}
     r = requests.get(url, params=payload)
     if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
         return (None, None)

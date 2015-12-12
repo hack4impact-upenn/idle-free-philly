@@ -1,7 +1,7 @@
 from flask import request, make_response
 from . import main
 from .. import db
-from .. import utils
+from ..utils import geocode
 from ..models import Agency, IncidentReport, Location
 from datetime import datetime, timedelta
 import twilio.twiml
@@ -41,7 +41,7 @@ def handle_message():
     elif step == 6:
         description = body
         twiml.message("Thanks!")
-        (lat, lon) = utils.geocode(location)
+        (lat, lon) = geocode(location)
         agency = Agency.query.filter_by(name=agency_name).first()
         new_incident = IncidentReport(
             agency=agency,

@@ -119,7 +119,7 @@ def setup_dev():
                 dest='filename')
 def parse_csv(filename):
     """Parses the given csv file into the database."""
-    parse_to_db(db, filename, True)
+    parse_to_db(db, filename)
 
 
 @manager.command

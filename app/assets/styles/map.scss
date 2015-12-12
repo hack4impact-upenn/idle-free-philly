@@ -11,9 +11,8 @@
     z-index: 99;
 }
 
-
-
 #submitButton {
+    background-color: $light-teal;
     color: $white;
     left: 220px;
     top: 49px;
@@ -26,30 +25,20 @@
     width:25%;
     color: white;
     right: 100px;
-    top: 60px;
+    top: 90px;
     z-index: 99;
 }
 
 #slider {
     position: absolute;
-    top: 49px;
-    width: 20%;
+    top: 8px;
+    right: 100px;
+    width: 25%;
     z-index: 99;
 }
 
 html, body{
     height: 100%;
-}
-
-.ui.button {
-    width: 100%;
-    background-color: $teal;
-    color: white;
-}
-
-.ui.button:hover {
-    background-color: $light-teal;
-    color: white;
 }
 
 #form_container {
@@ -59,14 +48,9 @@ html, body{
     height: 50%;
     overflow-y: scroll;
     color: white;
-    top: 60px;
+    top: 110px;
     right: 100px;
     z-index: 95;
-}
-
-#bodyContent {
-    height: 60%;
-    overflow-y: scroll;
 }
 
 #bodyContent > p {
@@ -80,20 +64,35 @@ html, body{
     position: absolute;
     background-color: white;
     width: 25%;
+    height: 50%;
+    overflow-y: scroll;
     color: black;
-    top: 60px;
+    top: 110px;
+    padding: 0.5em;
     right: 100px;
     z-index: 95;
 
 }
 
 #current_location_button {
+    width: 100%;
     background-color: $teal;
+    color: $white;
     margin-bottom: 1em;
 }
 
 #current_location_button:hover {
     background-color: $light-teal;
+}
+
+#submit {
+    width: 100%;
+    background-color: $red;
+    color: $white;
+}
+
+#submit:hover {
+    cursor: pointer;
 }
 
 

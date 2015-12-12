@@ -8,7 +8,7 @@ from datetime import timedelta
 
 
 @main.route('/')
-@main.route('/map')
+@main.route('/map', methods=['GET', 'POST'])
 def get_map():
     form = NewIncidentForm()
     agencies = Agency.query.all()
@@ -23,7 +23,7 @@ def get_map():
             license_plate=form.license_plate_number.data,
             location=l,
             date=form.date.data,
-            duration=timedelta(minutes=form.idling_duration.data),
+            duration=timedelta(minutes=form.duration.data),
             agency=form.agency.data,
             description=form.notes.data,
         )

@@ -21,7 +21,7 @@
                     {{ f.begin_form(form, flashes) }}
                     {{ f.render_form_field(form.license_plate_number) }}
                     {{ f.render_form_field(form.vehicle_ID) }}
-                    {{ f.render_form_field(form.idling_duration) }}
+                    {{ f.render_form_field(form.duration) }}
                     {{ f.render_form_field(form.location)}}
                     <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
                     {{ f.render_form_field(form.agency)}}
@@ -100,7 +100,7 @@
             var contentString = '<div id="replaceable">' +
                                 '<div id="siteNotice">' +
                                 '</div>' +
-                                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h1>' +
+                                '<h2 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h2>' +
                                 '<div id="bodyContent">' +
                                 '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
                                 '<p>Date: ' + '{{ report.date }}' + '</p>' +
@@ -148,7 +148,8 @@
         // Set the height of the googleMap to the height of the window (less
         // any elements above the googleMap)
         $(function () {
-            $("#googleMap").css("height", $(window).height());
+            $("#googleMap").css("height", $(window).height() - 
+                $(".ui.navigation.grid").height());
             $(".ui.navigation.grid").css("margin-bottom", "0");
             $("footer").css("margin-top", "0");
         });

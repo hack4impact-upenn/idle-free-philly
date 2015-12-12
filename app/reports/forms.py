@@ -10,18 +10,23 @@ from wtforms.validators import (
     Regexp,
     Length,
     Optional,
-    NumberRange
+    NumberRange,
+    URL
 )
 
 
-class NewIncidentForm(Form):
-    vehicle_ID = IntegerField('Vehicle ID', validators=[
+class IncidentReportForm(Form):
+    vehicle_id = StringField('Vehicle ID', validators=[
         InputRequired('Vehicle ID is required.'),
-        Length(min=2, max=10)
+        Length(min=2, max=10,
+               message='Vehicle ID must be between 2 to 10 characters.'),
+        Regexp("^[a-zA-Z0-9]*$",
+               message='License plate number must '
+                       'consist of only letters and numbers.'),
     ])
 
-    license_plate_number = StringField('License Plate Number', validators=[
-        InputRequired('License plate is required.'),
+    license_plate = StringField('License Plate Number', validators=[
+        Optional(),
         Regexp("^[a-zA-Z0-9]*$",
                message='License plate number must '
                        'consist of only letters and numbers.'),
@@ -43,11 +48,12 @@ class NewIncidentForm(Form):
     date = DateField('Date', default=datetime.date.today(),
                      validators=[InputRequired()])
 
-    duration = IntegerField('Idling Duration (in minutes)', [
-        InputRequired('Idling duration (in minutes) is required.'),
+    # TODO - add support for h:m:s format
+    duration = IntegerField('Idling Duration (h:m:s)', validators=[
+        InputRequired('Idling duration (hours:minutes:seconds) is required.'),
         NumberRange(min=0,
                     max=10000,
-                    message='Idling duration must be between'
+                    message='Idling duration must be between '
                             '0 and 10000 minutes.')
     ])
 
@@ -56,12 +62,23 @@ class NewIncidentForm(Form):
                               get_label='name',
                               query_factory=lambda: db.session.query(Agency))
 
-    picture = FileField('Upload a picture of the vehicle and/or driver.',
+    picture = FileField('Upload a picture of the idling vehicle.',
                         validators=[Optional()])
 
-    notes = TextAreaField('Additional Notes', [
+    description = TextAreaField('Additional Notes', validators=[
         Optional(),
         Length(max=5000)
     ])
 
     submit = SubmitField('Create Report')
+
+
+class EditIncidentReportForm(IncidentReportForm):
+    # use picture URL instead of picture
+    picture = StringField('Picture URL', validators=[
+        URL(message='Picture URL must be a valid URL. '
+                    'Please upload the image to an image hosting website '
+                    'and paste the link into this field.')
+    ])
+
+    submit = SubmitField('Update Report')

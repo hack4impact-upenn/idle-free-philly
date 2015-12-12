@@ -55,10 +55,18 @@ class IncidentReport(db.Model):
         from random import seed, choice, randint
         from datetime import timedelta
         from faker import Faker
+        import random
+        import string
 
         def flip_coin():
             """Returns True or False with equal probability"""
             return choice([True, False])
+
+        def rand_alphanumeric(n):
+            """Returns random string of alphanumeric characters of length n"""
+            r = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                        for _ in range(n))
+            return r
 
         agencies = Agency.query.all()
         users = User.query.all()
@@ -74,9 +82,9 @@ class IncidentReport(db.Model):
                                                   radius=0.001))
             )
             r = IncidentReport(
-                vehicle_id=fake.password(length=6, lower_case=False),
+                vehicle_id=rand_alphanumeric(6),
                 # Either sets license plate to '' or random 6 character string
-                license_plate=fake.password(length=6, lower_case=False)
+                license_plate=rand_alphanumeric(6)
                 if flip_coin() else '',
                 location=l,
                 date=fake.date_time_between(start_date="-1y", end_date="now"),

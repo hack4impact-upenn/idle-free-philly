@@ -2,7 +2,7 @@ import re
 import requests
 import datetime
 import csv
-from flask import url_for, current_app
+from flask import url_for, current_app, flash
 from app.models import Location, Agency, IncidentReport
 
 
@@ -115,3 +115,11 @@ def parse_to_db(db, filename):
         print 'Geocode failure count: %s' % fail_count
         print 'Geocode failed addresses: \n %s' % fail_addresses
         return columns
+
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("Error: %s - %s" % (
+                getattr(form, field).label.text, error),
+                'form-error')

@@ -21,15 +21,15 @@
                     'success': get_flashed_messages(category_filter=['form-success'])
                     } %}
                     {{ f.begin_form(form, flashes) }}
-                    {{ f.render_form_field(form.license_plate_number) }}
-                    {{ f.render_form_field(form.vehicle_ID) }}
+                    {{ f.render_form_field(form.license_plate) }}
+                    {{ f.render_form_field(form.vehicle_id) }}
                     {{ f.render_form_field(form.duration) }}
                     {{ f.render_form_field(form.location)}}
                     <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
                     {{ f.render_form_field(form.agency)}}
                     {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
                     {{ f.render_form_field(form.led_screen_number, extra_classes='led_screen_number') }}
-                    {{ f.render_form_field(form.notes) }}
+                    {{ f.render_form_field(form.description) }}
                     {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
                     {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
                     {{ f.form_message(flashes['info'], header='Information', class='info') }}
@@ -207,10 +207,6 @@
       };
       navigator.geolocation.getCurrentPosition(success, error);
     }
-
-
-
-
     </script>
 
 

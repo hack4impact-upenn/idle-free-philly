@@ -36,7 +36,7 @@ def parse_phone_number(phone_number):
     return stripped
 
 
-def parse_to_db(db, filename):
+def parse_to_db(db, filename, verbose):
     vehicle_id_index = 8
     license_plate_index = 9
     location_index = 4
@@ -47,11 +47,12 @@ def parse_to_db(db, filename):
     with open(filename, 'rb') as file:
         reader = csv.reader(file)
         columns = reader.next()
-        count = 0
-        addresses = ''
+        if verbose:
+            fail_count = 0
+            fail_addresses = ''
         for row in reader:
-            print count
-            print addresses
+            if verbose:
+                print 'Geocode failure count: %s' % fail_count
             address_text = row[location_index]
             # Viewport-biased geocoding using Google API
             url = "https://maps.googleapis.com/maps/api/geocode/json"
@@ -59,9 +60,10 @@ def parse_to_db(db, filename):
                        'bounds': config['default'].VIEWPORT}
             r = requests.get(url, params=payload)
             if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
-                print address_text
-                count = count + 1
-                addresses += address_text + '.    '
+                if verbose:
+                    print 'Geocode failure on address: %s' % address_text
+                    fail_count = fail_count + 1
+                    fail_addresses += address_text + '\n'
                 loc = Location(
                     latitude=None,
                     longitude=None,
@@ -104,6 +106,7 @@ def parse_to_db(db, filename):
                 description=row[description_index])
             db.session.add(incident)
             db.session.commit()
-        print count
-        print addresses
+        if verbose:
+            print 'Geocode failure count: %s' % fail_count
+            print 'Geocode failed addresses: \n %s' % fail_addresses
         return columns

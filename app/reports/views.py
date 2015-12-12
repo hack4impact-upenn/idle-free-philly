@@ -1,7 +1,7 @@
 from flask import render_template, abort, flash, redirect, url_for
 from flask.ext.login import login_required, current_user
 
-from forms import ChangeReportInfoForm
+from forms import EditIncidentReportForm
 
 from . import reports
 from .. import db
@@ -66,18 +66,18 @@ def edit_report_info(report_id):
     report = IncidentReport.query.filter_by(id=report_id).first()
     if report is None:
         abort(404)
-    form = ChangeReportInfoForm(report=report)
+    form = EditIncidentReportForm()
 
     if form.validate_on_submit():
-        # TODO - data is not changing?
         report.vehicle_id = form.vehicle_id.data
         report.license_plate = form.license_plate.data
+        # TODO format data
         # report.location = form.location.data
         # report.date = form.date.data
         # report.duration = form.duration.data
         # report.agency = form.agency.data
-        # report.picture_url = form.picture_url.data
-        # report.description = form.description.data
+        report.picture_url = form.picture.data
+        report.description = form.description.data
 
         print report.vehicle_id
         print form.vehicle_id.data
@@ -85,18 +85,20 @@ def edit_report_info(report_id):
         db.session.add(report)
         db.session.commit()
         flash('Report information updated.', 'form-success')
-    else:
+    elif form.errors.items():
         flash_errors(form)
 
     # pre-populate form
     form.vehicle_id.default = report.vehicle_id
     form.license_plate.default = report.license_plate
-    # form.location.default = report.location
-    # form.date.default = report.date
-    # form.duration.default = report.duration
-    # form.agency.default = report.agency
-    # form.picture_url.default = report.picture_url
-    # form.description.default = report.description
+    # TODO report.bus_number and LED screen number
+    form.location.default = report.location
+    # TODO change location repr to address
+    form.date.default = report.date
+    form.duration.default = report.duration
+    form.agency.default = report.agency
+    form.picture.default = report.picture_url
+    form.description.default = report.description
     form.process()
 
     return render_template('reports/manage_report.html', report=report,

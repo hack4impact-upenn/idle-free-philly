@@ -9,7 +9,8 @@ from wtforms.validators import (
     Regexp,
     Length,
     Optional,
-    NumberRange
+    NumberRange,
+    URL
 )
 
 from ..models import Agency
@@ -49,11 +50,12 @@ class IncidentReportForm(Form):
     date = DateField('Date', default=datetime.date.today(),
                      validators=[InputRequired()])
 
-    duration = IntegerField('Idling Duration (hour:minutes:seconds)', [
+    # TODO - add support for h:m:s format
+    duration = IntegerField('Idling Duration (h:m:s)', validators=[
         InputRequired('Idling duration (hours:minutes:seconds) is required.'),
         NumberRange(min=0,
                     max=10000,
-                    message='Idling duration must be between'
+                    message='Idling duration must be between '
                             '0 and 10000 minutes.')
     ])
 
@@ -65,7 +67,7 @@ class IncidentReportForm(Form):
     picture = FileField('Upload a picture of the idling vehicle.',
                         validators=[Optional()])
 
-    description = TextAreaField('Additional Notes', [
+    description = TextAreaField('Additional Notes', validators=[
         Optional(),
         Length(max=5000)
     ])
@@ -74,4 +76,11 @@ class IncidentReportForm(Form):
 
 
 class EditIncidentReportForm(IncidentReportForm):
+    # use picture URL instead of picture
+    picture = StringField('Picture URL', validators=[
+        URL(message='Picture URL must be a valid URL. '
+                    'Please upload the image to an image hosting website '
+                    'and paste the link into this field.')
+    ])
+
     submit = SubmitField('Update Report')

@@ -22,13 +22,10 @@
     position: absolute;
     background-color: $red;
     width:25%;
-    color: white;
-    right: 100px;
+    color: black;
+    right: 20px;
     top: 49px;
     z-index: 99;
-}
-html, body{
-    height: 100%;
 }
 
 #form_container {
@@ -41,7 +38,59 @@ html, body{
     top: 60px;
     right: 100px;
     z-index: 95;
+
 }
+
+#info_container {
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    color: black;
+    top: 60px;
+    right: 100px;
+    z-index: 95;
+
+}
+
+html, body{
+    height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    #form_button{
+        position: absolute;
+        background-color: $red;
+        width: 50vw;
+        color: $white;
+        top: 80vh;
+        left: 25%;
+        z-index: 99;
+        font-size: 150%;
+    }
+    #info_container {
+        position: absolute;
+        background-color: white;
+        width: 80vw;
+        height: 80vh;
+        right: 10%;
+        overflow-y: scroll;
+        color: black;
+        z-index: 150;
+    }
+
+    #form_container{
+        position: absolute;
+        background-color: white;
+        width: 80vw;
+        height: 80vh;
+        right: 10%;
+        overflow-y: scroll;
+        color: $white;
+        z-index: 150;
+    }
+}
+
+
 
 #bodyContent {
     height: 50%;
@@ -55,16 +104,7 @@ html, body{
 .bus_number {
 }
 
-#info_container {
-    position: absolute;
-    background-color: white;
-    width: 25%;
-    color: black;
-    top: 60px;
-    right: 100px;
-    z-index: 95;
 
-}
 
 #current_location_button {
     background-color: $dark-teal;
@@ -105,4 +145,18 @@ html, body{
 .ui.approve.button {
     display: block;
     margin: 0 auto;
+}
+
+#remove_form_icon {
+ position: absolute;
+ top: 2px;
+ right: 2px;
+ padding: 2px;
+}
+
+#close_info {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    padding: 2px;
 }

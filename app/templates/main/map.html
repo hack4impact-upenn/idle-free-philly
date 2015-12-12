@@ -8,15 +8,17 @@
 
             <div id="wrapper">
                 <div id="googleMap"></div>
-                <div id="form_button" class="ui red button ">Report Incident</div>
+                <div id="form_button" class="ui red button">Report Incident</div>
                 <div class="ui segment" id="form_container">
+                    <button id="remove_form_icon" class="ui icon red button">
+                      <i class="remove icon"></i>
+                    </button>
                     {% set flashes = {
                     'error': get_flashed_messages(category_filter=['form-error']),
                     'warning': get_flashed_messages(category_filter=['form-check-email']),
                     'info': get_flashed_messages(category_filter=['form-info']),
                     'success': get_flashed_messages(category_filter=['form-success'])
                     } %}
-
                     {{ f.begin_form(form, flashes) }}
                     {{ f.render_form_field(form.license_plate_number) }}
                     {{ f.render_form_field(form.vehicle_ID) }}
@@ -51,9 +53,8 @@
             </div>
         </div>
     </div>
+</div>
 
-
-    </html>
 
     <script type="text/javascript">
     $('#form_container').hide()
@@ -65,6 +66,11 @@
         $('#form_container').toggle();
         $('#info_container').hide();
     });
+
+    $('#close_info').click(function(){
+        console.log('boomboomboom');
+    });
+
     $('#agency').change(function(){
 
         if ($("#agency option:selected").val() === '5') {
@@ -78,6 +84,8 @@
 
         }
     });
+
+
     function initializeMapAndMarkers() {
         markerWrappers = [];
         var minDate = new Date(2015, 0, 1);
@@ -97,7 +105,10 @@
             if (incidentDate.getTime() < minDate.getTime())
                 minDate.setTime(incidentDate.getTime());
             //marker.setMap(map);
-            var contentString = '<div id="replaceable">' +
+            var contentString = '<div id="replaceable" class="ui segment">' +
+                                '<button id="close_info" class="ui icon red button close">' +
+                                '<i class="remove icon"></i>' +
+                                '</button>' +
                                 '<div id="siteNotice">' +
                                 '</div>' +
                                 '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h1>' +
@@ -110,6 +121,7 @@
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>' +
                                 '</div>';
+
             bounds.extend(marker.getPosition());
             markerWrapper = new MarkerWrapper(marker, incidentDate, contentString);
             markerWrappers.push(markerWrapper);
@@ -119,10 +131,15 @@
 
             // Add click listener to marker for displaying infoWindow
             marker.addListener('click', function() {
-                $('#form_container').hide()
-                $('#info_container').show()
-                $('#replaceable').replaceWith(contentString)
+                $('#form_container').hide();
+                $('#info_container').show();
+                $('#replaceable').replaceWith(contentString);
+                $('#close_info').on('click', function() {
+                    console.log('clicked');
+                    $('#info_container').hide();
+                });
             });
+
         });
         {% endfor %}
         var mapProp = {
@@ -134,7 +151,7 @@
         map=new google.maps.Map($('#googleMap')[0],mapProp);
         google.maps.event.addListener(map, 'click', function(event) {
                 $('#latitude').val(event.latLng.lat());
-                $('#replaceable').hide()
+                $('#info_container').hide()
                 $('#longitude').val(event.latLng.lng());
                 getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
           });

@@ -80,7 +80,59 @@ html, body{
     top: 110px;
     right: 100px;
     z-index: 95;
+
 }
+
+#info_container {
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    color: black;
+    top: 60px;
+    right: 100px;
+    z-index: 95;
+
+}
+
+
+html, body{
+    height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    #form_button{
+        position: absolute;
+        background-color: $red;
+        width: 50vw;
+        color: $white;
+        top: 80vh;
+        left: 25%;
+        z-index: 99;
+        font-size: 1em;
+    }
+    #info_container {
+        position: absolute;
+        background-color: white;
+        width: 80vw;
+        height: 100vh;
+        right: 10%;
+        overflow-y: scroll;
+        color: black;
+        z-index: 150;
+    }
+
+    #form_container{
+        position: absolute;
+        background-color: white;
+        width: 80vw;
+        height: 100vh;
+        right: 10%;
+        overflow-y: scroll;
+        color: $white;
+        z-index: 150;
+    }
+}
+
 
 #bodyContent > p {
     margin-bottom: 0.5em;
@@ -100,7 +152,6 @@ html, body{
     padding: 1em;
     right: 100px;
     z-index: 95;
-
 }
 
 #current_location_button {
@@ -158,4 +209,18 @@ html, body{
 
 #dashboard_dropdown > .menu {
     z-index: 100;
+}
+
+#remove_form_icon {
+ position: absolute;
+ top: 2px;
+ right: 2px;
+ padding: 2px;
+}
+
+#close_info {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    padding: 2px;
 }

@@ -1,18 +1,20 @@
+@import "app";
 
-.ui.text.container {
-    text-align: center;
+.ui-rangeSlider-bar {
+    background: $dark-teal;
 }
 
 #addressSearch {
     position: absolute;
     left: 30px;
-    top: 20px;
+    top: 49px;
     z-index: 99;
 }
 #submitButton {
-    position: absolute;
-    left: 40px;
-    top: 60px;
+    background-color: $dark-teal;
+    color: $white;
+    left: 220px;
+    top: 49px;
     z-index: 99;
 }
 
@@ -32,4 +34,23 @@
 
 #wrapper {
     position:relative;
+}
+
+#address_error {
+    position: fixed;
+    text-align: center;
+    margin: 0px 0px 0px -150px;
+    width: 300px;
+}
+
+#geocode_error {
+    position: fixed;
+    text-align: center;
+    margin: 0px 0px 0px -150px;
+    width: 300px;
+}
+
+.ui.approve.button {
+    display: block;
+    margin: 0 auto;
 }

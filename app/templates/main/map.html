@@ -214,4 +214,101 @@ $('.red.button').click(function(){
 </script>
 
 </html>
+
+<script type="text/javascript">
+    function initializeMapAndMarkers() {
+        markerWrappers = [];
+        var minDate = new Date(2015, 0, 1);
+        var bounds = new google.maps.LatLngBounds();
+        {% for report in incident_reports %}
+        $(function() {
+            var marker = new google.maps.Marker({
+                // Use latitude and longitude values from incident report
+                // to set position of marker
+                position:{lat: parseFloat('{{ report.location.latitude }}'), lng: parseFloat('{{ report.location.longitude }}')}
+            });
+            var dateString = '{{ report.date }}';
+            year = parseInt((dateString.split(' '))[0].split('-')[0]);
+            month = parseInt((dateString.split(' '))[0].split('-')[1])-1;
+            day = parseInt((dateString.split(' '))[0].split('-')[2]);
+            incidentDate = new Date(year, month, day);
+            if (incidentDate.getTime() < minDate.getTime())
+                minDate.setTime(incidentDate.getTime());
+            //marker.setMap(map);
+            var contentString = '<div id="content">' +
+                                '<div id="siteNotice">' +
+                                '</div>' +
+                                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h1>' +
+                                '<div id="bodyContent">' +
+                                '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
+                                '<p>Date: ' + '{{ report.date }}' + '</p>' +
+                                '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
+                                '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
+                                '<p>Link to Picture: ' + '{{ report.picture_url }}' + '</p>' +
+                                '<p>Description: ' + '{{ report.description }}' + '</p>' +
+                                '</div>' +
+                                '</div>';
+            bounds.extend(marker.getPosition());
+            markerWrapper = new MarkerWrapper(marker, incidentDate, contentString);
+            markerWrappers.push(markerWrapper);
+            var infoWindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+            // Add click listener to marker for displaying infoWindow
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+        });
+        {% endfor %}
+        var mapProp = {
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                streetViewControl: false,
+                scrollwheel: false,
+        };
+        map=new google.maps.Map($('#googleMap')[0],mapProp);
+
+        storeMarkerState(markerWrappers, map, minDate, bounds);
+        initializeDateSlider();
+        addLocationButton(map);
+    }
+    $(document).ready(function() {
+        // Add the map to the window
+        google.maps.event.addDomListener(window, 'load', initializeMapAndMarkers);
+
+        // Set the height of the googleMap to the height of the window (less
+        // any elements above the googleMap)
+        $(function () {
+            $("#googleMap").css("height", $(window).height());
+            $(".ui.navigation.grid").css("margin-bottom", "0");
+        });
+    });
+</script>
+<div id="wrapper">
+    <div id="googleMap"></div>
+        <div id="slider"></div>
+        <form name="addressForm" id="addressForm">
+            <div class="ui action input" id="addressSearch">
+                <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">
+                <!--<input class="ui button" type="submit" id="submitButton" value="Search">-->
+                <button id="submitButton" class="ui button">Search</button>
+            </div>
+        </form>
+</div>
+
+<div class="ui centered modal" id="geocode_error">
+    <i class="close icon"></i>
+    <div class="header">Geocode not successful</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
+    </div>
+</div>
+<div class="ui centered modal" id="address_error">
+    <i class="close icon"></i>
+    <div class="header">Address not found</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
+    </div>
+</div>
 {% endblock %}

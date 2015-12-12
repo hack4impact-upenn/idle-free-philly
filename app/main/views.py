@@ -1,6 +1,7 @@
 from flask import render_template
-from ..models import EditableHTML
+from ..models import EditableHTML, IncidentReport
 from . import main
+<<<<<<< HEAD
 from app import models, db
 from forms import NewIncidentForm
 from app.models import IncidentReport, Agency
@@ -36,6 +37,17 @@ def get_map():
     return render_template('main/map.html',
                            agencies=agencies,
                            form=form,
+=======
+
+
+@main.route('/')
+@main.route('/map')
+def index():
+    """Get information on all Incident Reports in the db, and
+    pass to map.html
+    """
+    return render_template('main/map.html',
+>>>>>>> c2c121c37b865a8aa4c108eccf9d4d473df17be2
                            incident_reports=IncidentReport.query.all())
 
 

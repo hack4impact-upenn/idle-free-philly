@@ -18,10 +18,51 @@
     z-index: 99;
 }
 
+#form_button {
+    position: absolute;
+    background-color: $red;
+    width:25%;
+    color: white;
+    right: 100px;
+    top: 49px;
+    z-index: 99;
+}
+html, body{
+    height: 100%;
+}
+
+#form_container {
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    color: white;
+    top: 60px;
+    right: 100px;
+    z-index: 95;
+}
+
+.bus_number {
+}
+
+#info_container {
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    color: black;
+    top: 60px;
+    right: 100px;
+    z-index: 95;
+
+}
+
+#current_location_button {
+    background-color: $dark-teal;
+}
+
 #slider {
     position: absolute;
     width: 20%;
-    right: 80px;
+    left: 300px;
     top:10px;
     z-index: 99;
 }

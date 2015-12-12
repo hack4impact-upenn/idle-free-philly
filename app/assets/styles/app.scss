@@ -139,6 +139,14 @@ h3 {
 .ui.form .field>label, p, input {
 	font-size: 1.1em;
 }
+
+#incident_info {
+	position: relative;
+	color: $dark-teal;
+	width: 0px;
+	top: 500px;
+}
+
 .sub.header {
 	text-transform: none;
 }

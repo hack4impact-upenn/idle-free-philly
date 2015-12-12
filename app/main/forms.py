@@ -21,6 +21,20 @@ class NewIncidentForm(Form):
                               validators=[DataRequired()],
                               get_label='name',
                               query_factory=lambda: db.session.query(Agency))
+    bus_number = IntegerField('Bus Number', [
+        validators.optional(),
+        validators.NumberRange(min=0,
+                               max=100000000,
+                               message='invalid bus number entered!')
+    ])
+    led_screen_number = IntegerField('LED Screen Number', [
+        validators.optional(),
+        validators.NumberRange(min=0,
+                               max=100000000,
+                               message='invalid LED Screen Number entered!')
+    ])
+
+
     vehicle_ID = StringField('Vehicle ID', [
         validators.required('vehicleID is required'),
         validators.Regexp('^[0-9]*$',
@@ -40,7 +54,7 @@ class NewIncidentForm(Form):
         validators.required('idling duration (in minutes) is required!'),
         validators.NumberRange(min=0,
                                max=1000,
-                               message='invalid duration range!')
+                               message='invalid duration entered!')
     ])
     picture = FileField('Upload a picture of the truck/driver',
                         validators=[validators.optional()])

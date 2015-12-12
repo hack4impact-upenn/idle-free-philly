@@ -63,7 +63,7 @@ def handle_message():
     response = make_response(str(twiml))
 
     # Set cookies
-    if step == 0:
+    if step < 2:
         reset_cookies(response)
     else:
         set_cookie(response, 'messagecount', str(step))

@@ -1,5 +1,5 @@
 import re
-from flask import url_for
+from flask import url_for, flash
 
 
 def register_template_utils(app):
@@ -29,3 +29,12 @@ def parse_phone_number(phone_number):
         stripped = '1' + stripped
     stripped = '+' + stripped
     return stripped
+
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))

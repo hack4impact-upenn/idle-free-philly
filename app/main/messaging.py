@@ -1,8 +1,8 @@
 from flask import request, make_response
 from . import main
-from .. import db
+# from .. import db
 # from ..models import Agency
-from ..models import IncidentReport
+# from ..models import IncidentReport
 from datetime import datetime, timedelta
 import twilio.twiml
 # import json
@@ -47,14 +47,14 @@ def handle_message():
         twiml.message("Thanks!")
         # agency = Agency.query.filter_by(name="SEPTA").first()
         # print(agency)
-        new_incident = IncidentReport(
-            vehicle_id=vehicle_id,
-            license_plate=license_plate,
-            duration=duration,
-            description=description,
-        )
-        db.session.add(new_incident)
-        db.session.commit()
+        # new_incident = IncidentReport(
+        #     vehicle_id=vehicle_id,
+        #     license_plate=license_plate,
+        #     duration=duration,
+        #     description=description,
+        # )
+        # db.session.add(new_incident)
+        # db.session.commit()
         step = -1
     step += 1
     response = make_response(str(twiml))

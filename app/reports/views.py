@@ -7,6 +7,7 @@ from . import reports
 from .. import db
 from ..models import IncidentReport, Agency
 from ..decorators import admin_or_agency_required, admin_required
+from ..utils import flash_errors
 
 
 @reports.route('/all')
@@ -56,7 +57,7 @@ def report_info(report_id):
     return render_template('reports/manage_report.html', report=report)
 
 
-@reports.route('/<int:report_id>/edit_info')
+@reports.route('/<int:report_id>/edit_info', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_report_info(report_id):
@@ -64,15 +65,34 @@ def edit_report_info(report_id):
     report = IncidentReport.query.filter_by(id=report_id).first()
     if report is None:
         abort(404)
-    form = ChangeReportInfoForm()
+    form = ChangeReportInfoForm(report=report)
+
+    # pre-populate form
+    form.vehicle_id.data = report.vehicle_id
+    form.license_plate.data = report.license_plate
+    form.location.data = report.location
+    form.date.data = report.date
+    form.duration.data = report.duration
+    form.agency.data = report.agency
+    form.picture_url.data = report.picture_url
+    form.description.data = report.description
+
     if form.validate_on_submit():
-        pass
-    # TODO only update changed fields
-    #    report. = form..data
+        # TODO - data is not changing?
+        report.vehicle_id = form.vehicle_id.data
+        report.license_plate = form.license_plate.data
+        report.location = form.location.data
+        report.date = form.date.data
+        report.duration = form.duration.data
+        report.agency = form.agency.data
+        report.picture_url = form.picture_url.data
+        report.description = form.description.data
 
         db.session.add(report)
         db.session.commit()
-        flash('Report information updated.')
+        flash('Report information updated.', 'form-success')
+    else:
+        flash_errors(form)
 
     return render_template('reports/manage_report.html', report=report,
                            form=form)

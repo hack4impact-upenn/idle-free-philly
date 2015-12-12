@@ -183,13 +183,18 @@ footer {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003171}}
+footer > div {
+  padding-right: 1em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003175}}
 footer > div > h3 {
   color: #FFFFFF;
   margin-top: 0;
   font-weight: 300;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003177}}
+@media -sass-debug-info{filename{}line{font-family:\00003181}}
 .icon.heart:hover {
   color: #FF684C;
 }
@@ -379,13 +384,18 @@ footer {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003171}}
+footer > div {
+  padding-right: 1em;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003175}}
 footer > div > h3 {
   color: #FFFFFF;
   margin-top: 0;
   font-weight: 300;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003177}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003181}}
 .icon.heart:hover {
   color: #FF684C;
 }
@@ -400,7 +410,7 @@ footer > div > h3 {
 @media -sass-debug-info{filename{}line{font-family:\000039}}
 .ui-rangeSlider-bar {
   background: #7CC1D8;
-  height: 110% !important;
+  height: 100% !important;
   width: 100%;
   top: -1px !important;
   -webkit-box-shadow: inset 0 -2px 6px RGBA(0, 0, 0, 0.5);

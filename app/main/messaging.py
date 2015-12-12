@@ -9,7 +9,7 @@ import twilio.twiml
 # import json
 
 
-@main.route("/report_incident", methods=['POST'])
+@main.route("/report_incident", methods=['GET', 'POST'])
 def handle_message():
     message = str(request.values.get('Body'))
     twiml = twilio.twiml.Response()

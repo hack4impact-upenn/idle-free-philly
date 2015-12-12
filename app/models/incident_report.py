@@ -69,7 +69,6 @@ class IncidentReport(db.Model):
                 user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
-                **kwargs
             )
             db.session.add(r)
             try:

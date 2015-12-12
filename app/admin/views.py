@@ -1,6 +1,7 @@
 from ..decorators import admin_required
 
-from flask import render_template, abort, redirect, flash, url_for, request
+from flask import render_template, abort, redirect, flash, url_for, \
+    request, Response
 from flask.ext.login import login_required, current_user
 
 from forms import (
@@ -12,10 +13,11 @@ from forms import (
     ChangeAgencyPublicStatusForm,
 )
 from . import admin
-from ..models import User, Role, Agency, EditableHTML
+from ..models import User, Role, Agency, EditableHTML, IncidentReport
 from .. import db
 from ..utils import parse_phone_number
 from ..email import send_email
+import csv
 
 
 @admin.route('/')
@@ -250,3 +252,35 @@ def update_editor_contents():
     db.session.commit()
 
     return 'OK', 200
+
+
+@admin.route('/get_reports', methods=['GET'])
+@login_required
+@admin_required
+def get_reports():
+    '''outfile = open('dump.csv', 'wb')
+    outcsv = csv.writer(outfile)
+    incident_reports = IncidentReport.query.all()
+    outcsv.writerows(incident_reports)
+    outfile.close()'''
+
+    outfile = open('mydump.csv', 'w+')
+    print('initial file contents:', outfile.read())
+
+    wr = csv.writer(outfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+    reports = db.session.query(IncidentReport).all()
+    wr.writerow(['VEHICLE ID', 'LICENSE PLATE', 'LOCATION', 'DATE',
+                'DURATION', 'AGENCY ID', 'DESCRIPTION'])
+    for r in reports:
+        print('vehicle id:', r.vehicle_id)
+        wr.writerow([r.date, r.location, r.agency_id, r.vehicle_id,
+                     r.duration,
+                     r.license_plate,
+                     r.description])
+
+    endfile = open('mydump.csv', 'r+')
+    data = endfile.read()
+    return Response(
+        data,
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=mydump.csv"})

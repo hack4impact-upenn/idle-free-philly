@@ -151,12 +151,20 @@ h3 {
   font-size: 1.1em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003142}}
+@media -sass-debug-info{filename{}line{font-family:\00003143}}
+#incident_info {
+  position: relative;
+  color: #1C7592;
+  width: 0px;
+  top: 500px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003150}}
 .sub.header {
   text-transform: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003147}}
+@media -sass-debug-info{filename{}line{font-family:\00003155}}
 footer {
   bottom: 0;
   width: 100%;
@@ -166,7 +174,7 @@ footer {
   background-color: #56A5BF;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003156}}
+@media -sass-debug-info{filename{}line{font-family:\00003164}}
 #h4i_logo {
   content: url("../../static/images/h4i_square_white.png");
   height: 1.2em;
@@ -174,14 +182,14 @@ footer {
   margin-right: 0.5em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003163}}
+@media -sass-debug-info{filename{}line{font-family:\00003171}}
 footer > div > h3 {
   color: #FFFFFF;
   margin-top: 0;
   font-weight: 300;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003169}}
+@media -sass-debug-info{filename{}line{font-family:\00003177}}
 .icon.heart:hover {
   color: #FF684C;
 }
@@ -339,12 +347,20 @@ h3 {
   font-size: 1.1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003143}}
+#incident_info {
+  position: relative;
+  color: #1C7592;
+  width: 0px;
+  top: 500px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003150}}
 .sub.header {
   text-transform: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003147}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003155}}
 footer {
   bottom: 0;
   width: 100%;
@@ -354,7 +370,7 @@ footer {
   background-color: #56A5BF;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003156}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003164}}
 #h4i_logo {
   content: url("../../static/images/h4i_square_white.png");
   height: 1.2em;
@@ -362,14 +378,14 @@ footer {
   margin-right: 0.5em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003163}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003171}}
 footer > div > h3 {
   color: #FFFFFF;
   margin-top: 0;
   font-weight: 300;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003169}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/sallykong\/Desktop\/Hack4Impact\/clean-air-council\/app\/assets\/styles\/app\.scss}line{font-family:\00003177}}
 .icon.heart:hover {
   color: #FF684C;
 }
@@ -397,27 +413,70 @@ footer > div > h3 {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000321}}
+#form_button {
+  position: absolute;
+  background-color: #FF684C;
+  width: 25%;
+  color: white;
+  right: 100px;
+  top: 49px;
+  z-index: 99;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000330}}
+html, body {
+  height: 100%;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000334}}
+#form_container {
+  position: absolute;
+  background-color: white;
+  width: 25%;
+  color: white;
+  top: 60px;
+  right: 100px;
+  z-index: 95;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000347}}
+#info_container {
+  position: absolute;
+  background-color: white;
+  width: 25%;
+  color: black;
+  top: 60px;
+  right: 100px;
+  z-index: 95;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000358}}
+#current_location_button {
+  background-color: #1C7592;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000362}}
 #slider {
   position: absolute;
   width: 20%;
-  right: 80px;
+  left: 300px;
   top: 10px;
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000329}}
+@media -sass-debug-info{filename{}line{font-family:\0000370}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000335}}
+@media -sass-debug-info{filename{}line{font-family:\0000376}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000339}}
+@media -sass-debug-info{filename{}line{font-family:\0000380}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -425,7 +484,7 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000346}}
+@media -sass-debug-info{filename{}line{font-family:\0000387}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -433,7 +492,7 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000353}}
+@media -sass-debug-info{filename{}line{font-family:\0000394}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;

@@ -80,14 +80,14 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000387}}
-.ui.dropdown.item, .ui.secondary.pointing.menu .active.item {
+#dashboard_dropdown {
   color: #FFFFFF;
   font-weight: 400;
   text-transform: uppercase;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000393}}
-.ui.dropdown.item > div > .header {
+#dashboard_dropdown > div > .header {
   color: #222222;
 }
 

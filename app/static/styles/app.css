@@ -520,28 +520,29 @@ html, body {
 @media -sass-debug-info{filename{}line{font-family:\00003113}}
 #submit {
   width: 100%;
-  background-color: #FF684C;
+  background-color: #56A5BF;
   color: #FFFFFF;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003119}}
 #submit:hover {
+  background-color: #7CC1D8;
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003125}}
+@media -sass-debug-info{filename{}line{font-family:\00003126}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003131}}
+@media -sass-debug-info{filename{}line{font-family:\00003132}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003135}}
+@media -sass-debug-info{filename{}line{font-family:\00003136}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -549,7 +550,7 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003142}}
+@media -sass-debug-info{filename{}line{font-family:\00003143}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -557,13 +558,13 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003149}}
+@media -sass-debug-info{filename{}line{font-family:\00003150}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003154}}
+@media -sass-debug-info{filename{}line{font-family:\00003155}}
 #dashboard_dropdown > .menu {
   z-index: 100;
 }

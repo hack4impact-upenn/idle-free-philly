@@ -78,6 +78,9 @@
 
         }
     });
+
+    var selectedMarker;
+
     function initializeMapAndMarkers() {
         markerWrappers = [];
         var minDate = new Date(2015, 0, 1);
@@ -87,7 +90,8 @@
             var marker = new google.maps.Marker({
                 // Use latitude and longitude values from incident report
                 // to set position of marker
-                position:{lat: parseFloat('{{ report.location.latitude }}'), lng: parseFloat('{{ report.location.longitude }}')}
+                position:{lat: parseFloat('{{ report.location.latitude }}'), lng: parseFloat('{{ report.location.longitude }}')},
+                icon: "../static/images/marker.png"
             });
             var dateString = '{{ report.date }}';
             year = parseInt((dateString.split(' '))[0].split('-')[0]);
@@ -136,6 +140,11 @@
                 $('#latitude').val(event.latLng.lat());
                 $('#replaceable').hide()
                 $('#longitude').val(event.latLng.lng());
+                 if (selectedMarker) {
+                    selectedMarker.setIcon("../static/images/marker.png");
+                }
+                marker.setIcon("../static/images/marker_selected.png");
+                selectedMarker = marker;
                 getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
           });
         storeMarkerState(markerWrappers, map, minDate, bounds);

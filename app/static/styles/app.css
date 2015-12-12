@@ -433,13 +433,26 @@ html, body {
   position: absolute;
   background-color: white;
   width: 25%;
+  height: 50%;
+  overflow-y: scroll;
   color: white;
   top: 60px;
   right: 100px;
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000347}}
+@media -sass-debug-info{filename{}line{font-family:\0000346}}
+#bodyContent {
+  height: 50%;
+  overflow-y: scroll;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000351}}
+#bodyContent > p {
+  margin-bottom: 0.5em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000358}}
 #info_container {
   position: absolute;
   background-color: white;
@@ -450,12 +463,12 @@ html, body {
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000358}}
+@media -sass-debug-info{filename{}line{font-family:\0000369}}
 #current_location_button {
   background-color: #1C7592;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000362}}
+@media -sass-debug-info{filename{}line{font-family:\0000373}}
 #slider {
   position: absolute;
   width: 20%;
@@ -464,19 +477,19 @@ html, body {
   z-index: 99;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000370}}
+@media -sass-debug-info{filename{}line{font-family:\0000381}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000376}}
+@media -sass-debug-info{filename{}line{font-family:\0000387}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000380}}
+@media -sass-debug-info{filename{}line{font-family:\0000391}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -484,7 +497,7 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000387}}
+@media -sass-debug-info{filename{}line{font-family:\0000398}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -492,7 +505,7 @@ html, body {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000394}}
+@media -sass-debug-info{filename{}line{font-family:\00003105}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;

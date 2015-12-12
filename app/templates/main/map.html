@@ -20,15 +20,13 @@
                     {{ f.begin_form(form, flashes) }}
                     {{ f.render_form_field(form.license_plate_number) }}
                     {{ f.render_form_field(form.vehicle_ID) }}
-                    {{ f.render_form_field(form.notes) }}
                     {{ f.render_form_field(form.idling_duration) }}
-                    <div class="fields">
-                        <button id="current_location_button" onclick="geoFindMe()">Use Current location</button>
-                        {{ f.render_form_field(form.location)}}
-                    </div>
+                    {{ f.render_form_field(form.location)}}
+                    <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
                     {{ f.render_form_field(form.agency)}}
                     {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
                     {{ f.render_form_field(form.led_screen_number, extra_classes='led_screen_number') }}
+                    {{ f.render_form_field(form.notes) }}
                     {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
                     {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
                     {{ f.form_message(flashes['info'], header='Information', class='info') }}
@@ -45,10 +43,10 @@
                 </div>
                 <div id="slider"></div>
                 <form name="addressForm" id="addressForm">
-                    <div class="ui search" id="addressSearch">
-                        <input class="prompt" placeholder="Enter Address" type="text" name="address" id="address">
+                    <div class="ui action input" id="addressSearch">
+                    <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">
+                    <button id="submitButton" class="ui button">Search</button>
                     </div>
-                    <br><input class="ui button" type="submit" id="submitButton" value="Submit"><br>
                 </form>
             </div>
         </div>

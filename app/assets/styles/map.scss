@@ -35,10 +35,21 @@ html, body{
     position: absolute;
     background-color: white;
     width: 25%;
+    height: 50%;
+    overflow-y: scroll;
     color: white;
     top: 60px;
     right: 100px;
     z-index: 95;
+}
+
+#bodyContent {
+    height: 50%;
+    overflow-y: scroll;
+}
+
+#bodyContent > p {
+    margin-bottom: 0.5em;
 }
 
 .bus_number {

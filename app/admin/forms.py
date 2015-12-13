@@ -1,4 +1,5 @@
 from flask.ext.wtf import Form
+from wtforms import ValidationError
 from wtforms.fields import StringField, SubmitField, SelectField
 from wtforms.fields.html5 import EmailField, TelField
 from wtforms.ext.sqlalchemy.fields import (
@@ -54,11 +55,17 @@ class ChangeAgencyAffiliationsForm(Form):
 
 
 class InviteUserForm(Form):
-    role = QuerySelectField('Account type',
-                            validators=[InputRequired()],
-                            get_label='name',
-                            query_factory=lambda: db.session.query(Role).
-                            order_by('permissions'))
+    role = QuerySelectField(
+        'Account type',
+        validators=[InputRequired()],
+        get_label='name',
+        query_factory=lambda: db.session.query(Role).order_by('permissions')
+    )
+    agency_affiliations = QuerySelectMultipleField(
+        'Agency affiliations',
+        get_label='name',
+        query_factory=lambda: db.session.query(Agency).order_by('name')
+    )
     first_name = StringField('First name', validators=[InputRequired(),
                                                        Length(1, 64)])
     last_name = StringField('Last name', validators=[InputRequired(),
@@ -75,6 +82,11 @@ class InviteUserForm(Form):
         UniquePhoneNumber(),
     ])
     submit = SubmitField('Invite')
+
+    @staticmethod
+    def validate_agency_affiliations(form, field):
+        if form.role.data.name == 'AgencyWorker' and len(field.data) == 0:
+            raise ValidationError('Agency affiliation must be set for workers')
 
 
 class ChangeAgencyOfficialStatusForm(Form):

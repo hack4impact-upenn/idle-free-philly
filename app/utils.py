@@ -1,7 +1,7 @@
 import re
 import requests
-import datetime
 import csv
+from datetime import datetime
 from flask import url_for, current_app
 from app.models import Location, Agency, IncidentReport
 
@@ -35,9 +35,11 @@ def parse_phone_number(phone_number):
     return stripped
 
 
-# Viewport-biased geocoding using Google API
-# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
 def geocode(address):
+    """Viewport-biased geocoding using Google API.
+
+    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails.
+    """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
     r = requests.get(url, params=payload)
@@ -49,7 +51,9 @@ def geocode(address):
 
 
 def parse_to_db(db, filename):
-    dt = datetime.datetime
+    """Reads a csv and imports the data into a database."""
+
+    # The indices in the csv of different data
     vehicle_id_index = 8
     license_plate_index = 9
     location_index = 4
@@ -57,22 +61,24 @@ def parse_to_db(db, filename):
     agency_index = 6
     picture_index = 13
     description_index = 11
-    with open(filename, 'rb') as file:
-        reader = csv.reader(file)
+
+    with open(filename, 'rb') as csv_file:
+        reader = csv.reader(csv_file)
         columns = reader.next()
         fail_count = 0
         fail_addresses = ''
         i = 1  # Count for current row
+
         for row in reader:
             i += 1
             address_text = row[location_index]
             coords = geocode(address_text)
+
             # Ignore rows that do not have correct geocoding
             if coords[0] is None or coords[1] is None:
                 fail_count += 1
-                fail_addresses += '%i. %s \n' % (i, address_text)
-                print 'Geocode failure on address: %s' % address_text
-                print 'Geocode failure count: %s' % fail_count
+                fail_addresses += 'Row {:d}: {}\n'.format(i, address_text)
+
             # Insert correctly geocoded row to database
             else:
                 loc = Location(
@@ -81,13 +87,15 @@ def parse_to_db(db, filename):
                     original_user_text=address_text)
                 db.session.add(loc)
                 date_format = "%m/%d/%Y %H:%M"
-                time1 = dt.strptime(row[date_index], date_format)
-                time2 = dt.strptime(row[date_index+1], date_format)
+                time1 = datetime.strptime(row[date_index], date_format)
+                time2 = datetime.strptime(row[date_index+1], date_format)
+
                 # Assign correct agency id
                 agency_name = row[agency_index].rstrip()
                 if agency_name.upper() == 'OTHER':
                     agency_name = row[agency_index + 1].rstrip()
                 a = Agency.get_agency_by_name(agency_name)
+
                 # Create new agency object if not in database
                 if a is None:
                     a = Agency(name=agency_name)
@@ -96,9 +104,11 @@ def parse_to_db(db, filename):
                     db.session.add(a)
                     db.session.commit()
                 vehicle_id_text = row[vehicle_id_index].strip()
+
                 if len(vehicle_id_text) is 0:
                     vehicle_id_text = None
                 license_plate_text = row[license_plate_index].strip()
+
                 if len(license_plate_text) is 0:
                     license_plate_text = None
                 incident = IncidentReport(
@@ -112,6 +122,7 @@ def parse_to_db(db, filename):
                     description=row[description_index])
                 db.session.add(incident)
                 db.session.commit()
-        print 'Geocode failure count: %s' % fail_count
-        print 'Geocode failed addresses: \n %s' % fail_addresses
+        if fail_count > 0:
+            print 'Could not geocode {} addresses.'.format(fail_count)
+            print 'Geocode failed addresses:\n{}'.format(fail_addresses)
         return columns

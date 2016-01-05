@@ -30,6 +30,13 @@
         <tr><td>Duration</td><td>{{ report.duration}}</td></tr>
         <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
         <tr><td>Picture</td><td><img src="{{ report.picture_url }}" alt="report picture" width="200"</td></tr>
+        <tr><td>Weather During Incident</td>
+            <td>
+                {% for line in report.weather.splitlines() %}
+                {{ line }}<br>
+                {% endfor %}
+                <br>
+            </td></tr>
         <!-- TODO add width attr to styles -->
         <tr><td>Description</td><td>{{ report.description }}</td></tr>
     </table>

@@ -57,6 +57,7 @@
                             <th>Vehicle ID</th>
                             <th>License Plate</th>
                             <th>Duration</th>
+                            <th>Weather During Incident</th>
                             <th>Description</th>
                         </tr>
                     </thead>
@@ -69,6 +70,7 @@
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.license_plate }}</td>
                             <td>{{ r.duration }}</td>
+                            <td>{{ r.weather }}</td>
                             <td>{{ r.description }}</td>
                         </tr>
                     {% endfor %}

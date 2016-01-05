@@ -1,6 +1,6 @@
 import re
 import requests
-from flask import url_for, current_app
+from flask import url_for, flash, current_app
 
 
 def register_template_utils(app):
@@ -30,6 +30,14 @@ def parse_phone_number(phone_number):
         stripped = '1' + stripped
     stripped = '+' + stripped
     return stripped
+
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("Error: %s - %s" % (
+                getattr(form, field).label.text, error),
+                'form-error')
 
 
 def geocode(address):

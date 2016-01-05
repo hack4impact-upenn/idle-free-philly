@@ -1,6 +1,7 @@
 import re
 import requests
 from flask import url_for, current_app
+from app import config
 
 
 def register_template_utils(app):
@@ -32,9 +33,11 @@ def parse_phone_number(phone_number):
     return stripped
 
 
-# Viewport-biased geocoding using Google API
-# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
 def geocode(address):
+    """Viewport-biased geocoding using Google API
+
+    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+    """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
     r = requests.get(url, params=payload)
@@ -43,3 +46,43 @@ def geocode(address):
     else:
         coords = r.json()['results'][0]['geometry']['location']
         return coords['lat'], coords['lng']
+
+
+def get_current_weather(location):
+    """TODO write docstring"""
+
+    url = "api.openweathermap.org/data/2.5/weather"
+    payload = {
+        'APPID': config.OPEN_WEATHER_MAP_API_KEY,
+        'units': 'imperial',
+        'lat': location.latitude,
+        'lon': location.longitude,
+    }
+    r = requests.get(url, params=payload)
+    response = r.json()
+    weather_text = ''
+
+    weather_key = response.get('weather')
+    if weather_key is not None:
+        if weather_key.get('description') is not None:
+            weather_text += 'Description: {}\n'.format(
+                weather_key['description'])
+
+    main_key = response.get('main')
+    if main_key is not None:
+        if main_key.get('temp') is not None:
+            weather_text += 'Temperature: {} degrees fahrenheit\n'.format(
+                main_key['temp'])
+        if main_key.get('pressure') is not None:
+            weather_text += 'Atmospheric pressure: {}hPa\n'.format(
+                main_key['pressure'])
+        if main_key.get('humidity') is not None:
+            weather_text += 'Humidity: {}%\n'.format(main_key['humidity'])
+
+    wind_key = response.get('wind')
+    if wind_key is not None:
+        if wind_key.get('speed') is not None:
+            weather_text += 'Wind speed: {}miles/hour\n'.format(
+                main_key['temp'])
+
+    return weather_text

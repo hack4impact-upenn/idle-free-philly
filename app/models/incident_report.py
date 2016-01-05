@@ -1,4 +1,5 @@
 from datetime import datetime
+from ..utils import get_current_weather
 from .. import db
 from . import Agency, User
 
@@ -31,6 +32,7 @@ class IncidentReport(db.Model):
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)
+    weather = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # True if this report's agency will be publicly shown alongside it. That
@@ -47,6 +49,9 @@ class IncidentReport(db.Model):
 
         if self.date is None:
             self.date = datetime.now()
+
+        if self.weather is None:
+            self.weather = get_current_weather(self.location)
 
     @staticmethod
     def generate_fake(count=100, **kwargs):

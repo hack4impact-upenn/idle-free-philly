@@ -18,31 +18,32 @@ def view_reports():
     Agency workers can see reports for their affiliated agencies.
     General users do not have access to this page."""
 
-    agencies = None
+    agencies = []
 
     if current_user.is_admin():
-        reports = IncidentReport.query.all()
+        incident_reports = IncidentReport.query.all()
         agencies = Agency.query.all()
 
     elif current_user.is_agency_worker():
-        reports = []
+        incident_reports = []
+        agencies = current_user.agencies
         for agency in current_user.agencies:
-            reports.extend(agency.incident_reports)
+            incident_reports.extend(agency.incident_reports)
 
     # TODO test using real data
-    return render_template('reports/reports.html', reports=reports,
-                           agencies=agencies, show_dropdown=True)
+    return render_template('reports/reports.html', reports=incident_reports,
+                           agencies=agencies)
 
 
 @reports.route('/my-reports')
 @login_required
 def view_my_reports():
     """View all idling incident reports for this user."""
-    reports = current_user.incident_reports
-    agencies = None
+    incident_reports = current_user.incident_reports
+    agencies = []
 
-    return render_template('reports/reports.html', reports=reports,
-                           agencies=agencies, show_dropdown=False)
+    return render_template('reports/reports.html', reports=incident_reports,
+                           agencies=agencies)
 
 
 @reports.route('/<int:report_id>')

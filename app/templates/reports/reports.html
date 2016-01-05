@@ -7,44 +7,57 @@
                 <i class="caret left icon"></i>
                 Back to dashboard
             </a>
+            {% if agencies|length < 2 %}
+            <div class="ui two column vertically padded stackable grid">
+              <div class="column">
+                  <h2 class="ui header">
+                    Incident Reports
+                      <div class="sub header">
+                        View and manage idling incident reports.
+                      </div>
+                  </h2>
+              </div>
+              <div class="computer only right aligned column">
+                  <div class="ui icon input">
+                      <input class="search-reports" type="text" placeholder="Search reports…">
+                      <i class="search icon"></i>
+                  </div>
+              </div>
+              <div class="mobile tablet only column">
+                  <div class="ui icon input">
+                      <input class="search-reports" type="text" placeholder="Search reports…">
+                      <i class="search icon"></i>
+                  </div>
+              </div>
+            </div>
+            {% else %}
             <h2 class="ui header">
                 Incident Reports
                 <div class="sub header">
                     View and manage idling incident reports.
                 </div>
             </h2>
-
             <div class="ui menu">
-                {% if not show_dropdown %}
-                <div class="item" data-value="{{ current_user.first_name }}">
-                    {{ current_user.first_name }}'s incident reports
-                </div>
-                {% elif current_user.is_admin() %}
                 <div id="select-agency" class="ui dropdown item">
                     <div class="text">
-                            All incident reports
+                        All incident reports
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                            <div class="item" data-value="">All incident reports</div>
-                            {% for a in agencies %}
-                            <div class="item" data-value="{{ a.name }}">{{ a.name }}</div>
-                            {% endfor %}
+                        <div class="item" data-value="">All incident reports</div>
+                        {% for a in agencies %}
+                        <div class="item" data-value="{{ a.name }}">{{ a.name }}</div>
+                        {% endfor %}
                     </div>
                 </div>
-                {% elif current_user.is_agency_worker() %}
-                <div class="item" data-value="Agency Incident Reports">
-                    Agency incident reports
-                </div>
-                {% endif %}
-
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
-                        <input id="search-reports" type="text" placeholder="Search reports…">
+                        <input class="search-reports" type="text" placeholder="Search reports…">
                         <i class="search icon"></i>
                     </div>
                 </div>
             </div>
+            {% endif %}
 
             {# Use overflow-x: scroll so that mobile views don't freak out
              # when the table is too wide #}
@@ -79,7 +92,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#search-reports').keyup(function () {
+            $('.search-reports').keyup(function () {
                 var searchText = $(this).val();
                 if (searchText.length > 0) {
                     $('tbody td:icontains(' + searchText + ')').addClass('positive');

@@ -79,6 +79,31 @@ class InviteUserForm(Form):
             raise ValidationError('Agency affiliation must be set for workers')
 
 
+class AddAgencyForm(Form):
+    name = StringField(
+        'Agency name',
+        validators=[InputRequired(), Length(1, 64)]
+    )
+    is_public = SelectField(
+        'Publicly visible',
+        description='If an agency is set as public, then all new incident '
+                    'reports created for that agency will show this agency to '
+                    'the general public by default. That is, the marker on '
+                    'the map will name this particular agency as the type of '
+                    'vehicle which was idling. If an agency is not set as '
+                    'public, then all new incident reports created for that '
+                    'agency will not show this agency by default. Note: this '
+                    'setting will not change anything for reports which were '
+                    'created in the past. To change whether the agency is '
+                    'displayed for past reports, you must edit that report '
+                    'individually on the reports page.',
+        # TODO add a link here once we know the route to the reports page
+        choices=[('y', 'Yes'), ('n', 'No')],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField('Create agency')
+
+
 class ChangeAgencyOfficialStatusForm(Form):
     is_official = SelectField(
         'Officially Approved',

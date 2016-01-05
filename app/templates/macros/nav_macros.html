@@ -28,6 +28,8 @@
                 <div class="header">Admin</div>
                 <a class="item" href="{{ url_for(current_user.role.index + '.all_agencies') }}">
                 Manage Agencies</a>
+                <a class="item" href="{{ url_for(current_user.role.index + '.add_agency') }}">
+                Add New Agency</a>
                 <a class="item" href="{{ url_for(current_user.role.index + '.registered_users') }}">
                 Manage Users</a>
                 <a class="item" href="{{ url_for(current_user.role.index + '.invite_user') }}">

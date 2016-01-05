@@ -135,6 +135,12 @@ def change_account_type(user_id):
     form = ChangeAccountTypeForm()
     if form.validate_on_submit():
         user.role = form.role.data
+
+        # If we change the user from a worker to something else, the user
+        #  should lose agency affiliations
+        if not user.is_worker():
+            user.agencies = []
+
         db.session.add(user)
         db.session.commit()
         flash('Role for user {} successfully changed to {}.'

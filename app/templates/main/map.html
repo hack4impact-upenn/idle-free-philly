@@ -38,7 +38,8 @@
             markerWrapper = new MarkerWrapper(marker, incidentDate, contentString);
             markerWrappers.push(markerWrapper);
             var infoWindow = new google.maps.InfoWindow({
-                content: contentString
+                content: contentString,
+                maxWidth: 300
             });
 
             // Add click listener to marker for displaying infoWindow

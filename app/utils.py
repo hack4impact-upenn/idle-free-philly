@@ -1,7 +1,6 @@
 import re
 import requests
 from flask import url_for, current_app
-from app import config
 
 
 def register_template_utils(app):
@@ -51,9 +50,9 @@ def geocode(address):
 def get_current_weather(location):
     """TODO write docstring"""
 
-    url = "api.openweathermap.org/data/2.5/weather"
+    url = "http://api.openweathermap.org/data/2.5/weather"
     payload = {
-        'APPID': config.OPEN_WEATHER_MAP_API_KEY,
+        'APPID': current_app.config['OPEN_WEATHER_MAP_API_KEY'],
         'units': 'imperial',
         'lat': location.latitude,
         'lon': location.longitude,
@@ -64,6 +63,7 @@ def get_current_weather(location):
 
     weather_key = response.get('weather')
     if weather_key is not None:
+        weather_key = weather_key[0]
         if weather_key.get('description') is not None:
             weather_text += 'Description: {}\n'.format(
                 weather_key['description'])
@@ -74,7 +74,7 @@ def get_current_weather(location):
             weather_text += 'Temperature: {} degrees fahrenheit\n'.format(
                 main_key['temp'])
         if main_key.get('pressure') is not None:
-            weather_text += 'Atmospheric pressure: {}hPa\n'.format(
+            weather_text += 'Atmospheric pressure: {} hPa\n'.format(
                 main_key['pressure'])
         if main_key.get('humidity') is not None:
             weather_text += 'Humidity: {}%\n'.format(main_key['humidity'])
@@ -82,7 +82,7 @@ def get_current_weather(location):
     wind_key = response.get('wind')
     if wind_key is not None:
         if wind_key.get('speed') is not None:
-            weather_text += 'Wind speed: {}miles/hour\n'.format(
-                main_key['temp'])
+            weather_text += 'Wind speed: {} miles/hour\n'.format(
+                wind_key['speed'])
 
-    return weather_text
+    return weather_text.strip()

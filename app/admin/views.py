@@ -38,6 +38,9 @@ def invite_user():
                     last_name=form.last_name.data,
                     email=form.email.data,
                     phone_number=parse_phone_number(form.phone_number.data))
+        if user.is_worker():
+            user.agencies = form.agency_affiliations.data
+
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()

@@ -27,6 +27,10 @@
 
                 {{ f.render_form_field(form.role) }}
 
+                <div id="affiliations-field">
+                    {{ f.render_form_field(form.agency_affiliations) }}
+                </div>
+
                 <div class="two fields">
                     {{ f.render_form_field(form.first_name) }}
                     {{ f.render_form_field(form.last_name) }}
@@ -47,4 +51,22 @@
             {{ f.end_form() }}
         </div>
     </div>
+
+     <script type="text/javascript">
+        $(document).ready(function () {
+            var showOrHideAffiliations = function () {
+                var currentRole = $('#role option:selected').text();
+                if (currentRole == 'AgencyWorker') {
+                    $('#affiliations-field').show();
+                }
+                else {
+                    $('#affiliations-field').hide();
+                }
+            };
+
+            showOrHideAffiliations();
+
+            $('#role').on("change", showOrHideAffiliations);
+        });
+    </script>
 {% endblock %}

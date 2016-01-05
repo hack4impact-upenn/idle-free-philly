@@ -38,6 +38,9 @@ def invite_user():
                     last_name=form.last_name.data,
                     email=form.email.data,
                     phone_number=parse_phone_number(form.phone_number.data))
+        if user.is_worker():
+            user.agencies = form.agency_affiliations.data
+
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -132,6 +135,12 @@ def change_account_type(user_id):
     form = ChangeAccountTypeForm()
     if form.validate_on_submit():
         user.role = form.role.data
+
+        # If we change the user from a worker to something else, the user
+        #  should lose agency affiliations
+        if not user.is_worker():
+            user.agencies = []
+
         db.session.add(user)
         db.session.commit()
         flash('Role for user {} successfully changed to {}.'

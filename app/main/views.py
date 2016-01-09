@@ -7,7 +7,7 @@ from app.models import IncidentReport, Agency
 from datetime import timedelta
 
 
-@main.route('/')
+@main.route('/', methods=['GET', 'POST'])
 @main.route('/map', methods=['GET', 'POST'])
 def index():
     form = IncidentReportForm()

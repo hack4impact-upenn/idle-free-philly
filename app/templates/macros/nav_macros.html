@@ -94,7 +94,7 @@
 {% endmacro %}
 
 {% macro render_nav(current_user, count, endpoints) %}
-    <nav class="ui navigation grid {% if endpoints %}has-submenu{% endif %}">
+    <nav id = "main_nav_grid" class="ui navigation grid {% if endpoints %}has-submenu{% endif %}">
         {{ mobile_nav(current_user, endpoints=endpoints) }}
         {{ desktop_nav(current_user, endpoints=endpoints, count=count) }}
     </nav>

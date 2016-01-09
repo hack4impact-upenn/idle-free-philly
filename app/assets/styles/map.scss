@@ -1,0 +1,114 @@
+@import "app";
+
+.ui-rangeSlider-innerBar {
+    width: 100% !important;
+    height: 100%;
+    left: 0px !important;
+}
+
+.ui-rangeSlider-bar {
+    background: $teal;
+    height: 110% !important;
+    width: 100%;
+    top: -1px !important;
+    -webkit-box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+    -mox-box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+    box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+}
+
+#addressSearch {
+    position: absolute;
+    left: 30px;
+    top: 49px;
+    z-index: 5;
+}
+
+#submitButton {
+    background-color: $teal;
+    color: $white;
+    left: 220px;
+    top: 49px;
+    z-index: 5;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+#slider {
+        position: absolute;
+        width: 25%;
+        right: 100px;
+        top: 8px;
+        z-index: 5;
+}
+
+#info_container {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    max-height: 60%;
+    overflow-y: scroll;
+    color: black;
+    top: 80px;
+    right: 100px;
+    z-index: 6;
+}
+
+#close_info {
+    position: absolute;
+    background-color: $red;
+    color: $white;
+    height: 25px;
+    width: 25px;
+    top: 5px;
+    right: 5px;
+    padding: 1px;
+}
+
+@media all and (max-width: $mobile-breakpoint) {
+    #slider {
+        display: none;
+    }
+    #addressSearch {
+        width: 80%;
+        left: 5%;
+    }
+    #info_container {
+        width: 80%;
+        left: 5%;
+        top: 100px;
+    }
+}
+
+#googleMap {
+    width:100%;
+    left: 0px;
+    top: 0px; 
+}
+
+#wrapper {
+    position:relative;
+}
+
+#address_error {
+    position: fixed;
+    text-align: center;
+    margin: 0px 0px 0px -150px;
+    width: 300px;
+}
+
+#geocode_error {
+    position: fixed;
+    text-align: center;
+    margin: 0px 0px 0px -150px;
+    width: 300px;
+}
+
+.ui.approve.button {
+    display: block;
+    margin: 0 auto;
+}
+
+#replaceable > p,a {
+    margin: 0 0 0.5em;
+}

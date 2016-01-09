@@ -7,7 +7,6 @@ from flask.ext.assets import Environment
 from flask.ext.wtf import CsrfProtect
 from flask.ext.compress import Compress
 from flask.ext.rq import RQ
-
 from config import config
 from assets import app_css, app_js, vendor_css, vendor_js
 

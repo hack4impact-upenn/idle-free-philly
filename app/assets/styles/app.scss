@@ -109,8 +109,12 @@ nav .mobile.only.row {
 }
 
 // Flashes
-.flashes > .ui.message:last-of-type {
-	position: absolute;
+
+.flashes > .ui.message {
+	position: fixed;
+	bottom: 5%;
+	right: 5%;
+	z-index: 12;
 }
 .ui.red.error {
 	color: $red;

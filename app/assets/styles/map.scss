@@ -20,7 +20,7 @@
     position: absolute;
     left: 30px;
     top: 49px;
-    z-index: 99;
+    z-index: 5;
 }
 
 #submitButton {
@@ -28,7 +28,7 @@
     color: $white;
     left: 220px;
     top: 49px;
-    z-index: 99;
+    z-index: 5;
     font-weight: 300;
     text-transform: uppercase;
 }
@@ -38,7 +38,7 @@
         width: 25%;
         right: 100px;
         top: 8px;
-        z-index: 99;
+        z-index: 5;
 }
 
 #info_container {
@@ -46,12 +46,12 @@
     position: absolute;
     background-color: white;
     width: 25%;
-    height: 60%;
+    max-height: 60%;
     overflow-y: scroll;
     color: black;
     top: 80px;
     right: 100px;
-    z-index: 100;
+    z-index: 6;
 }
 
 #close_info {
@@ -75,8 +75,8 @@
     }
     #info_container {
         width: 80%;
+        left: 5%;
         top: 100px;
-        right: 10%;
     }
 }
 

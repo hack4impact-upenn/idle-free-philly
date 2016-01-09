@@ -28,7 +28,6 @@ def index():
             description=form.description.data,
         )
         db.session.add(new_incident)
-        print(new_incident)
         db.session.commit()
 
     return render_template('main/map.html',

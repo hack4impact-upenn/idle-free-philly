@@ -2,6 +2,8 @@
 {% block content %}
 
 <script type="text/javascript">
+
+    var selectedMarker;
     function initializeMapAndMarkers() {
         markerWrappers = [];
         var minDate = new Date(2015, 0, 1);
@@ -11,7 +13,8 @@
             var marker = new google.maps.Marker({
                 // Use latitude and longitude values from incident report
                 // to set position of marker
-                position:{lat: parseFloat('{{ report.location.latitude }}'), lng: parseFloat('{{ report.location.longitude }}')}
+                position:{lat: parseFloat('{{ report.location.latitude }}'), lng: parseFloat('{{ report.location.longitude }}')},
+                icon: "../static/images/marker.png"
             });
             var dateString = '{{ report.date }}';
             year = parseInt((dateString.split(' '))[0].split('-')[0]);
@@ -32,7 +35,7 @@
                                 {% if current_user.is_admin() or report.agency in current_user.agencies %}
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
                                 {% endif %}
-                                '<p>Link to Picture: ' + '{{ report.picture_url }}' + '</p>' +
+                                '<p><a href=' + '{{ report.picture_url }}' + '>' + 'Link to Picture' + '</a></p>' +
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>' +
                                 '</div>';
@@ -47,6 +50,11 @@
             // Add click listener to marker for displaying infoWindow
             marker.addListener('click', function() {
                 infoWindow.open(map, marker);
+                if (selectedMarker) {
+                    selectedMarker.setIcon("../static/images/marker.png");
+                }
+                marker.setIcon("../static/images/marker_selected.png");
+                selectedMarker = marker;
             });
         });
         {% endfor %}

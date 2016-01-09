@@ -24,11 +24,13 @@
 }
 
 #submitButton {
-    background-color: $dark-teal;
+    background-color: $teal;
     color: $white;
     left: 220px;
     top: 49px;
     z-index: 99;
+    font-weight: 300;
+    text-transform: uppercase;
 }
 
 @media all and (min-width: $mobile-breakpoint+1) {

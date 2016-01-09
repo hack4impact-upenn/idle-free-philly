@@ -36,20 +36,16 @@
 @media all and (min-width: $mobile-breakpoint+1) {
     #slider {
         position: absolute;
-        width: 20%;
-        right: 80px;
-        top:10px;
+        width: 25%;
+        right: 100px;
+        top: 8px;
         z-index: 99;
     }
 }
 
 @media all and (max-width: $mobile-breakpoint) {
     #slider {
-        position: absolute;
-        width: 45%;
-        left: 60px;
-        top: 100px;
-        z-index: 99;
+        display: hide;
     }
 }
 
@@ -80,4 +76,32 @@
 .ui.approve.button {
     display: block;
     margin: 0 auto;
+}
+
+#info_container {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    height: 60%;
+    overflow-y: scroll;
+    color: black;
+    top: 80px;
+    right: 100px;
+    z-index: 95;
+}
+
+#close_info {
+    position: absolute;
+    background-color: $red;
+    color: $white;
+    height: 25px;
+    width: 25px;
+    top: 5px;
+    right: 5px;
+    padding: 1px;
+}
+
+#replaceable > p,a {
+    margin: 0 0 0.5em;
 }

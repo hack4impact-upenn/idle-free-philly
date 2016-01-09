@@ -415,35 +415,31 @@ footer > div > h3 {
 @media -sass-debug-info{filename{}line{font-family:\0000337}}
   #slider {
     position: absolute;
-    width: 20%;
-    right: 80px;
-    top: 10px;
+    width: 25%;
+    right: 100px;
+    top: 8px;
     z-index: 99;
   }
 }
 @media all and (max-width: 768px) {
 @media -sass-debug-info{filename{}line{font-family:\0000347}}
   #slider {
-    position: absolute;
-    width: 45%;
-    left: 60px;
-    top: 100px;
-    z-index: 99;
+    display: hide;
   }
 }
-@media -sass-debug-info{filename{}line{font-family:\0000356}}
+@media -sass-debug-info{filename{}line{font-family:\0000352}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000362}}
+@media -sass-debug-info{filename{}line{font-family:\0000358}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000366}}
+@media -sass-debug-info{filename{}line{font-family:\0000362}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -451,7 +447,7 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000373}}
+@media -sass-debug-info{filename{}line{font-family:\0000369}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -459,8 +455,39 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000380}}
+@media -sass-debug-info{filename{}line{font-family:\0000376}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000381}}
+#info_container {
+  display: none;
+  position: absolute;
+  background-color: white;
+  width: 25%;
+  height: 60%;
+  overflow-y: scroll;
+  color: black;
+  top: 80px;
+  right: 100px;
+  z-index: 95;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000394}}
+#close_info {
+  position: absolute;
+  background-color: #FF684C;
+  color: #FFFFFF;
+  height: 25px;
+  width: 25px;
+  top: 5px;
+  right: 5px;
+  padding: 1px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003105}}
+#replaceable > p, a {
+  margin: 0 0 0.5em;
 }

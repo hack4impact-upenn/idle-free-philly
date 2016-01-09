@@ -1,5 +1,35 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
+<div id="wrapper">
+    <div id="googleMap"></div>
+        <div id="slider"></div>
+            <div id="info_container">
+            <div class="ui segment" id="replaceable">
+            </div>
+        </div>
+        <form name="addressForm" id="addressForm">
+            <div class="ui action input" id="addressSearch">
+                <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">
+                <!--<input class="ui button" type="submit" id="submitButton" value="Search">-->
+                <button id="submitButton" class="ui button">Search</button>
+            </div>
+        </form>
+</div>
+
+<div class="ui centered modal" id="geocode_error">
+    <i class="close icon"></i>
+    <div class="header">Geocode not successful</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
+    </div>
+</div>
+<div class="ui centered modal" id="address_error">
+    <i class="close icon"></i>
+    <div class="header">Address not found</div>
+    <div class="actions">
+        <div class="ui approve button">Okay</div>
+    </div>
+</div>
 
 <script type="text/javascript">
 
@@ -24,37 +54,39 @@
             if (incidentDate.getTime() < minDate.getTime())
                 minDate.setTime(incidentDate.getTime());
             //marker.setMap(map);
-            var contentString = '<div id="content">' +
-                                '<div id="siteNotice">' +
-                                '</div>' +
-                                '<h1 id="firstHeading" class="firstHeading">Vehicle ID: ' + '{{ report.vehicle_id }}' +'</h1>' +
-                                '<div id="bodyContent">' +
-                                '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
-                                '<p>Date: ' + '{{ report.date }}' + '</p>' +
+            var contentString = '<div id="replaceable" class="ui segment">' +
+                                '<button id="close_info" class="ui icon button close">' +
+                                '<i class="remove icon"></i>' +
+                                '</button>' +
+                                '<h3>Date: ' + '{{ report.date }}' + '</h3>' +
                                 '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
-                                {% if current_user.is_admin() or report.agency in current_user.agencies %}
+                                '<p>Vehicle ID: ' + '{{ report.vehicle_id }}' +'</p>' +
+                                '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
+                                {% if current_user.is_admin() or report.agency in current_user.agencies or report.agency.is_public %}
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
                                 {% endif %}
                                 '<p><a href=' + '{{ report.picture_url }}' + '>' + 'Link to Picture' + '</a></p>' +
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
-                                '</div>' +
                                 '</div>';
             bounds.extend(marker.getPosition());
             markerWrapper = new MarkerWrapper(marker, incidentDate, contentString);
             markerWrappers.push(markerWrapper);
             var infoWindow = new google.maps.InfoWindow({
-                content: contentString,
-                maxWidth: 300
+                content: contentString
             });
 
             // Add click listener to marker for displaying infoWindow
             marker.addListener('click', function() {
-                infoWindow.open(map, marker);
+                $('#info_container').show();
+                $('#replaceable').replaceWith(contentString);
                 if (selectedMarker) {
                     selectedMarker.setIcon("../static/images/marker.png");
                 }
                 marker.setIcon("../static/images/marker_selected.png");
                 selectedMarker = marker;
+                $('#close_info').on('click', function() {
+                    $('#info_container').hide();
+                });
             });
         });
         {% endfor %}
@@ -65,7 +97,12 @@
                 scrollwheel: false,
         };
         map=new google.maps.Map($('#googleMap')[0],mapProp);
-
+        google.maps.event.addListener(map, 'click', function(event) {
+                $('#latitude').val(event.latLng.lat());
+                $('#info_container').hide()
+                $('#longitude').val(event.latLng.lng());
+                getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
+        });
         storeMarkerState(markerWrappers, map, minDate, bounds);
         initializeDateSlider();
         addLocationButton(map);
@@ -84,30 +121,5 @@
         });
     });
 </script>
-<div id="wrapper">
-    <div id="googleMap"></div>
-        <div class="computer only row"><div id="slider"></div></div>
-        <form name="addressForm" id="addressForm">
-            <div class="ui action input" id="addressSearch">
-                <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">
-                <!--<input class="ui button" type="submit" id="submitButton" value="Search">-->
-                <button id="submitButton" class="ui button">Search</button>
-            </div>
-        </form>
-</div>
 
-<div class="ui centered modal" id="geocode_error">
-    <i class="close icon"></i>
-    <div class="header">Geocode not successful</div>
-    <div class="actions">
-        <div class="ui approve button">Okay</div>
-    </div>
-</div>
-<div class="ui centered modal" id="address_error">
-    <i class="close icon"></i>
-    <div class="header">Address not found</div>
-    <div class="actions">
-        <div class="ui approve button">Okay</div>
-    </div>
-</div>
 {% endblock %}

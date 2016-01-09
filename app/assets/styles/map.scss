@@ -33,19 +33,21 @@
     text-transform: uppercase;
 }
 
-@media all and (min-width: $mobile-breakpoint+1) {
-    #slider {
+#slider {
         position: absolute;
         width: 25%;
         right: 100px;
         top: 8px;
         z-index: 99;
-    }
 }
 
 @media all and (max-width: $mobile-breakpoint) {
     #slider {
-        display: hide;
+        display: none;
+    }
+    #addressSearch {
+        width: 80%;
+        left: 5%;
     }
 }
 

@@ -411,35 +411,40 @@ footer > div > h3 {
   text-transform: uppercase;
 }
 
-@media all and (min-width: 769px) {
-@media -sass-debug-info{filename{}line{font-family:\0000337}}
-  #slider {
-    position: absolute;
-    width: 25%;
-    right: 100px;
-    top: 8px;
-    z-index: 99;
-  }
+@media -sass-debug-info{filename{}line{font-family:\0000336}}
+#slider {
+  position: absolute;
+  width: 25%;
+  right: 100px;
+  top: 8px;
+  z-index: 99;
 }
+
 @media all and (max-width: 768px) {
-@media -sass-debug-info{filename{}line{font-family:\0000347}}
+@media -sass-debug-info{filename{}line{font-family:\0000345}}
   #slider {
-    display: hide;
+    display: none;
+  }
+
+@media -sass-debug-info{filename{}line{font-family:\0000349}}
+  #addressSearch {
+    width: 80%;
+    left: 5%;
   }
 }
-@media -sass-debug-info{filename{}line{font-family:\0000352}}
+@media -sass-debug-info{filename{}line{font-family:\0000355}}
 #googleMap {
   width: 100%;
   left: 0px;
   top: 0px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000358}}
+@media -sass-debug-info{filename{}line{font-family:\0000361}}
 #wrapper {
   position: relative;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000362}}
+@media -sass-debug-info{filename{}line{font-family:\0000365}}
 #address_error {
   position: fixed;
   text-align: center;
@@ -447,7 +452,7 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000369}}
+@media -sass-debug-info{filename{}line{font-family:\0000372}}
 #geocode_error {
   position: fixed;
   text-align: center;
@@ -455,13 +460,13 @@ footer > div > h3 {
   width: 300px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000376}}
+@media -sass-debug-info{filename{}line{font-family:\0000379}}
 .ui.approve.button {
   display: block;
   margin: 0 auto;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000381}}
+@media -sass-debug-info{filename{}line{font-family:\0000384}}
 #info_container {
   display: none;
   position: absolute;
@@ -475,7 +480,7 @@ footer > div > h3 {
   z-index: 95;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\0000394}}
+@media -sass-debug-info{filename{}line{font-family:\0000397}}
 #close_info {
   position: absolute;
   background-color: #FF684C;
@@ -487,7 +492,7 @@ footer > div > h3 {
   padding: 1px;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003105}}
+@media -sass-debug-info{filename{}line{font-family:\00003108}}
 #replaceable > p, a {
   margin: 0 0 0.5em;
 }

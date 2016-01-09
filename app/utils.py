@@ -1,5 +1,6 @@
 import re
-from flask import url_for
+import requests
+from flask import url_for, current_app
 
 
 def register_template_utils(app):
@@ -29,3 +30,16 @@ def parse_phone_number(phone_number):
         stripped = '1' + stripped
     stripped = '+' + stripped
     return stripped
+
+
+# Viewport-biased geocoding using Google API
+# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+def geocode(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
+    r = requests.get(url, params=payload)
+    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        return None, None
+    else:
+        coords = r.json()['results'][0]['geometry']['location']
+        return coords['lat'], coords['lng']

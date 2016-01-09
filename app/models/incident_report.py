@@ -1,3 +1,4 @@
+from datetime import datetime
 from .. import db
 from . import Agency, User
 
@@ -19,8 +20,8 @@ class Location(db.Model):
 class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_id = db.Column(db.String(8))
-    license_plate = db.Column(db.String(8))
+    vehicle_id = db.Column(db.String(50))
+    license_plate = db.Column(db.String(16))
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',
@@ -43,6 +44,8 @@ class IncidentReport(db.Model):
         super(IncidentReport, self).__init__(**kwargs)
         if self.agency is not None and 'show_agency_publicly' not in kwargs:
             self.show_agency_publicly = self.agency.is_public
+        if self.date is None:
+            self.date = datetime.now()
 
     @staticmethod
     def generate_fake(count=100, **kwargs):

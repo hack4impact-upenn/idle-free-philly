@@ -29,7 +29,9 @@
                                 '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
                                 '<p>Date: ' + '{{ report.date }}' + '</p>' +
                                 '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
+                                {% if current_user.is_admin() or report.agency in current_user.agencies %}
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
+                                {% endif %}
                                 '<p>Link to Picture: ' + '{{ report.picture_url }}' + '</p>' +
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>' +
@@ -38,7 +40,8 @@
             markerWrapper = new MarkerWrapper(marker, incidentDate, contentString);
             markerWrappers.push(markerWrapper);
             var infoWindow = new google.maps.InfoWindow({
-                content: contentString
+                content: contentString,
+                maxWidth: 300
             });
 
             // Add click listener to marker for displaying infoWindow
@@ -58,6 +61,7 @@
         storeMarkerState(markerWrappers, map, minDate, bounds);
         initializeDateSlider();
         addLocationButton(map);
+        addCenterButton(map);
     }
     $(document).ready(function() {
         // Add the map to the window
@@ -74,7 +78,7 @@
 </script>
 <div id="wrapper">
     <div id="googleMap"></div>
-        <div id="slider"></div>
+        <div class="computer only row"><div id="slider"></div></div>
         <form name="addressForm" id="addressForm">
             <div class="ui action input" id="addressSearch">
                 <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">

@@ -20,6 +20,8 @@ class Config:
     EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(app_name=APP_NAME,
                                                        email=MAIL_USERNAME)
+    # Default viewport is bounding box for Philadelphia, PA
+    VIEWPORT = '39.861204,-75.310357|40.138932,-74.928582'
 
     @staticmethod
     def init_app(app):
@@ -94,9 +96,15 @@ class UnixConfig(ProductionConfig):
         app.logger.addHandler(syslog_handler)
 
 
+class ProductionWithDebug(ProductionConfig):
+    DEBUG = True
+    ASSETS_DEBUG = True
+
+
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'production_debug': ProductionWithDebug,
     'default': DevelopmentConfig
 }

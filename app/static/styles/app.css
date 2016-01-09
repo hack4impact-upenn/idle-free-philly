@@ -111,7 +111,7 @@ nav .mobile.only.row .ui.vertical.secondary.menu > a {
 
 @media -sass-debug-info{filename{}line{font-family:\00003112}}
 .flashes > .ui.message:last-of-type {
-  margin-bottom: 2rem;
+  position: absolute;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003115}}

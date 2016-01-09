@@ -110,7 +110,7 @@ nav .mobile.only.row {
 
 // Flashes
 .flashes > .ui.message:last-of-type {
-    margin-bottom: 2rem;
+	position: absolute;
 }
 .ui.red.error {
 	color: $red;

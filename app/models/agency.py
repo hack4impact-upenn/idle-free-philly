@@ -19,9 +19,12 @@ class Agency(db.Model):
     # reporting form. Non-official agencies will not show up in the form.
     is_official = db.Column(db.Boolean, default=False)
 
-    # True if this agency will be publicly shown with reports. That is, when a
-    # public user sees a report on the map, the report's agency will only be
-    # shown if is_public is True.
+    # If this agency is set as public, then all new incident reports created
+    # for this agency will show this agency's name to the general public by
+    # default. That is, the marker on the map will name this particular agency
+    # as the type of vehicle which was idling. If an agency is not set as
+    # public, then all new incident reports created for that agency will not
+    # show this agency by default.
     is_public = db.Column(db.Boolean, default=False)
 
     # Many users to many agencies. We use the above agency_user_table to

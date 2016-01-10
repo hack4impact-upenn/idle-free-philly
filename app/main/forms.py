@@ -17,6 +17,7 @@ from wtforms.validators import (
     Length,
     Optional,
     NumberRange,
+    URL
 )
 
 from ..models import Agency
@@ -70,8 +71,14 @@ class IncidentReportForm(Form):
                               get_label='name',
                               query_factory=lambda: db.session.query(Agency))
 
-    picture = FileField('Upload a picture of the idling vehicle.',
-                        validators=[Optional()])
+    picture_file = FileField('Upload a picture of the idling vehicle.',
+                             validators=[Optional()])
+
+    picture_url = StringField('Picture URL', validators=[
+        URL(message='Picture URL must be a valid URL. '
+                    'Please upload the image to an image hosting website '
+                    'and paste the link here.')
+        ])
 
     description = TextAreaField('Additional Notes', validators=[
         Optional(),

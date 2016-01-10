@@ -237,7 +237,7 @@ def join_from_invite(user_id, token):
                 db.session.add(new_user)
                 db.session.commit()
                 flash('Your password has been set. After you log in, you can '
-                      'go to the "Your Account" page to review your account '
+                      'go to the "Account" page to review your account '
                       'information and settings.', 'success')
                 return redirect(url_for('account.login'))
             return render_template('account/join_invite.html', form=form)

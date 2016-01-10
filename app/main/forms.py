@@ -1,8 +1,15 @@
 import datetime as datetime
 
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, SubmitField, IntegerField, \
-    TextAreaField, HiddenField, DateField, FileField
+from wtforms.fields import (
+    StringField,
+    SubmitField,
+    IntegerField,
+    TextAreaField,
+    HiddenField,
+    DateTimeField,
+    FileField
+)
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
@@ -22,7 +29,7 @@ class IncidentReportForm(Form):
         Length(min=2, max=10,
                message='Vehicle ID must be between 2 to 10 characters.'),
         Regexp("^[a-zA-Z0-9]*$",
-               message='License plate number must '
+               message='Vehicle id number must '
                        'consist of only letters and numbers.'),
     ])
 
@@ -46,8 +53,8 @@ class IncidentReportForm(Form):
     longitude = HiddenField('Longitude')
     location = StringField('Address')
 
-    date = DateField('Date', default=datetime.date.today(),
-                     validators=[InputRequired()])
+    date = DateTimeField('Date', default=datetime.datetime.now(),
+                         validators=[InputRequired()])
 
     # TODO - add support for h:m:s format
     duration = IntegerField('Idling Duration (minutes)', validators=[

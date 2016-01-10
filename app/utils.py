@@ -1,9 +1,11 @@
 import re
 import requests
 import csv
+import functools
 from datetime import datetime
 from flask import url_for, current_app
 from app.models import Location, Agency, IncidentReport
+from app.main.forms import IncidentReportForm
 
 
 def register_template_utils(app):
@@ -62,22 +64,19 @@ def parse_to_db(db, filename):
     picture_index = 13
     description_index = 11
 
+    validator_form = IncidentReportForm()
+
     with open(filename, 'rb') as csv_file:
         reader = csv.reader(csv_file)
         columns = reader.next()
-        fail_count = 0
-        fail_addresses = ''
-        i = 1  # Count for current row
 
-        for row in reader:
-            i += 1
+        for i, row in enumerate(reader, start=2):  # i is the row number
             address_text = row[location_index]
             coords = geocode(address_text)
 
             # Ignore rows that do not have correct geocoding
             if coords[0] is None or coords[1] is None:
-                fail_count += 1
-                fail_addresses += 'Row {:d}: {}\n'.format(i, address_text)
+                print_error(i, 'Failed to geocode "{:s}"'.format(address_text))
 
             # Insert correctly geocoded row to database
             else:
@@ -89,19 +88,20 @@ def parse_to_db(db, filename):
                 date_format = "%m/%d/%Y %H:%M"
                 time1 = datetime.strptime(row[date_index], date_format)
                 time2 = datetime.strptime(row[date_index+1], date_format)
+                duration = time2 - time1
 
                 # Assign correct agency id
                 agency_name = row[agency_index].rstrip()
                 if agency_name.upper() == 'OTHER':
                     agency_name = row[agency_index + 1].rstrip()
-                a = Agency.get_agency_by_name(agency_name)
+                agency = Agency.get_agency_by_name(agency_name)
 
                 # Create new agency object if not in database
-                if a is None:
-                    a = Agency(name=agency_name)
-                    a.is_public = True
-                    a.is_official = False
-                    db.session.add(a)
+                if agency is None:
+                    agency = Agency(name=agency_name)
+                    agency.is_public = True
+                    agency.is_official = False
+                    db.session.add(agency)
                     db.session.commit()
                 vehicle_id_text = row[vehicle_id_index].strip()
 
@@ -111,18 +111,57 @@ def parse_to_db(db, filename):
 
                 if len(license_plate_text) is 0:
                     license_plate_text = None
+
+                # Validate all the fields
+                validate_field = functools.partial(
+                    validate_field_partial,
+                    form=validator_form,
+                    row_number=i
+                )
+
+                validate_field(field=validator_form.vehicle_id,
+                               data=vehicle_id_text)
+
+                validate_field(field=validator_form.license_plate,
+                               data=license_plate_text)
+
+                validate_field(field=validator_form.date,
+                               data=time1)
+
+                validate_field(field=validator_form.duration,
+                               data=duration)
+
+                validate_field(field=validator_form.agency,
+                               data=agency)
+
+                validate_field(field=validator_form.description,
+                               data=row[description_index])
+
                 incident = IncidentReport(
                     vehicle_id=vehicle_id_text,
                     license_plate=license_plate_text,
                     location=loc,
                     date=time1,
-                    duration=time2 - time1,
-                    agency=a,
+                    duration=duration,
+                    agency=agency,
                     picture_url=row[picture_index],
                     description=row[description_index])
                 db.session.add(incident)
                 db.session.commit()
-        if fail_count > 0:
-            print 'Could not geocode {} addresses.'.format(fail_count)
-            print 'Geocode failed addresses:\n{}'.format(fail_addresses)
+
         return columns
+
+
+def validate_field_partial(field, data, form, row_number):
+    """TODO: docstring"""
+    field.data = data
+    field.raw_data = data
+
+    if not field.validate(form):
+        for error in form.vehicle_id.errors:
+            print_error(row_number, error)
+
+
+def print_error(row_number, error_message):
+    """TODO: docstring"""
+    print 'Row {:d}: {}'.format(row_number, error_message)

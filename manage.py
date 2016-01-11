@@ -11,7 +11,7 @@ from app.models import (
 )
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
-from app.utils import parse_to_db
+from app.parse_csv import parse_to_db
 
 # Import settings from .env file. Must define FLASK_CONFIG
 if os.path.exists('.env'):

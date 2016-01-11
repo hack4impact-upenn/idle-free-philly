@@ -1,7 +1,7 @@
 import unittest
 from app import create_app, db
 from app.models import Location, IncidentReport
-from app.utils import parse_to_db
+from app.parse_csv import parse_to_db
 
 
 class ParseCsvTestCase(unittest.TestCase):

@@ -2,10 +2,12 @@ from ..decorators import admin_required
 
 from flask import render_template, abort, redirect, flash, url_for, request
 from flask.ext.login import login_required, current_user
+from flask.ext.rq import get_queue
 
 from forms import (
     ChangeUserEmailForm,
     ChangeUserPhoneNumberForm,
+    ChangeAgencyAffiliationsForm,
     ChangeAccountTypeForm,
     InviteUserForm,
     ChangeAgencyOfficialStatusForm,
@@ -38,15 +40,22 @@ def invite_user():
                     last_name=form.last_name.data,
                     email=form.email.data,
                     phone_number=parse_phone_number(form.phone_number.data))
+        if user.is_worker():
+            user.agencies = form.agency_affiliations.data
+
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_email(user.email,
-                   'You Are Invited To Join',
-                   'account/email/invite',
-                   user=user,
-                   user_id=user.id,
-                   token=token)
+        invite_link = url_for('account.join_from_invite', user_id=user.id,
+                              token=token, _external=True)
+        get_queue().enqueue(
+            send_email,
+            recipient=user.email,
+            subject='You Are Invited To Join',
+            template='account/email/invite',
+            user=user,
+            invite_link=invite_link,
+        )
         flash('User {} successfully invited'.format(user.full_name()),
               'form-success')
     return render_template('admin/invite_user.html', form=form)
@@ -132,11 +141,46 @@ def change_account_type(user_id):
     form = ChangeAccountTypeForm()
     if form.validate_on_submit():
         user.role = form.role.data
+
+        # If we change the user from a worker to something else, the user
+        #  should lose agency affiliations
+        if not user.is_worker():
+            user.agencies = []
+
         db.session.add(user)
         db.session.commit()
         flash('Role for user {} successfully changed to {}.'
               .format(user.full_name(), user.role.name),
               'form-success')
+    form.role.default = user.role
+    form.process()
+    return render_template('admin/manage_user.html', user=user, form=form)
+
+
+@admin.route('/user/<int:user_id>/change-agency-affiliations',
+             methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_agency_affiliations(user_id):
+    """Change a worker's agency affiliations."""
+    user = User.query.get(user_id)
+    if user is None:
+        abort(404)
+    if not user.is_worker():
+        abort(404)
+
+    form = ChangeAgencyAffiliationsForm()
+    if form.validate_on_submit():
+        user.agencies = form.agency_affiliations.data
+        db.session.add(user)
+        db.session.commit()
+        flash('Agencies for user {} successfully changed to {}.'
+              .format(user.full_name(),
+                      ', '.join([a.name for a in user.agencies])),
+              'form-success')
+    form.agency_affiliations.default = sorted(user.agencies,
+                                              key=lambda agency: agency.name)
+    form.process()
     return render_template('admin/manage_user.html', user=user, form=form)
 
 

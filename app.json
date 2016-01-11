@@ -2,7 +2,8 @@
   "name": "Clean Air Council",
   "repository": "github.com/hack4impact/clean-air-council",
   "addons": [
-    "heroku-postgresql"
+    "heroku-postgresql",
+    "redistogo"
   ],
   "env": {
     "FLASK_CONFIG": {

@@ -28,8 +28,8 @@ class IncidentReportTestCase(unittest.TestCase):
         self.assertTrue(loc.incident_report is None)
 
     def test_location_has_incident(self):
-        incident_report_1 = IncidentReport()
-        incident_report_2 = IncidentReport()
+        incident_report_1 = IncidentReport(notify_workers_upon_creation=False)
+        incident_report_2 = IncidentReport(notify_workers_upon_creation=False)
         loc = Location(
             latitude='39.951039',
             longitude='-75.197428',
@@ -48,7 +48,8 @@ class IncidentReportTestCase(unittest.TestCase):
             date=now,
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
-            description='Truck idling on the road!'
+            description='Truck idling on the road!',
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.vehicle_id, '123456')
         self.assertEqual(incident.license_plate, 'ABC123')
@@ -75,7 +76,8 @@ class IncidentReportTestCase(unittest.TestCase):
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
             description='Truck idling on the road!',
-            location=loc1
+            location=loc1,
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.location, loc1)
         incident.location = loc2
@@ -92,7 +94,8 @@ class IncidentReportTestCase(unittest.TestCase):
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
             description='Truck idling on the road!',
-            agency=agency1
+            agency=agency1,
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.agency, agency1)
         incident.agency = agency2
@@ -102,7 +105,8 @@ class IncidentReportTestCase(unittest.TestCase):
         u1 = User(email='user@example.com', password='password')
         u2 = User(email='otheruser@example.org', password='notpassword')
         incident = IncidentReport(
-            user=u1
+            user=u1,
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.user, u1)
         incident.user = u2
@@ -119,7 +123,8 @@ class IncidentReportTestCase(unittest.TestCase):
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
             description='Truck idling on the road!',
-            agency=agency1
+            agency=agency1,
+            notify_workers_upon_creation=False
         )
 
         incident2 = IncidentReport(
@@ -129,7 +134,8 @@ class IncidentReportTestCase(unittest.TestCase):
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
             description='Truck idling on the road!',
-            agency=agency2
+            agency=agency2,
+            notify_workers_upon_creation=False
         )
 
         self.assertFalse(incident1.show_agency_publicly)
@@ -148,6 +154,7 @@ class IncidentReportTestCase(unittest.TestCase):
             description='Truck idling on the road!',
             agency=agency1,
             show_agency_publicly=True,
+            notify_workers_upon_creation=False
         )
 
         incident2 = IncidentReport(
@@ -159,6 +166,7 @@ class IncidentReportTestCase(unittest.TestCase):
             description='Truck idling on the road!',
             agency=agency2,
             show_agency_publicly=False,
+            notify_workers_upon_creation=False
         )
 
         self.assertTrue(incident1.show_agency_publicly)

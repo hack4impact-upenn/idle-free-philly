@@ -8,8 +8,13 @@
     ('admin.change_user_email', 'Change email address'),
     ('admin.change_user_phone_number', 'Change phone number'),
     ('admin.change_account_type', 'Change account type'),
-    (deletion_endpoint, 'Delete user')
 ] %}
+
+{% if user.is_worker() %}
+    {% set endpoints = endpoints + [('admin.change_agency_affiliations', 'Change agency affiliations')] %}
+{% endif %}
+
+{% set endpoints = endpoints + [(deletion_endpoint, 'Delete user')] %}
 
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
@@ -28,6 +33,9 @@
         <tr><td>Email address</td><td>{{ user.email }}</td></tr>
         <tr><td>Phone number</td><td>{{ user.phone_number }}</td></tr>
         <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
+        {% if user.is_worker() %}
+            <tr><td>Agency affiliations</td><td>{{ user.agencies|join(', ', attribute='name') }}</td></tr>
+        {% endif %}
     </table>
 {% endmacro %}
 

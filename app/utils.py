@@ -72,4 +72,5 @@ def upload_image(image_url=None, image_file_path=None, title=None,
             'title': title,
             'description': description,
         })
-    return result
+
+    return result['link'], result['deletehash']

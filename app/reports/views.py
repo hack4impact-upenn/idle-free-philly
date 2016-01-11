@@ -7,7 +7,12 @@ from . import reports
 from .. import db
 from ..models import IncidentReport, Agency
 from ..decorators import admin_or_agency_required, admin_required
-from ..utils import flash_errors
+from ..utils import (
+    flash_errors,
+    geocode,
+    timedelta_to_minutes,
+    minutes_to_timedelta
+)
 
 
 @reports.route('/all')
@@ -72,16 +77,21 @@ def edit_report_info(report_id):
     if form.validate_on_submit():
         report.vehicle_id = form.vehicle_id.data
         report.license_plate = form.license_plate.data
-        # TODO format data
-        # report.location = form.location.data
-        # report.date = form.date.data
-        # report.duration = form.duration.data
-        # report.agency = form.agency.data
-        report.picture_url = form.picture.data
-        report.description = form.description.data
 
-        print report.vehicle_id
-        print form.vehicle_id.data
+        # reformat location data - TODO error-checking for bad addresses
+        lat, lng = geocode(form.location.data)
+        report.location.latitude, report.location.longitude = lat, lng
+
+        report.date = form.date.data
+
+        # reformat duration data - minutes to time-delta
+        report.duration = minutes_to_timedelta(form.duration.data)
+
+        report.agency = form.agency.data
+
+        # TODO upload picture_file
+        report.picture_url = form.picture_url.data
+        report.description = form.description.data
 
         db.session.add(report)
         db.session.commit()
@@ -92,11 +102,11 @@ def edit_report_info(report_id):
     # pre-populate form
     form.vehicle_id.default = report.vehicle_id
     form.license_plate.default = report.license_plate
-    # TODO report.bus_number and LED screen number
-    form.location.default = report.location
-    # TODO change location repr to address
+    form.bus_number.default = report.bus_number
+    form.led_screen_number.default = report.led_screen_number
+    form.location.default = report.location.original_user_text
     form.date.default = report.date
-    form.duration.default = report.duration
+    form.duration.default = timedelta_to_minutes(report.duration)
     form.agency.default = report.agency
     form.picture_url.default = report.picture_url
     form.description.default = report.description

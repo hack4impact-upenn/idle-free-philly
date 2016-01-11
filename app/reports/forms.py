@@ -47,16 +47,13 @@ class IncidentReportForm(Form):
     longitude = HiddenField('Longitude')
     location = StringField('Address')
 
-    date = DateField('Date', default=datetime.date.today(),
+    date = DateField('Date (year-month-day)', default=datetime.date.today(),
                      validators=[InputRequired()])
 
-    # TODO - add support for h:m:s format
-    duration = IntegerField('Idling Duration (h:m:s)', validators=[
-        InputRequired('Idling duration (hours:minutes:seconds) is required.'),
+    duration = IntegerField('Idling Duration (in minutes)', validators=[
+        InputRequired('Idling duration is required.'),
         NumberRange(min=0,
-                    max=10000,
-                    message='Idling duration must be between '
-                            '0 and 10000 minutes.')
+                    message='Idling duration must be positive.')
     ])
 
     agency = QuerySelectField('Vehicle Agency ',
@@ -82,11 +79,4 @@ class IncidentReportForm(Form):
 
 
 class EditIncidentReportForm(IncidentReportForm):
-    # use picture URL instead of picture
-    picture = StringField('Picture URL', validators=[
-        URL(message='Picture URL must be a valid URL. '
-                    'Please upload the image to an image hosting website '
-                    'and paste the link into this field.')
-    ])
-
     submit = SubmitField('Update Report')

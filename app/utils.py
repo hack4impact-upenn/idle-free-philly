@@ -1,6 +1,8 @@
 import re
 import requests
+
 from flask import url_for, flash, current_app
+from datetime import timedelta
 
 
 def register_template_utils(app):
@@ -30,6 +32,17 @@ def parse_phone_number(phone_number):
         stripped = '1' + stripped
     stripped = '+' + stripped
     return stripped
+
+
+def timedelta_to_minutes(duration):
+    """Convert timedelta object to minutes"""
+    minutes = duration.seconds / 60
+
+    return minutes
+
+
+def minutes_to_timedelta(minutes):
+    return timedelta(minutes=minutes)
 
 
 def flash_errors(form):

@@ -13,21 +13,22 @@ class Location(db.Model):
                                    db.ForeignKey('incident_reports.id'))
 
     def __repr__(self):
-        # TODO: Show address instead?
-        return 'Coordinates: {0}, {1}'.format(self.latitude, self.longitude)
+        return str(self.original_user_text)
 
 
 class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.String(50))
-    license_plate = db.Column(db.String(16))
+    license_plate = db.Column(db.String(16))  # optional
+    bus_number = db.Column(db.Integer)  # optional
+    led_screen_number = db.Column(db.Integer)  # optional
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',
                                backref='incident_report')
     date = db.Column(db.DateTime)  # hour the incident occurred
-    duration = db.Column(db.Interval)  # like timedelta object
+    duration = db.Column(db.Interval)  # timedelta object
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
     description = db.Column(db.Text)

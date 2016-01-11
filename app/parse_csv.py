@@ -1,7 +1,7 @@
 import csv
 import functools
 from datetime import datetime
-from app.utils import geocode
+from app.utils import geocode, strip_non_alphanumeric_chars
 from app.models import Location, Agency, IncidentReport
 from app.main.forms import IncidentReportForm
 
@@ -24,6 +24,7 @@ def parse_to_db(db, filename):
         columns = reader.next()
 
         for i, row in enumerate(reader, start=2):  # i is the row number
+
             address_text = row[location_index]
             coords = geocode(address_text)
 
@@ -38,10 +39,8 @@ def parse_to_db(db, filename):
                     longitude=coords[1],
                     original_user_text=address_text)
                 db.session.add(loc)
-                date_format = "%m/%d/%Y %H:%M"
-                time1 = datetime.strptime(row[date_index], date_format)
-                time2 = datetime.strptime(row[date_index+1], date_format)
-                duration = time2 - time1
+
+                time1, time2 = parse_start_end_time(date_index, row)
 
                 # Assign correct agency id
                 agency_name = row[agency_index].rstrip()
@@ -56,14 +55,9 @@ def parse_to_db(db, filename):
                     agency.is_official = False
                     db.session.add(agency)
                     db.session.commit()
+
                 vehicle_id_text = row[vehicle_id_index].strip()
-
-                if len(vehicle_id_text) is 0:
-                    vehicle_id_text = None
                 license_plate_text = row[license_plate_index].strip()
-
-                if len(license_plate_text) is 0:
-                    license_plate_text = None
 
                 # Validate all the fields
                 validate_field = functools.partial(
@@ -72,50 +66,46 @@ def parse_to_db(db, filename):
                     row_number=i
                 )
 
-                kosher = True
+                errors = 0
 
-                kosher = kosher and validate_field(
+                if not validate_field(
                     field=validator_form.vehicle_id,
                     data=vehicle_id_text
-                )
+                ):
+                    errors += 1
 
-                kosher = kosher and validate_field(
+                if not validate_field(
                     field=validator_form.license_plate,
                     data=license_plate_text
-                )
+                ):
+                    errors += 1
 
-                kosher = kosher and validate_field(
-                    field=validator_form.date,
-                    data=time1
-                )
-
-                kosher = kosher and validate_field(
-                    field=validator_form.duration,
-                    data=duration
-                )
-
-                kosher = kosher and validate_field(
-                    field=validator_form.agency,
-                    data=agency
-                )
-
-                kosher = kosher and validate_field(
+                if not validate_field(
                     field=validator_form.description,
                     data=row[description_index]
-                )
+                ):
+                    errors += 1
 
-                kosher = kosher and validate_field(
+                if not validate_field(
                     field=validator_form.picture_url,
                     data=row[picture_index]
-                )
+                ):
+                    errors += 1
 
-                if kosher:
+                if errors == 0:
+                    vehicle_id_text = strip_non_alphanumeric_chars(
+                        vehicle_id_text)
+                    license_plate_text = strip_non_alphanumeric_chars(
+                        license_plate_text)
+
                     incident = IncidentReport(
-                        vehicle_id=vehicle_id_text,
-                        license_plate=license_plate_text,
+                        vehicle_id=vehicle_id_text if len(vehicle_id_text) > 0
+                        else None,
+                        license_plate=license_plate_text if
+                        len(license_plate_text) > 0 else None,
                         location=loc,
                         date=time1,
-                        duration=duration,
+                        duration=time2 - time1,
                         agency=agency,
                         picture_url=row[picture_index],
                         description=row[description_index])
@@ -123,6 +113,22 @@ def parse_to_db(db, filename):
                     db.session.commit()
 
         return columns
+
+
+def parse_start_end_time(date_index, row):
+    for date_format in ['%m/%d/%Y %H:%M', '%m/%d/%y %H:%M']:
+        try:
+            time1 = datetime.strptime(row[date_index], date_format)
+        except ValueError:
+            pass
+
+        try:
+            time2 = datetime.strptime(row[date_index + 1],
+                                      date_format)
+        except ValueError:
+            pass
+
+    return time1, time2
 
 
 def validate_field_partial(field, data, form, row_number):

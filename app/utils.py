@@ -3,6 +3,7 @@ import requests
 
 from flask import url_for, flash, current_app
 from datetime import timedelta
+from pytimeparse.timeparse import timeparse
 
 
 def register_template_utils(app):
@@ -37,6 +38,12 @@ def parse_phone_number(phone_number):
 def minutes_to_timedelta(minutes):
     """Use when creating new report."""
     return timedelta(minutes=minutes)
+
+
+def parse_timedelta(duration):
+    """Parse string into timedelta object"""
+    seconds = timeparse(duration)
+    return timedelta(seconds=seconds)
 
 
 def flash_errors(form):

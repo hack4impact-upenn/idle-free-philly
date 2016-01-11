@@ -56,7 +56,8 @@ def geocode(address):
 
 
 def get_current_weather(location):
-    """TODO write docstring"""
+    """Given an app.models.Location object, returns the current weather at
+    that location as a string."""
 
     url = "http://api.openweathermap.org/data/2.5/weather"
     payload = {

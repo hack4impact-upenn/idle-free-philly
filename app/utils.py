@@ -37,6 +37,12 @@ def parse_phone_number(phone_number):
     return stripped
 
 
+def strip_non_alphanumeric_chars(input_string):
+    """Strip all non-alphanumeric characters from the input."""
+    stripped = re.sub('[\W_]+', '', input_string)
+    return stripped
+
+
 def geocode(address):
     """Viewport-biased geocoding using Google API.
 

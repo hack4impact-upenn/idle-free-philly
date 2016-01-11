@@ -1,4 +1,4 @@
-import datetime as datetime
+from datetime import datetime
 
 from flask import render_template, abort, flash, redirect, url_for
 from flask.ext.login import login_required, current_user
@@ -84,8 +84,9 @@ def edit_report_info(report_id):
         report.location.latitude, report.location.longitude = lat, lng
         report.location.original_user_text = form.location.data
 
-        report.date.date = datetime.date(form.date.data)
-        report.date.time = datetime.time(form.time.data)
+        d, t = form.date.data, form.time.data
+        report.date = datetime(year=d.year, month=d.month, day=d.day,
+                               hour=t.hour, minute=t.minute, second=t.second)
 
         report.duration = parse_timedelta(form.duration.data)
         report.agency = form.agency.data

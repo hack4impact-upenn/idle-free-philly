@@ -22,8 +22,8 @@ class IncidentReportForm(Form):
         InputRequired('Vehicle ID is required.'),
         StrippedLength(
             min_length=2,
-            max_length=10,
-            message='Vehicle ID must be between 2 to 10 characters after '
+            max_length=15,
+            message='Vehicle ID must be between 2 to 15 characters after '
                     'stripping all non-alphanumeric characters.'
         ),
     ])
@@ -31,9 +31,9 @@ class IncidentReportForm(Form):
     license_plate = StringField('License Plate Number', validators=[
         Optional(),
         StrippedLength(
-            min_length=6,
-            max_length=7,
-            message='License plate must be between 6 to 7 characters after '
+            min_length=4,
+            max_length=8,
+            message='License plate must be between 4 to 8 characters after '
                     'stripping all non-alphanumeric characters.'
         )
     ])
@@ -71,6 +71,7 @@ class IncidentReportForm(Form):
                              validators=[Optional()])
 
     picture_url = StringField('Picture URL', validators=[
+        Optional(),
         URL(message='Picture URL must be a valid URL. '
                     'Please upload the image to an image hosting website '
                     'and paste the link here.')

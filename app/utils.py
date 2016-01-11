@@ -48,6 +48,12 @@ def flash_errors(form):
                 'form-error')
 
 
+def strip_non_alphanumeric_chars(input_string):
+    """Strip all non-alphanumeric characters from the input."""
+    stripped = re.sub('[\W_]+', '', input_string)
+    return stripped
+
+
 # Viewport-biased geocoding using Google API
 # Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
 def geocode(address):

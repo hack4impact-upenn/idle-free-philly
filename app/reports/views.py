@@ -120,13 +120,23 @@ def edit_report_info(report_id):
 @reports.route('/<int:report_id>/delete')
 @login_required
 @admin_required
+def delete_report_request(report_id):
+    """Request deletion of a report."""
+    report = IncidentReport.query.filter_by(id=report_id).first()
+    if report is None:
+        abort(404)
+    return render_template('reports/manage_report.html', report=report)
+
+
+@reports.route('/<int:report_id>/_delete')
+@login_required
+@admin_required
 def delete_report(report_id):
     """Delete a report"""
 
     report = IncidentReport.query.filter_by(id=report_id).first()
     db.session.delete(report)
     db.session.commit()
-    flash('Successfully delete report.')
+    flash('Successfully deleted report.', 'success')
 
-    # TODO flash after redirect
     return redirect(url_for('reports.view_reports'))

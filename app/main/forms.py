@@ -24,7 +24,7 @@ class IncidentReportForm(Form):
             min_length=2,
             max_length=15,
             message='Vehicle ID must be between 2 to 15 characters after '
-                    'stripping all non-alphanumeric characters.'
+                    'removing all non-alphanumeric characters.'
         ),
     ])
 
@@ -34,7 +34,7 @@ class IncidentReportForm(Form):
             min_length=4,
             max_length=8,
             message='License plate must be between 4 to 8 characters after '
-                    'stripping all non-alphanumeric characters.'
+                    'removing all non-alphanumeric characters.'
         )
     ])
 

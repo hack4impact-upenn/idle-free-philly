@@ -46,7 +46,7 @@ class StrippedLength(object):
 
         if self.message is None:
             self.message = 'String was not correctly formatted. After ' \
-                           'stripping all non-alphanumeric characters, the ' \
+                           'removing all non-alphanumeric characters, the ' \
                            'length of the string must be between {} and {} ' \
                            'characters.'.format(self.min_length,
                                                 self.max_length)

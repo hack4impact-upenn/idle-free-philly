@@ -42,8 +42,10 @@ class AgencyTestCase(unittest.TestCase):
     def test_agency_with_incident_report_no_user(self):
         Agency.insert_agencies()
         agency = Agency.get_agency_by_name('SEPTA')
-        incident1 = IncidentReport(description='Truck idling on the road!')
-        incident2 = IncidentReport(description='Another one!')
+        incident1 = IncidentReport(description='Truck idling on the road!',
+                                   notify_workers_upon_creation=False)
+        incident2 = IncidentReport(description='Another one!',
+                                   notify_workers_upon_creation=False)
         agency.incident_reports = [incident1, incident2]
         self.assertEqual(agency.name, 'SEPTA')
         self.assertTrue(agency.is_official)

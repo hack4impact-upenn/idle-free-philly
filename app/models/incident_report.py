@@ -1,6 +1,9 @@
 from datetime import datetime
+from flask import url_for
+from flask.ext.rq import get_queue
 from .. import db
 from . import Agency, User
+from ..email import send_email
 
 
 class Location(db.Model):
@@ -8,6 +11,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.String(50))
     longitude = db.Column(db.String(50))
+    # TODO: ensure original_user_text is always non-null
     original_user_text = db.Column(db.Text)  # the raw text which we geocoded
     incident_report_id = db.Column(db.Integer,
                                    db.ForeignKey('incident_reports.id'))
@@ -40,13 +44,32 @@ class IncidentReport(db.Model):
     # is_public field.
     show_agency_publicly = db.Column(db.Boolean, default=False)
 
-    def __init__(self, **kwargs):
+    def __init__(self, notify_workers_upon_creation=True, **kwargs):
         super(IncidentReport, self).__init__(**kwargs)
         if self.agency is not None and 'show_agency_publicly' not in kwargs:
             self.show_agency_publicly = self.agency.is_public
 
         if self.date is None:
             self.date = datetime.now()
+
+        if notify_workers_upon_creation:
+            all_reports_for_agency_link = url_for('reports.view_reports',
+                                                  _external=True)
+            subject = '{} Idling Incident'.format(self.agency.name)
+
+            if self.location.original_user_text is not None:
+                subject += ' at {}'.format(self.location.original_user_text)
+
+            for agency_worker in self.agency.users:
+                get_queue().enqueue(
+                    send_email,
+                    recipient=agency_worker.email,
+                    subject=subject,
+                    template='reports/email/alert_workers',
+                    incident_report=self,
+                    user=agency_worker,
+                    all_reports_for_agency_link=all_reports_for_agency_link
+                )
 
     @staticmethod
     def generate_fake(count=100, **kwargs):
@@ -85,6 +108,7 @@ class IncidentReport(db.Model):
                 user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
+                notify_workers_upon_creation=False,
                 **kwargs
             )
             db.session.add(r)

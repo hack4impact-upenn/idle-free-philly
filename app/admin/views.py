@@ -2,6 +2,7 @@ from ..decorators import admin_required
 
 from flask import render_template, abort, redirect, flash, url_for, request
 from flask.ext.login import login_required, current_user
+from flask.ext.rq import get_queue
 
 from forms import (
     ChangeUserEmailForm,
@@ -11,6 +12,7 @@ from forms import (
     InviteUserForm,
     ChangeAgencyOfficialStatusForm,
     ChangeAgencyPublicStatusForm,
+    AddAgencyForm,
 )
 from . import admin
 from ..models import User, Role, Agency, EditableHTML
@@ -45,12 +47,16 @@ def invite_user():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_email(user.email,
-                   'You Are Invited To Join',
-                   'account/email/invite',
-                   user=user,
-                   user_id=user.id,
-                   token=token)
+        invite_link = url_for('account.join_from_invite', user_id=user.id,
+                              token=token, _external=True)
+        get_queue().enqueue(
+            send_email,
+            recipient=user.email,
+            subject='You Are Invited To Join',
+            template='account/email/invite',
+            user=user,
+            invite_link=invite_link,
+        )
         flash('User {} successfully invited'.format(user.full_name()),
               'form-success')
     return render_template('admin/invite_user.html', form=form)
@@ -204,6 +210,25 @@ def delete_user(user_id):
         db.session.commit()
         flash('Successfully deleted user %s.' % user.full_name(), 'success')
     return redirect(url_for('admin.registered_users'))
+
+
+@admin.route('/add-agency', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_agency():
+    """Adds a new agency."""
+    form = AddAgencyForm()
+    if form.validate_on_submit():
+        agency = Agency(name=form.name.data,
+                        is_public=(form.is_public.data == 'y'),
+                        is_official=True)
+
+        db.session.add(agency)
+        db.session.commit()
+        flash('Agency {} successfully created'.format(agency.name),
+              'form-success')
+        return redirect(url_for('admin.add_agency'))
+    return render_template('admin/add_agency.html', form=form)
 
 
 @admin.route('/agencies')

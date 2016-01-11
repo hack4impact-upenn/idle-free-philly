@@ -25,11 +25,16 @@
         <tr><td>Report ID</td><td>{{ report.id }}</td></tr>
         <tr><td>Vehicle ID</td><td>{{ report.vehicle_id }}</td></tr>
         <tr><td>License Plate</td><td>{{ report.license_plate }}</td></tr>
-        <tr><td>Bus Number</td><td>{{ report.bus_number }}</td></tr>
-        <tr><td>LED Screen Number</td><td>{{ report.led_screen_number }}</td></tr>
+        <tr><td>Bus Number</td><td>
+                {{ report.bus_number if report.bus_number else '' }}
+            </td></tr>
+        <tr><td>LED Screen Number</td><td>
+                {{ report.led_screen_number if report.led_screen_number else '' }}
+            </td></tr>
         <tr><td>Location</td><td>{{ report.location }}</td></tr>
-        <tr><td>Date</td><td>{{ report.date }}</td></tr>
-        <tr><td>Duration</td><td>{{ report.duration}}</td></tr>
+        <tr><td>Date</td><td>{{ report.date.strftime('%m-%d-%Y') }}</td></tr>
+        <tr><td>Time</td><td>{{ report.date.strftime('%I:%M %p') }}</td></tr>
+        <tr><td>Duration (h:m:s)</td><td>{{ report.duration}}</td></tr>
         <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
         <tr><td>Picture</td><td><img src="{{ report.picture_url }}" alt="report picture" width="200"</td></tr>
         <!-- TODO add width attr to styles -->

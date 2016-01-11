@@ -42,10 +42,11 @@ class StrippedLength(object):
     def __init__(self, min_length=0, max_length=15, message=None):
         self.min_length = min_length
         self.max_length = max_length
+        self.message = message
 
-        if message is None:
+        if self.message is None:
             self.message = 'String was not correctly formatted. After ' \
-                           'stripping all non-alphanumeric characters, the ' \
+                           'removing all non-alphanumeric characters, the ' \
                            'length of the string must be between {} and {} ' \
                            'characters.'.format(self.min_length,
                                                 self.max_length)

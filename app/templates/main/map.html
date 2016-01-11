@@ -114,7 +114,8 @@
         // Set the height of the googleMap to the height of the window (less
         // any elements above the googleMap)
         $(function () {
-            $("#googleMap").css("height", $(window).height());
+            $("#googleMap").css("height", $(window).height() - 
+                $(".ui.navigation.grid").height());
             $(".ui.navigation.grid").css("margin-bottom", "0");
             $("footer").css("margin-top", "0");
         });

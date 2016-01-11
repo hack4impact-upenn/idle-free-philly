@@ -6,28 +6,36 @@ from wtforms.fields import StringField, SubmitField, IntegerField, \
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
-    Regexp,
     Length,
     Optional,
-    NumberRange
+    NumberRange,
+    URL
 )
 
+from app.custom_validators import StrippedLength
 from ..models import Agency
 from .. import db
 
 
-class NewIncidentForm(Form):
-    vehicle_ID = IntegerField('Vehicle ID', validators=[
+class IncidentReportForm(Form):
+    vehicle_id = StringField('Vehicle ID', validators=[
         InputRequired('Vehicle ID is required.'),
-        Length(min=2, max=10)
+        StrippedLength(
+            min_length=2,
+            max_length=15,
+            message='Vehicle ID must be between 2 to 15 characters after '
+                    'removing all non-alphanumeric characters.'
+        ),
     ])
 
-    license_plate_number = StringField('License Plate Number', validators=[
-        InputRequired('License plate is required.'),
-        Regexp("^[a-zA-Z0-9]*$",
-               message='License plate number must '
-                       'consist of only letters and numbers.'),
-        Length(min=6, max=7)
+    license_plate = StringField('License Plate Number', validators=[
+        Optional(),
+        StrippedLength(
+            min_length=4,
+            max_length=8,
+            message='License plate must be between 4 to 8 characters after '
+                    'removing all non-alphanumeric characters.'
+        )
     ])
 
     bus_number = IntegerField('Bus Number', validators=[
@@ -45,11 +53,12 @@ class NewIncidentForm(Form):
     date = DateField('Date', default=datetime.date.today(),
                      validators=[InputRequired()])
 
-    duration = IntegerField('Idling Duration (in minutes)', [
-        InputRequired('Idling duration (in minutes) is required.'),
+    # TODO - add support for h:m:s format
+    duration = IntegerField('Idling Duration (minutes)', validators=[
+        InputRequired('Idling duration (minutes) is required.'),
         NumberRange(min=0,
                     max=10000,
-                    message='Idling duration must be between'
+                    message='Idling duration must be between '
                             '0 and 10000 minutes.')
     ])
 
@@ -58,10 +67,17 @@ class NewIncidentForm(Form):
                               get_label='name',
                               query_factory=lambda: db.session.query(Agency))
 
-    picture = FileField('Upload a picture of the vehicle and/or driver.',
-                        validators=[Optional()])
+    picture_file = FileField('Upload a picture of the idling vehicle.',
+                             validators=[Optional()])
 
-    notes = TextAreaField('Additional Notes', [
+    picture_url = StringField('Picture URL', validators=[
+        Optional(),
+        URL(message='Picture URL must be a valid URL. '
+                    'Please upload the image to an image hosting website '
+                    'and paste the link here.')
+        ])
+
+    description = TextAreaField('Additional Notes', validators=[
         Optional(),
         Length(max=5000)
     ])

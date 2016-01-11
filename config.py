@@ -1,4 +1,5 @@
 import os
+import urlparse
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -25,6 +26,17 @@ class Config:
 
     IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID')
     IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET')
+
+    # TODO: explain what is happening here
+    REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
+
+    urlparse.uses_netloc.append('redis')
+    url = urlparse.urlparse(REDIS_URL)
+
+    RQ_DEFAULT_HOST = url.hostname
+    RQ_DEFAULT_PORT = url.port
+    RQ_DEFAULT_PASSWORD = url.password
+    RQ_DEFAULT_DB = 0
 
     @staticmethod
     def init_app(app):

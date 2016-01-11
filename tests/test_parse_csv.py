@@ -45,7 +45,7 @@ class ParseCsvTestCase(unittest.TestCase):
         parse_to_db(db, 'tests/poll244_sample.csv')
         t_url = 'https://textizen-attachments.s3.amazonaws.com/'
 
-        license1 = 'AG-26081'
+        license1 = 'AG26081'
         vehicle1 = '250'
         agency1 = 'ABBONIZIO TRANSFER'
         duration1 = '0:03:00'
@@ -58,7 +58,7 @@ class ParseCsvTestCase(unittest.TestCase):
         self.assertTrue(i1.picture_url == pic1)
         self.assertTrue(i1.description == desc1)
 
-        license2 = 'YSK-9618'
+        license2 = 'YSK9618'
         vehicle2 = '220530591'
         agency2 = 'VERIZON'
         duration2 = '0:05:00'
@@ -71,7 +71,7 @@ class ParseCsvTestCase(unittest.TestCase):
         self.assertTrue(i2.picture_url == pic2)
         self.assertTrue(i2.description == desc2)
 
-        license3 = 'MG-0512E'
+        license3 = 'MG0512E'
         vehicle3 = '105014'
         agency3 = 'STREETS'
         duration3 = '0:06:00'

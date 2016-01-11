@@ -16,7 +16,7 @@ from . import admin
 from ..models import User, Role, Agency, EditableHTML
 from .. import db
 from ..utils import parse_phone_number
-from ..email import send_async_email
+from ..email import send_email
 
 
 @admin.route('/')
@@ -48,7 +48,7 @@ def invite_user():
         invite_link = url_for('account.join_from_invite', user_id=user.id,
                               token=token, _external=True)
         get_queue().enqueue(
-            send_async_email,
+            send_email,
             recipient=user.email,
             subject='You Are Invited To Join',
             template='account/email/invite',

@@ -3,7 +3,7 @@ from flask import url_for
 from flask.ext.rq import get_queue
 from .. import db
 from . import Agency, User
-from ..email import send_async_email
+from ..email import send_email
 
 
 class Location(db.Model):
@@ -62,7 +62,7 @@ class IncidentReport(db.Model):
 
             for agency_worker in self.agency.users:
                 get_queue().enqueue(
-                    send_async_email,
+                    send_email,
                     recipient=agency_worker.email,
                     subject=subject,
                     template='reports/email/alert_workers',

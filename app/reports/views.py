@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import render_template, abort, flash, redirect, url_for
 from flask.ext.login import login_required, current_user
+from flask.ext.rq import get_queue
 
 from forms import EditIncidentReportForm
 
@@ -140,7 +141,9 @@ def delete_report(report_id):
     """Delete a report"""
 
     report = IncidentReport.query.filter_by(id=report_id).first()
-    delete_image(report.picture_deletehash)  # delete the report's image
+
+    # Asynchronously delete the report's image
+    get_queue().enqueue(delete_image, deletehash=report.picture_deletehash)
 
     db.session.delete(report)
     db.session.commit()

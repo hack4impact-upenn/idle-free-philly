@@ -6,13 +6,13 @@ from wtforms.fields import StringField, SubmitField, IntegerField, \
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
-    Regexp,
     Length,
     Optional,
     NumberRange,
     URL
 )
 
+from app.custom_validators import StrippedLength
 from ..models import Agency
 from .. import db
 
@@ -20,19 +20,22 @@ from .. import db
 class IncidentReportForm(Form):
     vehicle_id = StringField('Vehicle ID', validators=[
         InputRequired('Vehicle ID is required.'),
-        Length(min=2, max=10,
-               message='Vehicle ID must be between 2 to 10 characters.'),
-        Regexp("^[a-zA-Z0-9]*$",
-               message='License plate number must '
-                       'consist of only letters and numbers.'),
+        StrippedLength(
+            min_length=2,
+            max_length=15,
+            message='Vehicle ID must be between 2 to 15 characters after '
+                    'removing all non-alphanumeric characters.'
+        ),
     ])
 
     license_plate = StringField('License Plate Number', validators=[
         Optional(),
-        Regexp("^[a-zA-Z0-9]*$",
-               message='License plate number must '
-                       'consist of only letters and numbers.'),
-        Length(min=6, max=7)
+        StrippedLength(
+            min_length=4,
+            max_length=8,
+            message='License plate must be between 4 to 8 characters after '
+                    'removing all non-alphanumeric characters.'
+        )
     ])
 
     bus_number = IntegerField('Bus Number', validators=[
@@ -68,6 +71,7 @@ class IncidentReportForm(Form):
                              validators=[Optional()])
 
     picture_url = StringField('Picture URL', validators=[
+        Optional(),
         URL(message='Picture URL must be a valid URL. '
                     'Please upload the image to an image hosting website '
                     'and paste the link here.')

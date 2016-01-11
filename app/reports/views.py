@@ -12,7 +12,8 @@ from ..decorators import admin_or_agency_required, admin_required
 from ..utils import (
     flash_errors,
     geocode,
-    parse_timedelta
+    parse_timedelta,
+    delete_image
 )
 
 
@@ -139,6 +140,8 @@ def delete_report(report_id):
     """Delete a report"""
 
     report = IncidentReport.query.filter_by(id=report_id).first()
+    delete_image(report.picture_deletehash)  # delete the report's image
+
     db.session.delete(report)
     db.session.commit()
     flash('Successfully deleted report.', 'success')

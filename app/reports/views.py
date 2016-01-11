@@ -81,6 +81,7 @@ def edit_report_info(report_id):
         # reformat location data - TODO error-checking for bad addresses
         lat, lng = geocode(form.location.data)
         report.location.latitude, report.location.longitude = lat, lng
+        report.location.original_user_text = form.location.data
 
         report.date = form.date.data
 
@@ -127,4 +128,5 @@ def delete_report(report_id):
     db.session.commit()
     flash('Successfully delete report.')
 
+    # TODO flash after redirect
     return redirect(url_for('reports.view_reports'))

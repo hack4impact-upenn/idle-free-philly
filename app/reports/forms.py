@@ -2,7 +2,8 @@ import datetime as datetime
 
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, IntegerField, \
-    TextAreaField, HiddenField, DateField, FileField
+    TextAreaField, HiddenField, FileField, DateField
+from wtforms_components import TimeField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
@@ -50,16 +51,18 @@ class IncidentReportForm(Form):
     longitude = HiddenField('Longitude')
     location = StringField('Address')
 
-    date = DateField('Date', default=datetime.date.today(),
+    today = datetime.datetime.today()
+    date = DateField('Date (year-month-day)',
+                     default=today.strftime('%m-%d-%Y'),
+                     validators=[InputRequired()])
+    time = TimeField('Time (hours:minutes am/pm)',
+                     default=today.strftime('%I:%M %p'),
                      validators=[InputRequired()])
 
-    # TODO - add support for h:m:s format
-    duration = IntegerField('Idling Duration (minutes)', validators=[
-        InputRequired('Idling duration (minutes) is required.'),
+    duration = IntegerField('Idling Duration (in minutes)', validators=[
+        InputRequired('Idling duration is required.'),
         NumberRange(min=0,
-                    max=10000,
-                    message='Idling duration must be between '
-                            '0 and 10000 minutes.')
+                    message='Idling duration must be positive.')
     ])
 
     agency = QuerySelectField('Vehicle Agency ',
@@ -83,3 +86,11 @@ class IncidentReportForm(Form):
     ])
 
     submit = SubmitField('Create Report')
+
+
+class EditIncidentReportForm(IncidentReportForm):
+    duration = StringField('Idling Duration (h:m:s)', validators=[
+        InputRequired('Idling duration is required.')
+    ])
+
+    submit = SubmitField('Update Report')

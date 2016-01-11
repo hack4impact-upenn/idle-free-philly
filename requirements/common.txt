@@ -28,3 +28,5 @@ wsgiref==0.1.2
 requests==2.8.1
 redis==2.10.5
 rq==0.5.6
+WTForms-Components==0.9.9
+pytimeparse==1.1.5

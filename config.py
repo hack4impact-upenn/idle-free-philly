@@ -24,6 +24,9 @@ class Config:
     # Default viewport is bounding box for Philadelphia, PA
     VIEWPORT = '39.861204,-75.310357|40.138932,-74.928582'
 
+    IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID')
+    IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET')
+
     # TODO: explain what is happening here
     REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
 

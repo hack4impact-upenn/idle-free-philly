@@ -1,6 +1,7 @@
 import re
 import requests
 from flask import url_for, current_app
+from imgurpython import ImgurClient
 
 
 def register_template_utils(app):
@@ -49,3 +50,33 @@ def geocode(address):
     else:
         coords = r.json()['results'][0]['geometry']['location']
         return coords['lat'], coords['lng']
+
+
+def upload_image(image_url=None, image_file_path=None, title=None,
+                 description=None):
+    """Uploads an image to Imgur by the image's url or file_path. Returns the
+    Imgur api response."""
+    if image_url is None and image_file_path is None:
+        raise ValueError('Either image_url or image_file_path must be '
+                         'supplied.')
+    client = ImgurClient(current_app.config['IMGUR_CLIENT_ID'],
+                         current_app.config['IMGUR_CLIENT_SECRET'])
+    if title is None:
+        title = '{} Image Upload'.format(current_app.config['APP_NAME'])
+
+    if description is None:
+        description = 'This is part of an idling vehicle report on {}.'.format(
+            current_app.config['APP_NAME'])
+
+    if image_url is not None:
+        result = client.upload_from_url(url=image_url, config={
+            'title': title,
+            'description': description,
+        })
+    else:
+        result = client.upload_from_path(path=image_file_path, config={
+            'title': title,
+            'description': description,
+        })
+
+    return result['link'], result['deletehash']

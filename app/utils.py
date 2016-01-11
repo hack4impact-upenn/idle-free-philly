@@ -46,6 +46,7 @@ def minutes_to_timedelta(minutes):
 
 
 def flash_errors(form):
+    """Show a list of all errors in form after trying to submit."""
     for field, errors in form.errors.items():
         for error in errors:
             flash("Error: %s - %s" % (

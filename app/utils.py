@@ -54,7 +54,6 @@ def geocode(address):
 
 def parse_to_db(db, filename):
     """Reads a csv and imports the data into a database."""
-
     # The indices in the csv of different data
     vehicle_id_index = 8
     license_plate_index = 9
@@ -119,35 +118,55 @@ def parse_to_db(db, filename):
                     row_number=i
                 )
 
-                validate_field(field=validator_form.vehicle_id,
-                               data=vehicle_id_text)
+                kosher = True
 
-                validate_field(field=validator_form.license_plate,
-                               data=license_plate_text)
+                kosher = kosher and validate_field(
+                    field=validator_form.vehicle_id,
+                    data=vehicle_id_text
+                )
 
-                validate_field(field=validator_form.date,
-                               data=time1)
+                kosher = kosher and validate_field(
+                    field=validator_form.license_plate,
+                    data=license_plate_text
+                )
 
-                validate_field(field=validator_form.duration,
-                               data=duration)
+                kosher = kosher and validate_field(
+                    field=validator_form.date,
+                    data=time1
+                )
 
-                validate_field(field=validator_form.agency,
-                               data=agency)
+                kosher = kosher and validate_field(
+                    field=validator_form.duration,
+                    data=duration
+                )
 
-                validate_field(field=validator_form.description,
-                               data=row[description_index])
+                kosher = kosher and validate_field(
+                    field=validator_form.agency,
+                    data=agency
+                )
 
-                incident = IncidentReport(
-                    vehicle_id=vehicle_id_text,
-                    license_plate=license_plate_text,
-                    location=loc,
-                    date=time1,
-                    duration=duration,
-                    agency=agency,
-                    picture_url=row[picture_index],
-                    description=row[description_index])
-                db.session.add(incident)
-                db.session.commit()
+                kosher = kosher and validate_field(
+                    field=validator_form.description,
+                    data=row[description_index]
+                )
+
+                kosher = kosher and validate_field(
+                    field=validator_form.picture_url,
+                    data=row[picture_index]
+                )
+
+                if kosher:
+                    incident = IncidentReport(
+                        vehicle_id=vehicle_id_text,
+                        license_plate=license_plate_text,
+                        location=loc,
+                        date=time1,
+                        duration=duration,
+                        agency=agency,
+                        picture_url=row[picture_index],
+                        description=row[description_index])
+                    db.session.add(incident)
+                    db.session.commit()
 
         return columns
 
@@ -156,10 +175,13 @@ def validate_field_partial(field, data, form, row_number):
     """TODO: docstring"""
     field.data = data
     field.raw_data = data
+    validated = field.validate(form)
 
-    if not field.validate(form):
-        for error in form.vehicle_id.errors:
+    if not validated:
+        for error in field.errors:
             print_error(row_number, error)
+
+    return validated
 
 
 def print_error(row_number, error_message):

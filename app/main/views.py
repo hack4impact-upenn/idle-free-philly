@@ -1,11 +1,16 @@
 from flask import render_template
-from ..models import EditableHTML
+from ..models import EditableHTML, IncidentReport
 from . import main
 
 
 @main.route('/')
+@main.route('/map')
 def index():
-    return render_template('main/index.html')
+    """Get information on all Incident Reports in the db, and
+    pass to map.html
+    """
+    return render_template('main/map.html',
+                           incident_reports=IncidentReport.query.all())
 
 
 @main.route('/about')

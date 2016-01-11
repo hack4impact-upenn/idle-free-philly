@@ -98,7 +98,7 @@ def edit_report_info(report_id):
     form.date.default = report.date
     form.duration.default = report.duration
     form.agency.default = report.agency
-    form.picture.default = report.picture_url
+    form.picture_url.default = report.picture_url
     form.description.default = report.description
     form.process()
 

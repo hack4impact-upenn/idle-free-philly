@@ -36,7 +36,7 @@ def parse_phone_number(phone_number):
 
 def timedelta_to_minutes(duration):
     """Convert timedelta object to minutes"""
-    minutes = duration.seconds / 60
+    minutes = duration.seconds // 60
 
     return minutes
 

@@ -27,7 +27,7 @@ class IncidentReport(db.Model):
                                uselist=False,
                                lazy='joined',
                                backref='incident_report')
-    date = db.Column(db.DateTime)  # hour the incident occurred
+    date = db.Column(db.DateTime)  # datetime object
     duration = db.Column(db.Interval)  # timedelta object
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)

@@ -2,7 +2,7 @@ import datetime as datetime
 
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, IntegerField, \
-    TextAreaField, HiddenField, DateField, FileField
+    TextAreaField, HiddenField, DateTimeField, FileField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
@@ -47,8 +47,9 @@ class IncidentReportForm(Form):
     longitude = HiddenField('Longitude')
     location = StringField('Address')
 
-    date = DateField('Date (year-month-day)', default=datetime.date.today(),
-                     validators=[InputRequired()])
+    date = DateTimeField('Date (year-month-day hours:minutes:seconds)',
+                         default=datetime.datetime.today(),
+                         validators=[InputRequired()])
 
     duration = IntegerField('Idling Duration (in minutes)', validators=[
         InputRequired('Idling duration is required.'),

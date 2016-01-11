@@ -2,7 +2,8 @@ import datetime as datetime
 
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, IntegerField, \
-    TextAreaField, HiddenField, DateTimeField, FileField
+    TextAreaField, HiddenField, FileField, DateField
+from wtforms_components import TimeField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
@@ -51,12 +52,12 @@ class IncidentReportForm(Form):
     location = StringField('Address')
 
     today = datetime.datetime.today()
-    date = DateTimeField('Date (year-month-day)',
-                         default=today.strftime('%m-%d-%Y'),
-                         validators=[InputRequired()])
-    time = DateTimeField('Time (hours:minutes am/pm)',
-                         default=today.strftime('%I:%M %p'),
-                         validators=[InputRequired()])
+    date = DateField('Date (year-month-day)',
+                     default=today.strftime('%m-%d-%Y'),
+                     validators=[InputRequired()])
+    time = TimeField('Time (hours:minutes am/pm)',
+                     default=today.strftime('%I:%M %p'),
+                     validators=[InputRequired()])
 
     duration = IntegerField('Idling Duration (in minutes)', validators=[
         InputRequired('Idling duration is required.'),
@@ -88,10 +89,8 @@ class IncidentReportForm(Form):
 
 
 class EditIncidentReportForm(IncidentReportForm):
-    duration = IntegerField('Idling Duration (h:m:s)', validators=[
-        InputRequired('Idling duration is required.'),
-        NumberRange(min=0,
-                    message='Idling duration must be positive.')
+    duration = StringField('Idling Duration (h:m:s)', validators=[
+        InputRequired('Idling duration is required.')
     ])
 
     submit = SubmitField('Update Report')

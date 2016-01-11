@@ -11,7 +11,8 @@ from ..models import IncidentReport, Agency
 from ..decorators import admin_or_agency_required, admin_required
 from ..utils import (
     flash_errors,
-    geocode
+    geocode,
+    parse_timedelta
 )
 
 
@@ -86,9 +87,7 @@ def edit_report_info(report_id):
         report.date.date = datetime.date(form.date.data)
         report.date.time = datetime.time(form.time.data)
 
-        # reformat duration data - minutes to time-delta
-        report.duration = form.duration.data
-
+        report.duration = parse_timedelta(form.duration.data)
         report.agency = form.agency.data
 
         # TODO upload picture_file
@@ -108,12 +107,8 @@ def edit_report_info(report_id):
     form.led_screen_number.default = report.led_screen_number
     form.location.default = report.location.original_user_text
 
-    # TODO format string
-    print type(report.date)
     form.date.default = report.date
     form.time.default = report.date
-    # form.date.default = (report.date).strftime('%m-%d-%Y')
-    # form.time.default = report.date.strftime('%I:%M %p')
 
     form.duration.default = report.duration
     form.agency.default = report.agency

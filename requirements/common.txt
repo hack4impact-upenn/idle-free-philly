@@ -24,3 +24,5 @@ itsdangerous==0.24
 webassets==0.10.1
 wsgiref==0.1.2
 requests==2.8.1
+WTForms-Components==0.9.9
+pytimeparse==1.1.5

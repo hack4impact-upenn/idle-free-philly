@@ -1,4 +1,4 @@
-from flask import request, make_response
+from flask import request, make_response, current_app
 from . import main
 from .. import db
 from ..utils import geocode
@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import twilio.twiml
 
 
-@main.route("/report_incident", methods=['GET', 'POST'])
+@main.route('/report_incident', methods=['GET'])
 def handle_message():
     message = str(request.values.get('Body'))
     twiml = twilio.twiml.Response()
@@ -15,33 +15,42 @@ def handle_message():
     # Retrieve incident cookies
     step = int(request.cookies.get('messagecount', 0))
     vehicle_id = int(request.cookies.get('vehicle_id', 0))
-    agency_name = str(request.cookies.get('agency_name', ""))
-    license_plate = str(request.cookies.get('license_plate', ""))
+    agency_name = str(request.cookies.get('agency_name', ''))
+    license_plate = str(request.cookies.get('license_plate', ''))
     duration = int(request.cookies.get('duration', 0))
     description = str(request.cookies.get('description'))
-    location = str(request.cookies.get('location', ""))
+    location = str(request.cookies.get('location', ''))
     body = str(request.values.get('Body'))
-    if "report" in message.lower():
+
+    print locals()  # for debugging
+
+    if 'report' == message.lower():
         step = 0
-        twiml.message("What is your location?")
+        twiml.message('What is your location?')
+
     elif step == 1:
         location = body
-        twiml.message("""Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others""")  # noqa
+        twiml.message('''Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others''')  # noqa
+
     elif step == 2:
-        twiml.message("What is the License Plate Number? (eg.MG-1234E)")
+        twiml.message('What is the License Plate Number? (eg.MG-1234E)')
         agency_name = agency_letter_to_name(body)
+
     elif step == 3:
-        twiml.message("What is the Vehicle ID? (eg.105014)")
+        twiml.message('What is the Vehicle ID? (eg.105014)')
         license_plate = body
+
     elif step == 4:
-        twiml.message("How many minutes has it been idling for? (eg. 10)")
+        twiml.message('How many minutes has it been idling for? (eg. 10)')
         vehicle_id = int(body)
+
     elif step == 5:
-        twiml.message("Please describe the situation (eg. The driver is sleeping)")  # noqa
+        twiml.message('Please describe the situation (eg. The driver is sleeping)')  # noqa
         duration = int(body)
+
     elif step == 6:
         description = body
-        twiml.message("Thanks!")
+        twiml.message('Thanks!')
         (lat, lon) = geocode(location)
         agency = Agency.query.filter_by(name=agency_name).first()
         new_incident = IncidentReport(
@@ -59,12 +68,19 @@ def handle_message():
         db.session.add(new_incident)
         db.session.commit()
         step = -1
+
+    else:
+        twiml.message('Welcome to {}! Please text "report" to report an '
+                      'idling incident.'
+                      .format(current_app.config['APP_NAME']))
+
     step += 1
     response = make_response(str(twiml))
 
     # Set cookies
     if step < 2:
         reset_cookies(response)
+
     else:
         set_cookie(response, 'messagecount', str(step))
         set_cookie(response, 'agency_name', agency_name)
@@ -73,6 +89,7 @@ def handle_message():
         set_cookie(response, 'duration', str(duration))
         set_cookie(response, 'description', description)
         set_cookie(response, 'location', location)
+
     return response
 
 
@@ -94,14 +111,19 @@ def set_cookie(resp, key, val):
 
 def agency_letter_to_name(letter):
     if letter == 'A':
-        return "SEPTA BUS"
+        return 'SEPTA BUS'
+
     elif letter == 'B':
-        return "SEPTA CCT"
+        return 'SEPTA CCT'
+
     elif letter == 'C':
-        return "SEPTA"
+        return 'SEPTA'
+
     elif letter == 'D':
-        return "PWD"
+        return 'PWD'
+
     elif letter == 'E':
-        return "PECO"
+        return 'PECO'
+
     else:
-        return "STREETS"
+        return 'STREETS'

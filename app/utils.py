@@ -34,14 +34,8 @@ def parse_phone_number(phone_number):
     return stripped
 
 
-def timedelta_to_minutes(duration):
-    """Convert timedelta object to minutes"""
-    minutes = duration.seconds // 60
-
-    return minutes
-
-
 def minutes_to_timedelta(minutes):
+    """Use when creating new report."""
     return timedelta(minutes=minutes)
 
 

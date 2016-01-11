@@ -1,3 +1,5 @@
+import datetime as datetime
+
 from flask import render_template, abort, flash, redirect, url_for
 from flask.ext.login import login_required, current_user
 
@@ -9,9 +11,7 @@ from ..models import IncidentReport, Agency
 from ..decorators import admin_or_agency_required, admin_required
 from ..utils import (
     flash_errors,
-    geocode,
-    timedelta_to_minutes,
-    minutes_to_timedelta
+    geocode
 )
 
 
@@ -83,10 +83,11 @@ def edit_report_info(report_id):
         report.location.latitude, report.location.longitude = lat, lng
         report.location.original_user_text = form.location.data
 
-        report.date = form.date.data
+        report.date.date = datetime.date(form.date.data)
+        report.date.time = datetime.time(form.time.data)
 
         # reformat duration data - minutes to time-delta
-        report.duration = minutes_to_timedelta(form.duration.data)
+        report.duration = form.duration.data
 
         report.agency = form.agency.data
 
@@ -106,8 +107,15 @@ def edit_report_info(report_id):
     form.bus_number.default = report.bus_number
     form.led_screen_number.default = report.led_screen_number
     form.location.default = report.location.original_user_text
+
+    # TODO format string
+    print type(report.date)
     form.date.default = report.date
-    form.duration.default = timedelta_to_minutes(report.duration)
+    form.time.default = report.date
+    # form.date.default = (report.date).strftime('%m-%d-%Y')
+    # form.time.default = report.date.strftime('%I:%M %p')
+
+    form.duration.default = report.duration
     form.agency.default = report.agency
     form.picture_url.default = report.picture_url
     form.description.default = report.description

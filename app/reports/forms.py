@@ -47,8 +47,12 @@ class IncidentReportForm(Form):
     longitude = HiddenField('Longitude')
     location = StringField('Address')
 
-    date = DateTimeField('Date (year-month-day hours:minutes:seconds)',
-                         default=datetime.datetime.today(),
+    today = datetime.datetime.today()
+    date = DateTimeField('Date (year-month-day)',
+                         default=today.strftime('%m-%d-%Y'),
+                         validators=[InputRequired()])
+    time = DateTimeField('Time (hours:minutes am/pm)',
+                         default=today.strftime('%I:%M %p'),
                          validators=[InputRequired()])
 
     duration = IntegerField('Idling Duration (in minutes)', validators=[
@@ -80,4 +84,10 @@ class IncidentReportForm(Form):
 
 
 class EditIncidentReportForm(IncidentReportForm):
+    duration = IntegerField('Idling Duration (h:m:s)', validators=[
+        InputRequired('Idling duration is required.'),
+        NumberRange(min=0,
+                    message='Idling duration must be positive.')
+    ])
+
     submit = SubmitField('Update Report')

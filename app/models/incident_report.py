@@ -34,6 +34,11 @@ class IncidentReport(db.Model):
     duration = db.Column(db.Interval)  # like timedelta object
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
+
+    # Should never be exposed to the user. This is the Imgur deletehash, so
+    # we can delete an image from Imgur in case of problems (e.g.
+    # legal issues).
+    picture_deletehash = db.Column(db.Text)
     description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 

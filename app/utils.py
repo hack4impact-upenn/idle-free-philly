@@ -80,3 +80,11 @@ def upload_image(image_url=None, image_file_path=None, title=None,
         })
 
     return result['link'], result['deletehash']
+
+
+def delete_image(deletehash):
+    """Attempts to delete a specific image from Imgur using its deletehash."""
+    client = ImgurClient(current_app.config['IMGUR_CLIENT_ID'],
+                         current_app.config['IMGUR_CLIENT_SECRET'])
+
+    client.delete_image(deletehash)

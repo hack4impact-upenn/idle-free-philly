@@ -15,7 +15,19 @@
     "MAIL_USERNAME": {
       "required": true
     },
-    "MAIL_PASSWORD": {
+    "IMGUR_CLIENT_ID": {
+      "required": true
+    },
+    "IMGUR_CLIENT_SECRET": {
+      "required": true
+    },
+    "TWILIO_ACCOUNT_SID": {
+      "required": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "required": true
+    },
+    "OPEN_WEATHER_MAP_API_KEY": {
       "required": true
     }
   }

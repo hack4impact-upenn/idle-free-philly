@@ -16,17 +16,26 @@ def handle_message():
 
     # Retrieve incident cookies
     step = int(request.cookies.get('messagecount', 0))
-    vehicle_id = int(request.cookies.get('vehicle_id', 0))
+    vehicle_id = str(request.cookies.get('vehicle_id', ''))
     agency_name = str(request.cookies.get('agency_name', ''))
     license_plate = str(request.cookies.get('license_plate', ''))
     duration = int(request.cookies.get('duration', 0))
-    description = str(request.cookies.get('description'))
+    description = str(request.cookies.get('description', ''))
     location = str(request.cookies.get('location', ''))
+
     body = str(request.values.get('Body'))
 
     print locals()  # for debugging
 
     if 'report' == message.lower():
+        # reset report variables/cookies
+        vehicle_id = ''
+        agency_name = ''
+        license_plate = ''
+        duration = 0
+        description = ''
+        location = ''
+
         step = 1
         twiml.message('What is your location? Be specific! (e.g. "34th and '
                       'Spruce in Philadelphia PA")')
@@ -35,11 +44,13 @@ def handle_message():
         location = body
         step += 1
 
-        agencies = Agency.query.filter_by(is_official=True).all()
+        agencies = Agency.query.filter_by(is_official=True).order_by(
+            Agency.name).all()
         letters = all_strings(len(agencies) + 1)  # one extra letter for Other
         agencies_listed = '\n'.join(
             '{}:{}'.format(l, ag.name) for l, ag in zip(letters, agencies)
         )
+        agencies_listed += '\n{}:Other'.format(letters[-1])
 
         twiml.message('Which agency owns the vehicle you see idling? Select '
                       'from the following list or enter {} for Other.'
@@ -47,7 +58,11 @@ def handle_message():
         twiml.message(agencies_listed)
 
     elif step == 2:
-        agency_name = agency_letter_to_agency(body)
+        # TODO: handle other
+        agency = agency_letter_to_agency(body)
+        if agency is not None:
+            agency_name = agency.name
+
         step += 1
         twiml.message('What is the license plate number? Reply "no" to skip. '
                       '(e.g. MG1234E)')
@@ -59,7 +74,7 @@ def handle_message():
                       'side of the vehicle. (e.g. 105014)')
 
     elif step == 4:
-        vehicle_id = int(body)
+        vehicle_id = str(body)
         step += 1
         twiml.message('How many minutes have you observed the vehicle idling? '
                       '(eg. 10)')
@@ -77,6 +92,7 @@ def handle_message():
         twiml.message('Thanks!')
         (lat, lon) = geocode(location)
         agency = Agency.query.filter_by(name=agency_name).first()
+        # TODO: handle empty strings, set attributes to None
         new_incident = IncidentReport(
             agency=agency,
             vehicle_id=vehicle_id,
@@ -91,7 +107,15 @@ def handle_message():
         )
         db.session.add(new_incident)
         db.session.commit()
-        # TODO: what to do with step?
+
+        # reset report variables/cookies
+        step = 0
+        vehicle_id = ''
+        agency_name = ''
+        license_plate = ''
+        duration = 0
+        description = ''
+        location = ''
 
     else:
         twiml.message('Welcome to {}! Please reply "report" to report an '
@@ -100,19 +124,17 @@ def handle_message():
 
     response = make_response(str(twiml))
 
-    # Set cookies
-    if step < 2:
-        reset_cookies(response)
+    # if step < 2:
+    #     reset_cookies(response)
 
-    else:
-        set_cookie(response, 'messagecount', str(step))
-        set_cookie(response, 'agency_name', agency_name)
-        set_cookie(response, 'vehicle_id', str(vehicle_id))
-        set_cookie(response, 'license_plate', license_plate)
-        set_cookie(response, 'duration', str(duration))
-        set_cookie(response, 'description', description)
-        set_cookie(response, 'location', location)
-
+    set_cookie(response, 'messagecount', str(step))
+    set_cookie(response, 'agency_name', agency_name)
+    set_cookie(response, 'vehicle_id', vehicle_id)
+    set_cookie(response, 'license_plate', license_plate)
+    set_cookie(response, 'duration', str(duration))
+    set_cookie(response, 'description', description)
+    set_cookie(response, 'location', location)
+    print str(twiml)
     return response
 
 

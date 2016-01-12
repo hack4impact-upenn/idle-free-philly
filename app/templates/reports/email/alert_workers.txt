@@ -1,0 +1,29 @@
+Dear {{ user.full_name() }},
+
+A {{ incident_report.agency.name }} vehicle was reported idling. Here is some information about the idling incident.
+
+* Time: {{ incident_report.date.strftime('%m-%d-%Y at %I:%M %p') }}
+* Duration (h:m:s): {{ incident_report.duration }}
+* Agency: {{ incident_report.agency.name }}
+* Vehicle ID: {{ incident_report.vehicle_id }}
+{% if incident_report.license_plate %}
+* License Plate: {{ incident_report.license_plate }}
+{% endif %}
+* Location:
+{% if incident_report.location.original_user_text %}
+    - User text: {{ incident_report.location.original_user_text }}
+{% endif %}
+    - Latitude: {{ incident_report.location.latitude }}
+    - Longitude: {{ incident_report.location.longitude }}
+* Picture: {{ incident_report.picture_url }}
+* Description: {{ incident_report.description }}
+
+Please go to {{ all_reports_for_agency_link }} to see all {{ incident_report.agency.name }} idling incidents.
+
+Sincerely,
+
+The {{ config.APP_NAME }} Team
+
+Note: replies to this email address are not monitored.
+
+<!--TODO: finish up when it is known exactly which fields are optional-->

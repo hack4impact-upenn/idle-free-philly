@@ -68,7 +68,8 @@ class IncidentReportForm(Form):
     agency = QuerySelectField('Vehicle Agency ',
                               validators=[InputRequired()],
                               get_label='name',
-                              query_factory=lambda: db.session.query(Agency))
+                              query_factory=lambda: db.session.query(Agency)
+                              .filter_by(is_official=True))
 
     picture_file = FileField('Upload a picture of the idling vehicle.',
                              validators=[Optional()])

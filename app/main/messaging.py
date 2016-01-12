@@ -70,7 +70,7 @@ def handle_message():
         step = -1
 
     else:
-        twiml.message('Welcome to {}! Please text "report" to report an '
+        twiml.message('Welcome to {}! Please reply "report" to report an '
                       'idling incident.'
                       .format(current_app.config['APP_NAME']))
 
@@ -104,7 +104,7 @@ def reset_cookies(resp):
 
 
 def set_cookie(resp, key, val):
-    expires = datetime.utcnow() + timedelta(hours=4)
+    expires = datetime.utcnow() + timedelta(hours=1)
     expires_str = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
     resp.set_cookie(key, value=val, expires=expires_str)
 

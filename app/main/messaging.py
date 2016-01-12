@@ -1,20 +1,25 @@
 import string
 import itertools
+import time
 from flask import request, make_response, current_app
+from flask.ext.rq import get_queue
 from . import main
 from .. import db
-from ..utils import geocode
+from ..utils import geocode, upload_image
 from ..models import Agency, IncidentReport, Location
 from datetime import datetime, timedelta
 import twilio.twiml
+from twilio.rest import TwilioRestClient
+from twilio import TwilioRestException
 
 
 @main.route('/report_incident', methods=['GET'])
 def handle_message():
     message = str(request.values.get('Body'))
     num_media = int(request.values.get('NumMedia'))
-    twilio_hosted_media_url = str(request.values.get('MediaUrl')) \
+    twilio_hosted_media_url = str(request.values.get('MediaUrl0')) \
         if num_media > 0 else None
+    message_sid = str(request.values.get('MessageSid'))
 
     twiml = twilio.twiml.Response()
 
@@ -43,6 +48,7 @@ def handle_message():
         picture_url = ''
 
         step = handle_start_report(step, twiml)
+        step = 7
 
     elif step == 1:
         location, step = handle_location_step(body, step, twiml)
@@ -63,8 +69,8 @@ def handle_message():
         description, step = handle_description_step(body, step, twiml)
 
     elif step == 7:
-        picture_url, step = handle_picture_step(body, twilio_hosted_media_url,
-                                                step, twiml)
+        picture_url, step = handle_picture_step(body, step, message_sid,
+                                                twilio_hosted_media_url, twiml)
 
         twiml.message('Thanks!')
         (lat, lon) = geocode(location)
@@ -186,9 +192,35 @@ def handle_description_step(body, step, twiml):
     return description, step
 
 
-def handle_picture_step(body, twilio_hosted_media_url, step, twiml):
+def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
+                        twiml):
     print twilio_hosted_media_url
+
+    account_sid = current_app.config['TWILIO_ACCOUNT_SID']
+    auth_token = current_app.config['TWILIO_AUTH_TOKEN']
+
+    upload_image_job = get_queue().enqueue(
+        upload_image,
+        imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
+        imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
+        app_name=current_app.config['APP_NAME'],
+        image_url=twilio_hosted_media_url
+    )
+    print upload_image_job
+
+    delete_mms(account_sid, auth_token, message_sid)
+
     return '', step
+
+
+def delete_mms(account_sid, auth_token, message_sid):
+    client = TwilioRestClient(account_sid, auth_token)
+    try:
+        for media in client.messages.get(message_sid).media_list.list():
+            media.delete()
+            return True
+    except TwilioRestException:
+        time.sleep(30)
 
 
 def get_agencies_listed(agencies, letters):

@@ -12,6 +12,7 @@ from forms import (
     InviteUserForm,
     ChangeAgencyOfficialStatusForm,
     ChangeAgencyPublicStatusForm,
+    AddAgencyForm,
 )
 from . import admin
 from ..models import User, Role, Agency, EditableHTML
@@ -209,6 +210,25 @@ def delete_user(user_id):
         db.session.commit()
         flash('Successfully deleted user %s.' % user.full_name(), 'success')
     return redirect(url_for('admin.registered_users'))
+
+
+@admin.route('/add-agency', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_agency():
+    """Adds a new agency."""
+    form = AddAgencyForm()
+    if form.validate_on_submit():
+        agency = Agency(name=form.name.data,
+                        is_public=(form.is_public.data == 'y'),
+                        is_official=True)
+
+        db.session.add(agency)
+        db.session.commit()
+        flash('Agency {} successfully created'.format(agency.name),
+              'form-success')
+        return redirect(url_for('admin.add_agency'))
+    return render_template('admin/add_agency.html', form=form)
 
 
 @admin.route('/agencies')

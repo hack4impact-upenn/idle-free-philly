@@ -1,3 +1,5 @@
+import string
+import itertools
 from flask import request, make_response, current_app
 from . import main
 from .. import db
@@ -25,28 +27,50 @@ def handle_message():
     print locals()  # for debugging
 
     if 'report' == message.lower():
-        step = 0
-        twiml.message('What is your location?')
+        step = 1
+        twiml.message('What is your location? Be specific! (e.g. "34th and '
+                      'Spruce in Philadelphia PA")')
 
     elif step == 1:
         location = body
-        twiml.message('''Which Agency Owns the Vehicle? A)SEPTA Bus, B)SEPTA CCT, C)SEPTA, D)PWD, E)PECO, F)Streets, G)Others''')  # noqa
+        step += 1
+
+        agencies = Agency.query.filter_by(is_official=True).all()
+        letters = all_strings(len(agencies) + 1)  # one extra letter for Other
+        agencies_listed = '\n'.join(
+            '{}:{}'.format(l, ag.name) for l, ag in zip(letters, agencies)
+        )
+
+        twiml.message('Which agency owns the vehicle you see idling? Select '
+                      'from the following list or enter {} for Other.'
+                      .format(letters[-1]))
+        twiml.message(agencies_listed)
 
     elif step == 2:
-        twiml.message('What is the License Plate Number? (eg.MG-1234E)')
-        agency_name = agency_letter_to_name(body)
+        agency_name = agency_letter_to_agency(body)
+        step += 1
+        twiml.message('What is the license plate number? Reply "no" to skip. '
+                      '(e.g. MG1234E)')
 
     elif step == 3:
-        twiml.message('What is the Vehicle ID? (eg.105014)')
         license_plate = body
+        step += 1
+        twiml.message('What is the Vehicle ID? This is usually on the back or '
+                      'side of the vehicle. (e.g. 105014)')
 
     elif step == 4:
-        twiml.message('How many minutes has it been idling for? (eg. 10)')
         vehicle_id = int(body)
+        step += 1
+        twiml.message('How many minutes have you observed the vehicle idling? '
+                      '(eg. 10)')
 
     elif step == 5:
-        twiml.message('Please describe the situation (eg. The driver is sleeping)')  # noqa
         duration = int(body)
+        step += 1
+        twiml.message('Please describe the situation (eg. The driver is '
+                      'sleeping)')
+
+    # TODO: mms
 
     elif step == 6:
         description = body
@@ -67,14 +91,13 @@ def handle_message():
         )
         db.session.add(new_incident)
         db.session.commit()
-        step = -1
+        # TODO: what to do with step?
 
     else:
         twiml.message('Welcome to {}! Please reply "report" to report an '
                       'idling incident.'
                       .format(current_app.config['APP_NAME']))
 
-    step += 1
     response = make_response(str(twiml))
 
     # Set cookies
@@ -93,6 +116,22 @@ def handle_message():
     return response
 
 
+def all_strings(max_count):
+    """Makes a alphabetical list from a to z and then continues with
+    letter combinations. Modified from
+    http://stackoverflow.com/questions/29351492/how-to-make-a-continuous-alphabetic-list-python-from-a-z-then-from-aa-ab-ac-e"""  # noqa
+    repeat_size = 1
+    count = 0
+    ret = []
+    while True:
+        for s in itertools.product(string.ascii_uppercase, repeat=repeat_size):
+            count += 1
+            if count > max_count:
+                return ret
+            ret.append(''.join(s))
+        repeat_size += 1
+
+
 def reset_cookies(resp):
     resp.set_cookie('messagecount', expires=0)
     resp.set_cookie('agency_name', expires=0)
@@ -109,21 +148,9 @@ def set_cookie(resp, key, val):
     resp.set_cookie(key, value=val, expires=expires_str)
 
 
-def agency_letter_to_name(letter):
-    if letter == 'A':
-        return 'SEPTA BUS'
-
-    elif letter == 'B':
-        return 'SEPTA CCT'
-
-    elif letter == 'C':
-        return 'SEPTA'
-
-    elif letter == 'D':
-        return 'PWD'
-
-    elif letter == 'E':
-        return 'PECO'
-
-    else:
-        return 'STREETS'
+def agency_letter_to_agency(input_letter):
+    agencies = Agency.query.filter_by(is_official=True).all()
+    letters = all_strings(len(agencies) + 1)  # one extra letter for Other
+    letters_to_agency = dict(zip(letters, agencies))
+    letters_to_agency[letters[-1]] = None
+    return letters_to_agency[input_letter]

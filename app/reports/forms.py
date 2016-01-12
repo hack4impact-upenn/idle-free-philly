@@ -94,4 +94,11 @@ class EditIncidentReportForm(IncidentReportForm):
         InputRequired('Idling duration is required.')
     ])
 
+    # All agencies should be options in the EditForm but only official agencies
+    # should be an option in the ReportForm
+    agency = QuerySelectField('Vehicle Agency ',
+                              validators=[InputRequired()],
+                              get_label='name',
+                              query_factory=lambda: db.session.query(Agency))
+
     submit = SubmitField('Update Report')

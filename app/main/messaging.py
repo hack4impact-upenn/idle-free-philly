@@ -43,12 +43,11 @@ def handle_message():
     elif step == 1:
         location = body
         step += 1
-
         agencies = Agency.query.filter_by(is_official=True).order_by(
             Agency.name).all()
         letters = all_strings(len(agencies) + 1)  # one extra letter for Other
         agencies_listed = '\n'.join(
-            '{}:{}'.format(l, ag.name) for l, ag in zip(letters, agencies)
+            '{}: {}'.format(l, ag.name) for l, ag in zip(letters, agencies)
         )
         agencies_listed += '\n{}:Other'.format(letters[-1])
 
@@ -68,13 +67,14 @@ def handle_message():
                       '(e.g. MG1234E)')
 
     elif step == 3:
-        license_plate = body
+        if body.lower() != 'no':
+            license_plate = body
         step += 1
         twiml.message('What is the Vehicle ID? This is usually on the back or '
                       'side of the vehicle. (e.g. 105014)')
 
     elif step == 4:
-        vehicle_id = str(body)
+        vehicle_id = body
         step += 1
         twiml.message('How many minutes have you observed the vehicle idling? '
                       '(eg. 10)')

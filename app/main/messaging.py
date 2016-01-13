@@ -1,16 +1,14 @@
 import string
 import itertools
-import time
 from flask import request, make_response, current_app
 from flask.ext.rq import get_queue
 from . import main
 from .. import db
-from ..utils import geocode, upload_image
+from ..utils import geocode, upload_image, get_rq_scheduler
 from ..models import Agency, IncidentReport, Location
 from datetime import datetime, timedelta
 import twilio.twiml
 from twilio.rest import TwilioRestClient
-from twilio import TwilioRestException
 
 
 @main.route('/report_incident', methods=['GET'])
@@ -199,28 +197,29 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
     account_sid = current_app.config['TWILIO_ACCOUNT_SID']
     auth_token = current_app.config['TWILIO_AUTH_TOKEN']
 
-    upload_image_job = get_queue().enqueue(
+    get_queue().enqueue(
         upload_image,
         imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
         imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
         app_name=current_app.config['APP_NAME'],
         image_url=twilio_hosted_media_url
     )
-    print upload_image_job
 
-    delete_mms(account_sid, auth_token, message_sid)
+    get_rq_scheduler().enqueue_in(
+        timedelta(seconds=10),
+        delete_mms,
+        account_sid=account_sid,
+        auth_token=auth_token,
+        message_sid=message_sid
+    )
 
     return '', step
 
 
 def delete_mms(account_sid, auth_token, message_sid):
     client = TwilioRestClient(account_sid, auth_token)
-    try:
-        for media in client.messages.get(message_sid).media_list.list():
-            media.delete()
-            return True
-    except TwilioRestException:
-        time.sleep(30)
+    for media in client.messages.get(message_sid).media_list.list():
+        media.delete()
 
 
 def get_agencies_listed(agencies, letters):

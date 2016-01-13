@@ -1,7 +1,9 @@
 import re
 import requests
+from redis import Redis
 from flask import url_for, current_app
 from imgurpython import ImgurClient
+from rq_scheduler import Scheduler
 
 
 def register_template_utils(app):
@@ -77,3 +79,13 @@ def upload_image(imgur_client_id, imgur_client_secret, app_name,
         })
 
     return result['link'], result['deletehash']
+
+
+def get_rq_scheduler(app=current_app):
+    conn = Redis(
+        host=app.config['RQ_DEFAULT_HOST'],
+        port=app.config['RQ_DEFAULT_PORT'],
+        db=0,
+        password=app.config['RQ_DEFAULT_PASSWORD']
+    )
+    return Scheduler(connection=conn)  # Get a scheduler for the default queue

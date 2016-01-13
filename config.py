@@ -30,9 +30,9 @@ class Config:
     TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
     TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
 
-    # TODO: explain what is happening here
     REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
 
+    # Parse the REDIS_URL to set RQ config variables
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(REDIS_URL)
 

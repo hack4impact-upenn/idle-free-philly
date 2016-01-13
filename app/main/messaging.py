@@ -67,8 +67,8 @@ def handle_message():
         description, step = handle_description_step(body, step, twiml)
 
     elif step == 7:
-        picture_url, step = handle_picture_step(body, step, message_sid,
-                                                twilio_hosted_media_url, twiml)
+        picture_url, step, image_job_id = handle_picture_step(
+            body, step, message_sid, twilio_hosted_media_url, twiml)
 
         (lat, lon) = geocode(location)
         agency = Agency.query.filter_by(name=agency_name).first()
@@ -88,6 +88,13 @@ def handle_message():
         )
         db.session.add(new_incident)
         db.session.commit()
+
+        get_queue().enqueue(
+            attach_image_to_incident_report,
+            depends_on=image_job_id,
+            incident_report=new_incident,
+            image_job_id=image_job_id,
+        )
 
         # reset report variables/cookies
         step = 0
@@ -192,7 +199,7 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
     account_sid = current_app.config['TWILIO_ACCOUNT_SID']
     auth_token = current_app.config['TWILIO_AUTH_TOKEN']
 
-    get_queue().enqueue(
+    image_job_id = get_queue().enqueue(
         upload_image,
         imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
         imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
@@ -201,7 +208,7 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
     )
 
     get_rq_scheduler().enqueue_in(
-        timedelta(seconds=10),
+        timedelta(minutes=10),
         delete_mms,
         account_sid=account_sid,
         auth_token=auth_token,
@@ -210,13 +217,21 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
     twiml.message('Thanks! See your report at {}'
                   .format(url_for('main.index')))
 
-    return '', step
+    return '', step, image_job_id
 
 
 def delete_mms(account_sid, auth_token, message_sid):
     client = TwilioRestClient(account_sid, auth_token)
     for media in client.messages.get(message_sid).media_list.list():
         media.delete()
+
+
+def attach_image_to_incident_report(incident_report, image_job_id):
+    link, deletehash = get_queue().fetch_job(image_job_id).result
+    incident_report.picture_url = link
+    incident_report.deletehash = deletehash
+    db.session.add(incident_report)
+    db.session.commit()
 
 
 def get_agencies_listed(agencies, letters):

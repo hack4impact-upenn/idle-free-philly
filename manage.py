@@ -9,8 +9,13 @@ from app.models import (
     IncidentReport,
     EditableHTML
 )
+from redis import Redis
+from rq import Worker, Queue, Connection
+from rq_scheduler.scheduler import Scheduler
+from rq_scheduler.utils import setup_loghandlers
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+
 
 # Import settings from .env file. Must define FLASK_CONFIG
 if os.path.exists('.env'):
@@ -128,6 +133,38 @@ def setup_general():
     Role.insert_roles()
     Agency.insert_agencies()
     EditableHTML.add_default_faq()
+
+
+@manager.command
+def run_worker():
+    """Initializes a slim rq task queue."""
+    listen = ['default']
+    conn = Redis(
+        host=app.config['RQ_DEFAULT_HOST'],
+        port=app.config['RQ_DEFAULT_PORT'],
+        db=0,
+        password=app.config['RQ_DEFAULT_PASSWORD']
+    )
+
+    with Connection(conn):
+        worker = Worker(map(Queue, listen))
+        worker.work()
+
+
+@manager.command
+def run_scheduler():
+    """Initializes a rq scheduler."""
+    conn = Redis(
+        host=app.config['RQ_DEFAULT_HOST'],
+        port=app.config['RQ_DEFAULT_PORT'],
+        db=0,
+        password=app.config['RQ_DEFAULT_PASSWORD']
+    )
+
+    setup_loghandlers('INFO')
+    scheduler = Scheduler(connection=conn, interval=60.0)
+    scheduler.run()
+
 
 if __name__ == '__main__':
     manager.run()

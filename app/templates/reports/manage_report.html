@@ -3,11 +3,17 @@
 
 {% set deletion_endpoint = 'reports.delete_report_request' %}
 
-{% set endpoints = [
-    ('reports.report_info', 'Report information'),
-    ('reports.edit_report_info', 'Edit report'),
-    (deletion_endpoint, 'Delete report')
-] %}
+{% if (report.user_id == current_user.id) or current_user.is_admin() %}
+    {% set endpoints = [
+        ('reports.report_info', 'Report information'),
+        ('reports.edit_report_info', 'Edit report'),
+        (deletion_endpoint, 'Delete report')
+    ] %}
+{% else %}
+    {% set endpoints = [
+        ('reports.report_info', 'Report information'),
+    ] %}
+{% endif %}
 
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
@@ -45,10 +51,17 @@
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-            <a class="ui basic compact button" href="{{ url_for('reports.view_reports') }}"> <!-- TODO my reports -->
+            {% if (report.user_id == current_user.id) %}
+            <a class="ui basic compact button" href="{{ url_for('reports.view_my_reports') }}">
+                <i class="caret left icon"></i>
+                Back to my reports
+            </a>
+            {% else %}
+            <a class="ui basic compact button" href="{{ url_for('reports.view_reports') }}">
                 <i class="caret left icon"></i>
                 Back to all reports
             </a>
+            {% endif %}
             <h2 class="ui header">
                 {{ '%s\'s report on %s' % (report.user.full_name(), report.agency.name) }}
                 <div class="sub header">View and manage this report.</div>

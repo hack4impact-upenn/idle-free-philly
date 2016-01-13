@@ -8,7 +8,7 @@ from forms import EditIncidentReportForm
 from . import reports
 from .. import db
 from ..models import IncidentReport, Agency
-from ..decorators import admin_or_agency_required, admin_required
+from ..decorators import admin_or_agency_required
 from ..utils import (
     flash_errors,
     geocode,
@@ -55,24 +55,35 @@ def view_my_reports():
 @reports.route('/<int:report_id>')
 @reports.route('/<int:report_id>/info')
 @login_required
-@admin_required
 def report_info(report_id):
     """View a report"""
     report = IncidentReport.query.filter_by(id=report_id).first()
+
     if report is None:
         abort(404)
-    return render_template('reports/manage_report.html', report=report,
-                           return_to_all=True)  # TODO rename
+
+    """Either the user is looking at their own report, or the user is either
+    an admin or agency worker."""
+    if (not (current_user.is_admin() or current_user.is_agency_worker())) and \
+       (report.user_id != current_user.id):
+        abort(403)
+
+    return render_template('reports/manage_report.html', report=report)
 
 
 @reports.route('/<int:report_id>/edit_info', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def edit_report_info(report_id):
     """Change the fields for a report"""
     report = IncidentReport.query.filter_by(id=report_id).first()
+
     if report is None:
         abort(404)
+    """Either the user is editing their own report, or the user is an admin.
+    Agency workers cannot edit reports for their own agency."""
+    if (report.user_id != current_user.id) and (not current_user.is_admin()):
+        abort(403)
+
     form = EditIncidentReportForm()
 
     if form.validate_on_submit():
@@ -123,24 +134,36 @@ def edit_report_info(report_id):
 
 @reports.route('/<int:report_id>/delete')
 @login_required
-@admin_required
 def delete_report_request(report_id):
     """Request deletion of a report."""
     report = IncidentReport.query.filter_by(id=report_id).first()
+
     if report is None:
         abort(404)
+
+    """Either the user is deleting their own report, or the user is an admin.
+    Agency workers cannot delete reports for their own agency."""
+    if (report.user_id != current_user.id) and (not current_user.is_admin()):
+        abort(403)
+
     return render_template('reports/manage_report.html', report=report)
 
 
 @reports.route('/<int:report_id>/_delete')
 @login_required
-@admin_required
 def delete_report(report_id):
     """Delete a report"""
 
     report = IncidentReport.query.filter_by(id=report_id).first()
+    report_user_id = report.user_id
+
     db.session.delete(report)
     db.session.commit()
     flash('Successfully deleted report.', 'success')
 
-    return redirect(url_for('reports.view_reports'))
+    # TODO - address edge case where an admin clicks on their own report from
+    # reports/all endpoint, should redirect back to /all
+    if report_user_id == current_user.id:
+        return redirect(url_for('reports.view_my_reports'))
+    else:
+        return redirect(url_for('reports.view_reports'))

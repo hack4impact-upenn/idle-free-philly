@@ -39,6 +39,7 @@ class IncidentReportForm(Form):
         )
     ])
 
+    # TODO Make this a hidden field unless SEPTA Bus is selected as agency
     bus_number = IntegerField('Bus Number', validators=[
         Optional()
     ])

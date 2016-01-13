@@ -205,7 +205,7 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
         imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
         app_name=current_app.config['APP_NAME'],
         image_url=twilio_hosted_media_url
-    )
+    ).id
 
     get_rq_scheduler().enqueue_in(
         timedelta(minutes=10),

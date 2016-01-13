@@ -1,6 +1,9 @@
 {
   "name": "Clean Air Council",
   "repository": "github.com/hack4impact/clean-air-council",
+  "scripts": {
+    "postdeploy": "python manage.py recreate_db && python manage.py setup_prod"
+  },
   "addons": [
     "heroku-postgresql",
     "redistogo"
@@ -16,6 +19,21 @@
       "required": true
     },
     "MAIL_PASSWORD": {
+      "required": true
+    },
+    "IMGUR_CLIENT_ID": {
+      "required": true
+    },
+    "IMGUR_CLIENT_SECRET": {
+      "required": true
+    },
+    "TWILIO_ACCOUNT_SID": {
+      "required": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "required": true
+    },
+    "OPEN_WEATHER_MAP_API_KEY": {
       "required": true
     }
   }

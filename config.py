@@ -27,9 +27,12 @@ class Config:
     IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID')
     IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET')
 
-    # TODO: explain what is happening here
+    TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+    TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+
     REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
 
+    # Parse the REDIS_URL to set RQ config variables
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(REDIS_URL)
 

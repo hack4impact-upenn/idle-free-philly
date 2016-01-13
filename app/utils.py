@@ -4,7 +4,9 @@ import requests
 from flask import url_for, flash, current_app
 from datetime import timedelta
 from pytimeparse.timeparse import timeparse
+from redis import Redis
 from imgurpython import ImgurClient
+from rq_scheduler import Scheduler
 
 
 def register_template_utils(app):
@@ -102,3 +104,13 @@ def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
         })
 
     return result['link'], result['deletehash']
+
+
+def get_rq_scheduler(app=current_app):
+    conn = Redis(
+        host=app.config['RQ_DEFAULT_HOST'],
+        port=app.config['RQ_DEFAULT_PORT'],
+        db=0,
+        password=app.config['RQ_DEFAULT_PASSWORD']
+    )
+    return Scheduler(connection=conn)  # Get a scheduler for the default queue

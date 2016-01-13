@@ -6,6 +6,7 @@ from . import main
 from .. import db
 from ..utils import geocode, upload_image, get_rq_scheduler
 from ..models import Agency, IncidentReport, Location
+from ..main.forms import IncidentReportForm
 from datetime import datetime, timedelta
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -13,7 +14,7 @@ from twilio.rest import TwilioRestClient
 
 @main.route('/report_incident', methods=['GET'])
 def handle_message():
-    message = str(request.values.get('Body'))
+    body = str(request.values.get('Body'))
     num_media = int(request.values.get('NumMedia'))
     twilio_hosted_media_url = str(request.values.get('MediaUrl0')) \
         if num_media > 0 else None
@@ -31,11 +32,9 @@ def handle_message():
     location = str(request.cookies.get('location', ''))
     picture_url = str(request.cookies.get('picture_url', ''))
 
-    body = str(request.values.get('Body'))
+    print locals()  # TODO: for debugging
 
-    print locals()  # for debugging
-
-    if 'report' == message.lower():
+    if 'report' == body.lower():
         # reset report variables/cookies
         vehicle_id = ''
         agency_name = ''
@@ -134,17 +133,30 @@ def handle_start_report(step, twiml):
 
 
 def handle_location_step(body, step, twiml):
-    # TODO handle geocode test here
-    location = body
-    step += 1
-    agencies = Agency.query.filter_by(is_official=True).order_by(
-        Agency.name).all()
-    letters = all_strings(len(agencies) + 1)  # one extra letter for Other
-    agencies_listed = get_agencies_listed(agencies, letters)
-    twiml.message('Which agency owns the vehicle you see idling? Select '
-                  'from the following list or enter {} for Other.'
-                  .format(letters[-1]))
-    twiml.message(agencies_listed)
+    validator_form = IncidentReportForm()
+
+    errors = data_errors(form=validator_form, field=validator_form.location,
+                         data=body)
+    print geocode(body)
+    if geocode(body) is (None, None):
+        errors.append('We could not find that location. Please respond with a '
+                      'full address including city and state.')
+    if len(errors) == 0:
+        location = body
+        step += 1
+        agencies = Agency.query.filter_by(is_official=True).order_by(
+            Agency.name).all()
+        letters = all_strings(len(agencies) + 1)  # one extra letter for Other
+        agencies_listed = get_agencies_listed(agencies, letters)
+        twiml.message('Which agency owns the vehicle you see idling? Select '
+                      'from the following list or enter {} for Other.'
+                      .format(letters[-1]))
+        twiml.message(agencies_listed)
+    else:
+        location = ''
+        twiml.message('Sorry, there were some errors with your response. '
+                      'Please enter the location again.')
+        twiml.message('Errors:\n{}'.format('\n'.join(errors)))
     return location, step
 
 
@@ -280,3 +292,15 @@ def agency_letter_to_agency(input_letter):
     letters_to_agency = dict(zip(letters, agencies))
     letters_to_agency[letters[-1]] = None
     return letters_to_agency[input_letter]
+
+
+def data_errors(field, data, form):
+    """TODO: docstring"""
+    field.data = data
+    field.raw_data = data
+    validated = field.validate(form)
+
+    if not validated:
+        return field.errors
+
+    return []

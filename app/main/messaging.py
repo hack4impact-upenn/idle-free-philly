@@ -1,6 +1,6 @@
 import string
 import itertools
-from flask import request, make_response, current_app
+from flask import request, make_response, current_app, url_for
 from flask.ext.rq import get_queue
 from . import main
 from .. import db
@@ -46,7 +46,7 @@ def handle_message():
         picture_url = ''
 
         step = handle_start_report(step, twiml)
-        step = 7
+        step = 1
 
     elif step == 1:
         location, step = handle_location_step(body, step, twiml)
@@ -70,14 +70,13 @@ def handle_message():
         picture_url, step = handle_picture_step(body, step, message_sid,
                                                 twilio_hosted_media_url, twiml)
 
-        twiml.message('Thanks!')
         (lat, lon) = geocode(location)
         agency = Agency.query.filter_by(name=agency_name).first()
         # TODO: handle empty strings, set attributes to None
         new_incident = IncidentReport(
             agency=agency,
             vehicle_id=vehicle_id,
-            license_plate=license_plate,
+            license_plate=license_plate if license_plate else None,
             duration=timedelta(minutes=duration),
             description=description,
             location=Location(
@@ -85,7 +84,7 @@ def handle_message():
                 longitude=lon,
                 original_user_text=location
             ),
-            picture_url=picture_url
+            picture_url=picture_url if picture_url else None
         )
         db.session.add(new_incident)
         db.session.commit()
@@ -106,9 +105,6 @@ def handle_message():
                       .format(current_app.config['APP_NAME']))
 
     response = make_response(str(twiml))
-
-    # if step < 2:
-    #     reset_cookies(response)
 
     set_cookie(response, 'messagecount', str(step))
     set_cookie(response, 'agency_name', agency_name)
@@ -131,6 +127,7 @@ def handle_start_report(step, twiml):
 
 
 def handle_location_step(body, step, twiml):
+    # TODO handle geocode test here
     location = body
     step += 1
     agencies = Agency.query.filter_by(is_official=True).order_by(
@@ -192,8 +189,6 @@ def handle_description_step(body, step, twiml):
 
 def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
                         twiml):
-    print twilio_hosted_media_url
-
     account_sid = current_app.config['TWILIO_ACCOUNT_SID']
     auth_token = current_app.config['TWILIO_AUTH_TOKEN']
 
@@ -212,6 +207,8 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
         auth_token=auth_token,
         message_sid=message_sid
     )
+    twiml.message('Thanks! See your report at {}'
+                  .format(url_for('main.index')))
 
     return '', step
 

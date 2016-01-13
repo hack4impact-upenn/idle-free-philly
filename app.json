@@ -1,6 +1,9 @@
 {
   "name": "Clean Air Council",
   "repository": "github.com/hack4impact/clean-air-council",
+  "scripts": {
+    "postdeploy": "python manage.py recreate_db && python manage.py setup_prod"
+  }
   "addons": [
     "heroku-postgresql",
     "redistogo"

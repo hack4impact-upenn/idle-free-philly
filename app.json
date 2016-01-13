@@ -15,6 +15,9 @@
     "MAIL_USERNAME": {
       "required": true
     },
+    "MAIL_PASSWORD": {
+      "required": true
+    },
     "IMGUR_CLIENT_ID": {
       "required": true
     },

@@ -1,5 +1,9 @@
 import re
-from flask import url_for
+import requests
+from redis import Redis
+from flask import url_for, current_app
+from imgurpython import ImgurClient
+from rq_scheduler import Scheduler
 
 
 def register_template_utils(app):
@@ -29,3 +33,61 @@ def parse_phone_number(phone_number):
         stripped = '1' + stripped
     stripped = '+' + stripped
     return stripped
+
+
+def strip_non_alphanumeric_chars(input_string):
+    """Strip all non-alphanumeric characters from the input."""
+    stripped = re.sub('[\W_]+', '', input_string)
+    return stripped
+
+
+# Viewport-biased geocoding using Google API
+# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+def geocode(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
+    r = requests.get(url, params=payload)
+    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        return None, None
+    else:
+        coords = r.json()['results'][0]['geometry']['location']
+        return coords['lat'], coords['lng']
+
+
+def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
+                 image_file_path=None, title=None, description=None):
+    """Uploads an image to Imgur by the image's url or file_path. Returns the
+    Imgur api response."""
+    if image_url is None and image_file_path is None:
+        raise ValueError('Either image_url or image_file_path must be '
+                         'supplied.')
+    client = ImgurClient(imgur_client_id, imgur_client_secret)
+    if title is None:
+        title = '{} Image Upload'.format(current_app.config['APP_NAME'])
+
+    if description is None:
+        description = 'This is part of an idling vehicle report on {}.'.format(
+            current_app.config['APP_NAME'])
+
+    if image_url is not None:
+        result = client.upload_from_url(url=image_url, config={
+            'title': title,
+            'description': description,
+        })
+    else:
+        result = client.upload_from_path(path=image_file_path, config={
+            'title': title,
+            'description': description,
+        })
+
+    return result['link'], result['deletehash']
+
+
+def get_rq_scheduler(app=current_app):
+    conn = Redis(
+        host=app.config['RQ_DEFAULT_HOST'],
+        port=app.config['RQ_DEFAULT_PORT'],
+        db=0,
+        password=app.config['RQ_DEFAULT_PASSWORD']
+    )
+    return Scheduler(connection=conn)  # Get a scheduler for the default queue

@@ -1,5 +1,9 @@
+from datetime import datetime
+from flask import url_for
+from flask.ext.rq import get_queue
 from .. import db
-from . import Agency
+from . import Agency, User
+from ..email import send_email
 
 
 class Location(db.Model):
@@ -7,16 +11,21 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.String(50))
     longitude = db.Column(db.String(50))
+    # TODO: ensure original_user_text is always non-null
     original_user_text = db.Column(db.Text)  # the raw text which we geocoded
     incident_report_id = db.Column(db.Integer,
                                    db.ForeignKey('incident_reports.id'))
+
+    def __repr__(self):
+        # TODO: Show address instead?
+        return 'Coordinates: {0}, {1}'.format(self.latitude, self.longitude)
 
 
 class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_id = db.Column(db.String(8))
-    license_plate = db.Column(db.String(8))
+    vehicle_id = db.Column(db.String(50))
+    license_plate = db.Column(db.String(16))
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',
@@ -25,8 +34,47 @@ class IncidentReport(db.Model):
     duration = db.Column(db.Interval)  # like timedelta object
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
+
+    # Should never be exposed to the user. This is the Imgur deletehash, so
+    # we can delete an image from Imgur in case of problems (e.g.
+    # legal issues).
+    picture_deletehash = db.Column(db.Text)
     description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # True if this report's agency will be publicly shown alongside it. That
+    # is, when a general user sees a report on the map, this report's agency
+    # will only be shown if show_agency_publicly is True. The
+    # show_agency_publicly attribute is inherited from a report's agency's
+    # is_public field.
+    show_agency_publicly = db.Column(db.Boolean, default=False)
+
+    def __init__(self, notify_workers_upon_creation=True, **kwargs):
+        super(IncidentReport, self).__init__(**kwargs)
+        if self.agency is not None and 'show_agency_publicly' not in kwargs:
+            self.show_agency_publicly = self.agency.is_public
+
+        if self.date is None:
+            self.date = datetime.now()
+
+        if notify_workers_upon_creation:
+            all_reports_for_agency_link = url_for('reports.view_reports',
+                                                  _external=True)
+            subject = '{} Idling Incident'.format(self.agency.name)
+
+            if self.location.original_user_text is not None:
+                subject += ' at {}'.format(self.location.original_user_text)
+
+            for agency_worker in self.agency.users:
+                get_queue().enqueue(
+                    send_email,
+                    recipient=agency_worker.email,
+                    subject=subject,
+                    template='reports/email/alert_workers',
+                    incident_report=self,
+                    user=agency_worker,
+                    all_reports_for_agency_link=all_reports_for_agency_link
+                )
 
     @staticmethod
     def generate_fake(count=100, **kwargs):
@@ -41,6 +89,7 @@ class IncidentReport(db.Model):
             return choice([True, False])
 
         agencies = Agency.query.all()
+        users = User.query.all()
         fake = Faker()
 
         seed()
@@ -61,8 +110,10 @@ class IncidentReport(db.Model):
                 date=fake.date_time_between(start_date="-1y", end_date="now"),
                 duration=timedelta(minutes=randint(1, 30)),
                 agency=choice(agencies),
+                user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
+                notify_workers_upon_creation=False,
             )
             db.session.add(r)
             try:

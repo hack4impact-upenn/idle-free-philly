@@ -154,11 +154,13 @@ class UserModelTestCase(unittest.TestCase):
         u = User(email='user@example.com', password='password')
         incident1 = IncidentReport(
             vehicle_id='123456',
-            user=u
+            user=u,
+            notify_workers_upon_creation=False
         )
         incident2 = IncidentReport(
             vehicle_id='654321',
-            user=u
+            user=u,
+            notify_workers_upon_creation=False
         )
         u.reported_incidents = [incident1, incident2]
         self.assertEqual(u.reported_incidents, [incident1, incident2])

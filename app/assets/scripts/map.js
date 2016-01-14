@@ -2,6 +2,9 @@
 var globalMarkerWrappers = null;
 var globalMap = null;
 
+// Geographic bounds centered according to incident report locations
+var geographicBounds = null;
+
 // Initial map center coordinates
 INITIAL_CENTER_LAT = 39.952;
 INITIAL_CENTER_LONG = -75.195;
@@ -30,6 +33,7 @@ function storeMarkerState(markerWrappers, map, minDate, bounds) {
         (globalMarkerWrappers[mw].actualMarker).setMap(globalMap);
     }
     BOUNDS_MIN = minDate;
+    geographicBounds = bounds;
     map.fitBounds(bounds);
 }
 
@@ -114,6 +118,35 @@ function addLocationButton(map) {
 
 	controlDiv.index = 1;
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
+}
+
+function addCenterButton(map) {
+    var centerDiv = document.createElement('div');
+
+    var centerButton = document.createElement('button');
+    centerButton.style.backgroundColor = '#fff';
+    centerButton.style.border = 'none';
+    centerButton.style.outline = 'none';
+    centerButton.style.width = '28px';
+    centerButton.style.height = '28px';
+    centerButton.style.borderRadius = '2px';
+    centerButton.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+    centerButton.style.cursor = 'pointer';
+    centerButton.style.marginBottom = '10px';
+    centerButton.style.marginRight = '10px';
+    centerButton.style.padding = '0px';
+    centerButton.style.textAlign = 'center';
+    centerButton.innerHTML = '  <i class="reply icon"></i>';
+    centerButton.value = 'Reports Center';
+    centerButton.title = 'Reports Center';
+    centerButton.id = 'centerButton';
+    centerDiv.appendChild(centerButton);
+
+    centerButton.addEventListener('click', function() {
+        map.fitBounds(geographicBounds);
+    });
+    centerDiv.index = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerDiv);
 }
 
 // Get address submit event

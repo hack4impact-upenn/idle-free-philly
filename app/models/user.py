@@ -61,9 +61,9 @@ class User(UserMixin, db.Model):
     phone_number = db.Column(db.String(16), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    reported_incidents = db.relationship('IncidentReport',
-                                         backref='user',
-                                         lazy='select')
+    incident_reports = db.relationship('IncidentReport',
+                                       backref='user',
+                                       lazy='select')
     # also related to agencies via the agency_user_table
 
     def __init__(self, **kwargs):
@@ -87,6 +87,12 @@ class User(UserMixin, db.Model):
 
     def is_worker(self):
         return self.role.permissions == Permission.AGENCY_WORKER
+
+    def is_agency_worker(self):
+        return self.can(Permission.AGENCY_WORKER)
+
+    def is_general_user(self):
+        return self.can(Permission.GENERAL)
 
     @property
     def password(self):

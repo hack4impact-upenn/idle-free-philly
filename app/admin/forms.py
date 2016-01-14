@@ -1,14 +1,18 @@
 from flask.ext.wtf import Form
+from wtforms import ValidationError
 from wtforms.fields import StringField, SubmitField, SelectField
 from wtforms.fields.html5 import EmailField, TelField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.ext.sqlalchemy.fields import (
+    QuerySelectField,
+    QuerySelectMultipleField
+)
 from wtforms.validators import Length, Email, Optional, InputRequired
 from ..custom_validators import (
     UniqueEmail,
     UniquePhoneNumber,
     PhoneNumberLength,
 )
-from ..models import Role
+from ..models import Role, Agency
 from .. import db
 
 
@@ -40,12 +44,28 @@ class ChangeAccountTypeForm(Form):
     submit = SubmitField('Update role')
 
 
+class ChangeAgencyAffiliationsForm(Form):
+    agency_affiliations = QuerySelectMultipleField(
+        'Agency affiliations',
+        validators=[InputRequired()],
+        get_label='name',
+        query_factory=lambda: db.session.query(Agency).order_by('name')
+    )
+    submit = SubmitField('Update agency affiliations')
+
+
 class InviteUserForm(Form):
-    role = QuerySelectField('Account type',
-                            validators=[InputRequired()],
-                            get_label='name',
-                            query_factory=lambda: db.session.query(Role).
-                            order_by('permissions'))
+    role = QuerySelectField(
+        'Account type',
+        validators=[InputRequired()],
+        get_label='name',
+        query_factory=lambda: db.session.query(Role).order_by('permissions')
+    )
+    agency_affiliations = QuerySelectMultipleField(
+        'Agency affiliations',
+        get_label='name',
+        query_factory=lambda: db.session.query(Agency).order_by('name')
+    )
     first_name = StringField('First name', validators=[InputRequired(),
                                                        Length(1, 64)])
     last_name = StringField('Last name', validators=[InputRequired(),
@@ -62,6 +82,36 @@ class InviteUserForm(Form):
         UniquePhoneNumber(),
     ])
     submit = SubmitField('Invite')
+
+    @staticmethod
+    def validate_agency_affiliations(form, field):
+        if form.role.data.name == 'AgencyWorker' and len(field.data) == 0:
+            raise ValidationError('Agency affiliation must be set for workers')
+
+
+class AddAgencyForm(Form):
+    name = StringField(
+        'Agency name',
+        validators=[InputRequired(), Length(1, 64)]
+    )
+    is_public = SelectField(
+        'Publicly visible',
+        description='If an agency is set as public, then all new incident '
+                    'reports created for that agency will show this agency to '
+                    'the general public by default. That is, the marker on '
+                    'the map will name this particular agency as the type of '
+                    'vehicle which was idling. If an agency is not set as '
+                    'public, then all new incident reports created for that '
+                    'agency will not show this agency by default. Note: this '
+                    'setting will not change anything for reports which were '
+                    'created in the past. To change whether the agency is '
+                    'displayed for past reports, you must edit that report '
+                    'individually on the reports page.',
+        # TODO add a link here once we know the route to the reports page
+        choices=[('y', 'Yes'), ('n', 'No')],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField('Create agency')
 
 
 class ChangeAgencyOfficialStatusForm(Form):

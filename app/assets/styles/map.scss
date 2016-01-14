@@ -1,58 +1,40 @@
 @import "app";
 
+.ui-rangeSlider-innerBar {
+    width: 100% !important;
+    height: 100%;
+    left: 0px !important;
+}
+
 .ui-rangeSlider-bar {
-    background: $dark-teal;
+    background: $teal;
+    height: 110% !important;
+    width: 100%;
+    top: -1px !important;
+    -webkit-box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+    -mox-box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
+    box-shadow: inset 0 -2px 6px RGBA(0,0,0,0.5);
 }
 
 #addressSearch {
     position: absolute;
     left: 30px;
     top: 49px;
-    z-index: 99;
+    z-index: 5;
 }
+
 #submitButton {
-    background-color: $dark-teal;
+    background-color: $teal;
     color: $white;
     left: 220px;
     top: 49px;
-    z-index: 99;
+    z-index: 5;
+    font-weight: 300;
+    text-transform: uppercase;
 }
 
-#form_button {
-    position: absolute;
-    background-color: $red;
-    width:25%;
-    color: white;
-    right: 100px;
-    top: 49px;
-    z-index: 99;
-}
-html, body{
-    height: 100%;
-}
-
-#form_container {
-    position: absolute;
-    background-color: white;
-    width: 25%;
-    color: white;
-    top: 60px;
-    right: 100px;
-    z-index: 95;
-}
-
-.bus_number {
-}
-
-#info_container {
-    position: absolute;
-    background-color: white;
-    width: 25%;
-    color: black;
-    top: 60px;
-    right: 100px;
-    z-index: 95;
-
+#submitButton:hover {
+    background-color: $light-teal;
 }
 
 #current_location_button {
@@ -61,10 +43,75 @@ html, body{
 
 #slider {
     position: absolute;
-    width: 20%;
-    left: 300px;
-    top:10px;
-    z-index: 99;
+    width: 25%;
+    right: 100px;
+    top: 8px;
+    z-index: 5;
+}
+
+#form_button {
+    position: absolute;
+    background-color: $red;
+    width: 25%;
+    color: white;
+    top: 85px;
+    right: 100px;
+    z-index: 6;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+#form_button:hover {
+    background-color: $light-red;
+    cursor: pointer;
+}
+
+#form_fields {
+    margin-top: 1em;
+    padding: 1em;
+}
+
+#info_container, #form_container {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 25%;
+    max-height: 60%;
+    overflow-y: scroll;
+    color: black;
+    top: 80px;
+    right: 100px;
+    z-index: 6;
+}
+
+#close_info, #close_form {
+    position: absolute;
+    background-color: $red;
+    color: $white;
+    height: 25px;
+    width: 25px;
+    top: 5px;
+    right: 5px;
+    padding: 1px;
+}
+
+@media all and (max-width: $mobile-breakpoint) {
+    #slider {
+        display: none;
+    }
+    #addressSearch {
+        width: 80%;
+        left: 5%;
+    }
+    #form_button,
+    #form_container,
+    #info_container {
+        width: 80%;
+        left: 5%;
+        top: 100px;
+    }
 }
 
 #googleMap {
@@ -94,4 +141,12 @@ html, body{
 .ui.approve.button {
     display: block;
     margin: 0 auto;
+}
+
+#replaceable > p,a {
+    margin: 0 0 0.5em;
+}
+
+.bus_number, .led_screen_number {
+    display: hide;
 }

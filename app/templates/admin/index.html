@@ -23,19 +23,36 @@
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-            <h2 class="ui header">
-                Admin Dashboard
+            <h2>
+                Reports
             </h2>
-            <div class="ui two column stackable grid">
-                {{ dashboard_option('Registered Users', 'admin.registered_users',
-                                    description='View and manage user accounts', icon='users icon') }}
-                {{ dashboard_option('Invite New User', 'admin.invite_user',
-                                    description='Invites a new user to create their own account', icon='add user icon') }}
+            <div class="ui three column stackable grid">
+                {{ dashboard_option('All Reports', 'reports.view_reports', description='View and manage all incident reports', icon='folder icon') }}
+                {{ dashboard_option('My reports', 'reports.view_my_reports', description='View and manage my incident reports', icon='file icon') }}
+                {{ dashboard_option('Download Reports', 'admin.get_reports', description='Download reports in CSV', icon='download icon') }}
+            </div>
+            <br>
+            <h2>
+                Admin
+            </h2>
+            <div class="ui three column stackable grid">
                 {{ dashboard_option('Manage Agencies', 'admin.all_agencies',
                                     description='View and manage all agencies', icon='shipping icon') }}
-                {{ dashboard_option('Download Reports', 'admin.get_reports',
-                                    description='Download reports in CSV', icon='download icon') }}
+                {{ dashboard_option('Add New Agency', 'admin.add_agency',
+                                    description='Add a new agency for incident reports', icon='add square icon') }}
+                {{ dashboard_option('Manage Users', 'admin.registered_users',
+                                    description='View and manage user accounts', icon='users icon') }}
+                {{ dashboard_option('Invite New User', 'admin.invite_user',
+                                    description='Invite a new user to create their own account', icon='add user icon') }}
             </div>
+            <br>
+            <h2>
+               Account
+            </h2>
+            <div class="ui three column stackable grid">
+                {{ dashboard_option('My account', 'account.manage', description='View and manage your account', icon='user icon') }}
+            </div>
+            <br>
         </div>
     </div>
 {% endblock %}

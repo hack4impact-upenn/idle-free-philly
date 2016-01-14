@@ -2,19 +2,15 @@ from flask import render_template
 from ..models import EditableHTML
 from . import main
 from app import models, db
-from forms import NewIncidentForm
+from forms import IncidentReportForm
 from app.models import IncidentReport, Agency
 from datetime import timedelta
 
 
 @main.route('/')
-def index():
-    return render_template('main/index.html')
-
-
 @main.route('/map', methods=['GET', 'POST'])
-def get_map():
-    form = NewIncidentForm()
+def index():
+    form = IncidentReportForm()
     agencies = Agency.query.all()
 
     if form.validate_on_submit():
@@ -24,7 +20,7 @@ def get_map():
 
         new_incident = models.IncidentReport(
             vehicle_id=form.vehicle_ID.data,
-            license_plate=form.license_plate_number.data,
+            license_plate=form.license_plate.data,
             location=l,
             date=form.date.data,
             duration=timedelta(minutes=form.idling_duration.data),

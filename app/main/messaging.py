@@ -14,6 +14,7 @@ from twilio.rest import TwilioRestClient
 
 @main.route('/report_incident', methods=['GET'])
 def handle_message():
+    """Called by Twilio when a text message is received."""
     body, message_sid, twilio_hosted_media_url = get_request_values()
 
     twiml = twilio.twiml.Response()
@@ -311,18 +312,22 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
 
 
 def reply_with_errors(errors, twiml, field_name):
+    """Reply to the user with errors in a field."""
     twiml.message('Sorry, there were some errors with your response. '
                   'Please enter the {} again.'.format(field_name))
     twiml.message('Errors:\n{}'.format('\n'.join(errors)))
 
 
 def delete_mms(account_sid, auth_token, message_sid):
+    """Deletes the media attached to the given message from Twilio."""
     client = TwilioRestClient(account_sid, auth_token)
     for media in client.messages.get(message_sid).media_list.list():
         media.delete()
 
 
 def attach_image_to_incident_report(incident_report, image_job_id):
+    """Attach the image uploaded by the job with image_job_id to the given
+    incident_report."""
     link, deletehash = get_queue().fetch_job(image_job_id).result
     incident_report.picture_url = link
     incident_report.deletehash = deletehash
@@ -331,6 +336,14 @@ def attach_image_to_incident_report(incident_report, image_job_id):
 
 
 def get_agencies_listed(agencies, letters):
+    """Returns the given agencies joined with the given letters like so
+
+    A: Agency1
+    B: Agency2
+    ...
+    G: Other
+
+    """
     agencies_listed = '\n'.join(
         '{}: {}'.format(l, ag.name) for l, ag in zip(letters, agencies)
     )
@@ -354,24 +367,15 @@ def all_strings(max_count):
         repeat_size += 1
 
 
-def reset_cookies(resp):
-    resp.set_cookie('messagecount', expires=0)
-    resp.set_cookie('agency_name', expires=0)
-    resp.set_cookie('vehicle_id', expires=0)
-    resp.set_cookie('license_plate', expires=0)
-    resp.set_cookie('duration', expires=0)
-    resp.set_cookie('description', expires=0)
-    resp.set_cookie('location', expires=0)
-
-
-def set_cookie(resp, key, val):
-    expires = datetime.utcnow() + timedelta(hours=1)
+def set_cookie(resp, key, val, expiration=1):
+    """Sets a expiring cookie in the response."""
+    expires = datetime.utcnow() + timedelta(hours=expiration)
     expires_str = expires.strftime('%a, %d %b %Y %H:%M:%S GMT')
     resp.set_cookie(key, value=val, expires=expires_str)
 
 
 def data_errors(field, data, form):
-    """TODO: docstring"""
+    """Return errors in given data using a WTForm field."""
     field.data = data
     field.raw_data = data
     validated = field.validate(form)

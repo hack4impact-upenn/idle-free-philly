@@ -6,7 +6,7 @@ from . import main
 from .. import db
 from ..utils import geocode, upload_image, get_rq_scheduler
 from ..models import Agency, IncidentReport, Location, User
-from ..main.forms import IncidentReportForm
+from ..reports.forms import IncidentReportForm
 from datetime import datetime, timedelta
 import twilio.twiml
 from twilio.rest import TwilioRestClient

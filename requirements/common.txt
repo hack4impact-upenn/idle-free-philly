@@ -28,6 +28,8 @@ itsdangerous==0.24
 webassets==0.10.1
 wsgiref==0.1.2
 requests==2.8.1
+WTForms-Components==0.9.9
+pytimeparse==1.1.5
 redis==2.10.5
 rq==0.5.6
 -e git://github.com/ui/rq-scheduler.git@4e6837bb6a6e5be4ca364ff9d6218c2b2153009a#egg=rq-scheduler

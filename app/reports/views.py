@@ -162,7 +162,7 @@ def delete_report(report_id):
     flash('Successfully deleted report.', 'success')
 
     # TODO - address edge case where an admin clicks on their own report from
-    # reports/all endpoint, should redirect back to /all
+    # reports/all endpoint, should redirect back to /all. use cookies
     if report_user_id == current_user.id:
         return redirect(url_for('reports.view_my_reports'))
     else:

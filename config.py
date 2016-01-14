@@ -1,5 +1,6 @@
 import os
 import urlparse
+from raygun4py.middleware import flask as flask_raygun
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -32,6 +33,8 @@ class Config:
 
     REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
 
+    RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
+
     # Parse the REDIS_URL to set RQ config variables
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(REDIS_URL)
@@ -63,6 +66,12 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
+    @classmethod
+    def init_app(cls, app):
+        Config.init_app(app)
+
+        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
 
 
 class HerokuConfig(ProductionConfig):
@@ -99,6 +108,7 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'heroku': HerokuConfig,
     'production_debug': ProductionWithDebug,
     'default': DevelopmentConfig
 }

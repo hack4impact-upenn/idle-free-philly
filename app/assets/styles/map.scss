@@ -38,7 +38,17 @@
 }
 
 #current_location_button {
-    background-color: $dark-teal;
+    background-color: $teal;
+    color: $white;
+    width: 100%;
+    font-weight: 300;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+}
+
+#current_location_button:hover {
+    background-color: $light-teal;
+    cursor: pointer;
 }
 
 #slider {
@@ -47,6 +57,11 @@
     right: 100px;
     top: 8px;
     z-index: 5;
+}
+
+#form_fields {
+    margin-top: 1em;
+    padding: 1em;
 }
 
 #form_button {
@@ -63,14 +78,20 @@
     border-radius: 0.5em;
 }
 
-#form_button:hover {
-    background-color: $light-red;
-    cursor: pointer;
+#close_info, #close_form {
+    position: absolute;
+    background-color: $red;
+    color: $white;
+    height: 25px;
+    width: 25px;
+    top: 5px;
+    right: 5px;
+    padding: 1px;
 }
 
-#form_fields {
-    margin-top: 1em;
-    padding: 1em;
+#form_button:hover, #close_info:hover, #close_form:hover {
+    background-color: $light-red;
+    cursor: pointer;
 }
 
 #info_container, #form_container {
@@ -84,17 +105,6 @@
     top: 80px;
     right: 100px;
     z-index: 6;
-}
-
-#close_info, #close_form {
-    position: absolute;
-    background-color: $red;
-    color: $white;
-    height: 25px;
-    width: 25px;
-    top: 5px;
-    right: 5px;
-    padding: 1px;
 }
 
 @media all and (max-width: $mobile-breakpoint) {

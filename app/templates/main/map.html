@@ -23,10 +23,8 @@
             {{ f.render_form_field(form.vehicle_id) }}
             {{ f.render_form_field(form.description) }}
             {{ f.render_form_field(form.duration) }}
-            <div class="fields">
-                <button id="current_location_button" onclick="geoFindMe()">Use Current location</button>
-                {{ f.render_form_field(form.location)}}
-            </div>
+            {{ f.render_form_field(form.location)}}
+            <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
             {{ f.render_form_field(form.agency)}}
             {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
             {{ f.render_form_field(form.led_screen_number, extra_classes='led_screen_number') }}
@@ -77,7 +75,7 @@
     $('#close_form').click(function(){
         $('#form_container').hide();
     });
-    
+
     $('#agency').change(function(){
         if ($("#agency option:selected").val() === '5') {
             $('.bus_number').show()
@@ -196,18 +194,19 @@
     }
 
     function geoFindMe() {
-      if (!navigator.geolocation){
+        if (!navigator.geolocation){
           return;
         }
-      function success(position) {
-        var geocoder = new google.maps.Geocoder;
-        $('#latitude').val(position.coords.latitude);
-        $('#longitude').val(position.coords.longitude);
-        getReverseGeocodingData(position.coords.latitude, position.coords.longitude)
-      };
-      function error() {
-      };
-      navigator.geolocation.getCurrentPosition(success, error);
+        function success(position) {
+            var geocoder = new google.maps.Geocoder;
+            $('#latitude').val(position.coords.latitude);
+            $('#longitude').val(position.coords.longitude);
+            getReverseGeocodingData(position.coords.latitude, 
+                position.coords.longitude)
+        };
+        function error() {
+        };
+        navigator.geolocation.getCurrentPosition(success, error);
     }
 
 </script>

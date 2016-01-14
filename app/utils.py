@@ -1,7 +1,10 @@
 import re
 import requests
+
+from flask import url_for, flash, current_app
+from datetime import timedelta
+from pytimeparse.timeparse import timeparse
 from redis import Redis
-from flask import url_for, current_app
 from imgurpython import ImgurClient
 from rq_scheduler import Scheduler
 
@@ -33,6 +36,26 @@ def parse_phone_number(phone_number):
         stripped = '1' + stripped
     stripped = '+' + stripped
     return stripped
+
+
+def minutes_to_timedelta(minutes):
+    """Use when creating new report."""
+    return timedelta(minutes=minutes)
+
+
+def parse_timedelta(duration):
+    """Parse string into timedelta object"""
+    seconds = timeparse(duration)
+    return timedelta(seconds=seconds)
+
+
+def flash_errors(form):
+    """Show a list of all errors in form after trying to submit."""
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("Error: %s - %s" % (
+                getattr(form, field).label.text, error),
+                'form-error')
 
 
 def strip_non_alphanumeric_chars(input_string):

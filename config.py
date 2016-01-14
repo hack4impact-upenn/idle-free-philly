@@ -71,7 +71,8 @@ class ProductionConfig(Config):
     def init_app(cls, app):
         Config.init_app(app)
 
-        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
+        if app.config['RAYGUN_APIKEY'] is not None:
+            flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
 
 
 class HerokuConfig(ProductionConfig):

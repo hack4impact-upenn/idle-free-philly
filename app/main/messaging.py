@@ -5,17 +5,22 @@ from flask.ext.rq import get_queue
 from . import main
 from .. import db
 from ..utils import geocode, upload_image, get_rq_scheduler
-from ..models import Agency, IncidentReport, Location
+from ..models import Agency, IncidentReport, Location, User
 from ..main.forms import IncidentReportForm
 from datetime import datetime, timedelta
 import twilio.twiml
 from twilio.rest import TwilioRestClient
 
 
-@main.route('/report_incident', methods=['GET'])
+@main.route('/report_incident', methods=['GET'])  # noqa
 def handle_message():
     """Called by Twilio when a text message is received."""
-    body, message_sid, twilio_hosted_media_url = get_request_values()
+    body = str(request.values.get('Body')).lower().strip()
+    num_media = int(request.values.get('NumMedia'))
+    twilio_hosted_media_url = str(request.values.get('MediaUrl0')) \
+        if num_media > 0 else None
+    message_sid = str(request.values.get('MessageSid'))
+    phone_number = str(request.values.get('From'))
 
     twiml = twilio.twiml.Response()
 
@@ -68,9 +73,24 @@ def handle_message():
 
         new_incident = handle_create_report(agency_name, description, duration,
                                             license_plate, location,
-                                            picture_url, vehicle_id)
+                                            picture_url, vehicle_id,
+                                            phone_number)
 
-        start_attach_job(image_job_id, new_incident)
+        twiml.message('Thanks! See your report at {}'
+                      .format(url_for('main.index')))
+
+        if new_incident.user is None:
+            twiml.message('Want to keep track of all your reports? Create an '
+                          'account at {}'
+                          .format(url_for('account.register')))
+
+        if image_job_id is not None:
+            get_queue().enqueue(
+                attach_image_to_incident_report,
+                depends_on=image_job_id,
+                incident_report=new_incident,
+                image_job_id=image_job_id,
+            )
 
         # reset report variables/cookies
         step = 0
@@ -94,18 +114,8 @@ def handle_message():
     return response
 
 
-def start_attach_job(image_job_id, new_incident):
-    if image_job_id is not None:
-        get_queue().enqueue(
-            attach_image_to_incident_report,
-            depends_on=image_job_id,
-            incident_report=new_incident,
-            image_job_id=image_job_id,
-        )
-
-
 def handle_create_report(agency_name, description, duration, license_plate,
-                         location, picture_url, vehicle_id):
+                         location, picture_url, vehicle_id, phone_number):
     lat, lon = geocode(location)
     agency = Agency.get_agency_by_name(agency_name)
     if agency is None:
@@ -113,6 +123,7 @@ def handle_create_report(agency_name, description, duration, license_plate,
                         is_public=True)
         db.session.add(agency)
         db.session.commit()
+
     new_incident = IncidentReport(
         agency=agency,
         vehicle_id=vehicle_id,
@@ -124,20 +135,13 @@ def handle_create_report(agency_name, description, duration, license_plate,
             longitude=lon,
             original_user_text=location
         ),
-        picture_url=picture_url if picture_url else None
+        picture_url=picture_url if picture_url else None,
+        user=User.query.filter_by(phone_number=phone_number).first()
     )
     db.session.add(new_incident)
     db.session.commit()
+
     return new_incident
-
-
-def get_request_values():
-    body = str(request.values.get('Body')).lower().strip()
-    num_media = int(request.values.get('NumMedia'))
-    twilio_hosted_media_url = str(request.values.get('MediaUrl0')) \
-        if num_media > 0 else None
-    message_sid = str(request.values.get('MessageSid'))
-    return body, message_sid, twilio_hosted_media_url
 
 
 def handle_start_report(step, twiml):
@@ -305,8 +309,6 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
             auth_token=auth_token,
             message_sid=message_sid
         )
-    twiml.message('Thanks! See your report at {}'
-                  .format(url_for('main.index')))
 
     return '', step, image_job_id
 

@@ -76,13 +76,17 @@ def handle_message():
                                             picture_url, vehicle_id,
                                             phone_number)
 
-        twiml.message('Thanks! See your report at {}'
-                      .format(url_for('main.index')))
+        twiml.message('Thanks! See your report on the map at {}'
+                      .format(url_for('main.index', _external=True)))
 
         if new_incident.user is None:
             twiml.message('Want to keep track of all your reports? Create an '
                           'account at {}'
-                          .format(url_for('account.register')))
+                          .format(url_for('account.register', _external=True)))
+        else:
+            twiml.message('See all your reports at {}'
+                          .format(url_for('reports.view_my_reports',
+                                          _external=True)))
 
         if image_job_id is not None:
             get_queue().enqueue(

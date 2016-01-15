@@ -44,11 +44,14 @@
         <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
         <tr><td>Weather Conditions</td>
             <td>
-                {% for line in report.weather.splitlines() %}
-                    {{ line }}<br>
-                {% endfor %}
-                <br>
-            </td></tr>
+                {% if report.weather %}
+                    {% for line in report.weather.splitlines() %}
+                        {{ line }}<br>
+                    {% endfor %}
+                    <br>
+                {% endif %}
+            </td>
+        </tr>
         <tr><td>Picture</td>
             <td>
                 {% if report.picture_url %}

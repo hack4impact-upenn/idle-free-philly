@@ -157,6 +157,40 @@ $(document).ready(function() {
     });
 });
 
+function getNextDate(startDate) {
+    date = startDate.getDate();
+    month = startDate.getMonth();
+    year = startDate.getFullYear();
+    MAX_MONTH = 11;
+    monthDays = {
+        0: 31,
+        1: 28,
+        2: 31,
+        3: 30,
+        4: 31,
+        5: 30,
+        6: 31,
+        7: 31,
+        8: 30,
+        9: 31,
+        10: 30,
+        11: 31
+    }
+    if ((month == 1) && ((year % 400 == 0) || ((year % 100 != 0) && (year % 4 == 0)))) {
+        monthDays = 29;
+    }
+    date++;
+    if (date > monthDays) {
+        date = 1
+        month++;
+        if (month > MAX_MONTH) {
+            month = 0;
+            year++;
+        }
+    }
+    return new Date(year, month, date);
+}
+
 function initializeDateSlider() {
     $("#slider").dateRangeSlider({
         bounds: {
@@ -194,7 +228,7 @@ function initializeDateSlider() {
         beginMonth = monthObj[String(data.values.min).substring(4, 7)];
         endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
-        endDate = new Date(endYear, endMonth, endDay);
+        endDate = getNextDate(new Date(endYear, endMonth, endDay));
         for (mw = 0; mw < globalMarkerWrappers.length; mw++) {
             if ((globalMarkerWrappers[mw].incidentDate.getTime() < beginDate.getTime()) ||
                 (globalMarkerWrappers[mw].incidentDate.getTime() > endDate.getTime())) {

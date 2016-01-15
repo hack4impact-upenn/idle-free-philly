@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import render_template, abort, flash, redirect, url_for
 from flask.ext.login import login_required, current_user
 
@@ -6,8 +8,12 @@ from forms import EditIncidentReportForm
 from . import reports
 from .. import db
 from ..models import IncidentReport, Agency
-from ..decorators import admin_or_agency_required, admin_required
-from ..utils import flash_errors
+from ..decorators import admin_or_agency_required
+from ..utils import (
+    flash_errors,
+    geocode,
+    parse_timedelta
+)
 
 
 @reports.route('/all')
@@ -49,39 +55,56 @@ def view_my_reports():
 @reports.route('/<int:report_id>')
 @reports.route('/<int:report_id>/info')
 @login_required
-@admin_required
 def report_info(report_id):
     """View a report"""
     report = IncidentReport.query.filter_by(id=report_id).first()
+
     if report is None:
         abort(404)
-    return render_template('reports/manage_report.html', report=report,
-                           return_to_all=True)  # TODO rename
+
+    """Either the user is looking at their own report, or the user is either
+    an admin or agency worker."""
+    if (not (current_user.is_admin() or current_user.is_agency_worker())) and \
+       (report.user_id != current_user.id):
+        abort(403)
+
+    return render_template('reports/manage_report.html', report=report)
 
 
 @reports.route('/<int:report_id>/edit_info', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def edit_report_info(report_id):
     """Change the fields for a report"""
     report = IncidentReport.query.filter_by(id=report_id).first()
+
     if report is None:
         abort(404)
+    """Either the user is editing their own report, or the user is an admin.
+    Agency workers cannot edit reports for their own agency."""
+    if (report.user_id != current_user.id) and (not current_user.is_admin()):
+        abort(403)
+
     form = EditIncidentReportForm()
 
     if form.validate_on_submit():
         report.vehicle_id = form.vehicle_id.data
         report.license_plate = form.license_plate.data
-        # TODO format data
-        # report.location = form.location.data
-        # report.date = form.date.data
-        # report.duration = form.duration.data
-        # report.agency = form.agency.data
-        report.picture_url = form.picture.data
-        report.description = form.description.data
 
-        print report.vehicle_id
-        print form.vehicle_id.data
+        # reformat location data - TODO error-checking for bad addresses
+        lat, lng = geocode(form.location.data)
+        report.location.latitude, report.location.longitude = lat, lng
+        report.location.original_user_text = form.location.data
+
+        d, t = form.date.data, form.time.data
+        report.date = datetime(year=d.year, month=d.month, day=d.day,
+                               hour=t.hour, minute=t.minute, second=t.second)
+
+        report.duration = parse_timedelta(form.duration.data)
+        report.agency = form.agency.data
+
+        # TODO upload picture_file
+        report.picture_url = form.picture_url.data
+        report.description = form.description.data
 
         db.session.add(report)
         db.session.commit()
@@ -92,13 +115,16 @@ def edit_report_info(report_id):
     # pre-populate form
     form.vehicle_id.default = report.vehicle_id
     form.license_plate.default = report.license_plate
-    # TODO report.bus_number and LED screen number
-    form.location.default = report.location
-    # TODO change location repr to address
+    form.bus_number.default = report.bus_number
+    form.led_screen_number.default = report.led_screen_number
+    form.location.default = report.location.original_user_text
+
     form.date.default = report.date
+    form.time.default = report.date
+
     form.duration.default = report.duration
     form.agency.default = report.agency
-    form.picture.default = report.picture_url
+    form.picture_url.default = report.picture_url
     form.description.default = report.description
     form.process()
 
@@ -108,13 +134,36 @@ def edit_report_info(report_id):
 
 @reports.route('/<int:report_id>/delete')
 @login_required
-@admin_required
+def delete_report_request(report_id):
+    """Request deletion of a report."""
+    report = IncidentReport.query.filter_by(id=report_id).first()
+
+    if report is None:
+        abort(404)
+
+    """Either the user is deleting their own report, or the user is an admin.
+    Agency workers cannot delete reports for their own agency."""
+    if (report.user_id != current_user.id) and (not current_user.is_admin()):
+        abort(403)
+
+    return render_template('reports/manage_report.html', report=report)
+
+
+@reports.route('/<int:report_id>/_delete')
+@login_required
 def delete_report(report_id):
     """Delete a report"""
 
     report = IncidentReport.query.filter_by(id=report_id).first()
+    report_user_id = report.user_id
+
     db.session.delete(report)
     db.session.commit()
-    flash('Successfully delete report.')
+    flash('Successfully deleted report.', 'success')
 
-    return redirect(url_for('reports.view_reports'))
+    # TODO - address edge case where an admin clicks on their own report from
+    # reports/all endpoint, should redirect back to /all. use cookies
+    if report_user_id == current_user.id:
+        return redirect(url_for('reports.view_my_reports'))
+    else:
+        return redirect(url_for('reports.view_reports'))

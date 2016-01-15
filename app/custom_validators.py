@@ -1,6 +1,6 @@
 from wtforms import ValidationError
-from .utils import parse_phone_number
-from models import User
+from app.models import User
+from app.utils import parse_phone_number, strip_non_alphanumeric_chars
 
 
 class UniqueEmail(object):
@@ -33,3 +33,25 @@ class PhoneNumberLength(object):
         if not (self.min_length <= len(stripped_number) <= self.max_length):
             raise ValidationError('Phone number was not correctly formatted. '
                                   'Enter something like \"123 456 7898\"')
+
+
+class StrippedLength(object):
+    """String should be number of length min_length to max_length after
+    removing non-alphanumeric characters."""
+
+    def __init__(self, min_length=0, max_length=15, message=None):
+        self.min_length = min_length
+        self.max_length = max_length
+        self.message = message
+
+        if self.message is None:
+            self.message = 'String was not correctly formatted. After ' \
+                           'removing all non-alphanumeric characters, the ' \
+                           'length of the string must be between {} and {} ' \
+                           'characters.'.format(self.min_length,
+                                                self.max_length)
+
+    def __call__(self, form, field):
+        stripped = strip_non_alphanumeric_chars(field.data)
+        if not (self.min_length <= len(stripped) <= self.max_length):
+            raise ValidationError(self.message)

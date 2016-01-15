@@ -2,17 +2,18 @@ import datetime as datetime
 
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, SubmitField, IntegerField, \
-    TextAreaField, HiddenField, DateField, FileField
+    TextAreaField, HiddenField, FileField, DateField
+from wtforms_components import TimeField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
-    Regexp,
     Length,
     Optional,
     NumberRange,
     URL
 )
 
+from app.custom_validators import StrippedLength
 from ..models import Agency
 from .. import db
 
@@ -20,21 +21,25 @@ from .. import db
 class IncidentReportForm(Form):
     vehicle_id = StringField('Vehicle ID', validators=[
         InputRequired('Vehicle ID is required.'),
-        Length(min=2, max=10,
-               message='Vehicle ID must be between 2 to 10 characters.'),
-        Regexp("^[a-zA-Z0-9]*$",
-               message='License plate number must '
-                       'consist of only letters and numbers.'),
+        StrippedLength(
+            min_length=2,
+            max_length=15,
+            message='Vehicle ID must be between 2 to 15 characters after '
+                    'removing all non-alphanumeric characters.'
+        ),
     ])
 
     license_plate = StringField('License Plate Number', validators=[
         Optional(),
-        Regexp("^[a-zA-Z0-9]*$",
-               message='License plate number must '
-                       'consist of only letters and numbers.'),
-        Length(min=6, max=7)
+        StrippedLength(
+            min_length=4,
+            max_length=8,
+            message='License plate must be between 4 to 8 characters after '
+                    'removing all non-alphanumeric characters.'
+        )
     ])
 
+    # TODO Make this a hidden field unless SEPTA Bus is selected as agency
     bus_number = IntegerField('Bus Number', validators=[
         Optional()
     ])
@@ -47,25 +52,36 @@ class IncidentReportForm(Form):
     longitude = HiddenField('Longitude')
     location = StringField('Address')
 
-    date = DateField('Date', default=datetime.date.today(),
+    today = datetime.datetime.today()
+    date = DateField('Date (year-month-day)',
+                     default=today.strftime('%m-%d-%Y'),
+                     validators=[InputRequired()])
+    time = TimeField('Time (hours:minutes am/pm)',
+                     default=today.strftime('%I:%M %p'),
                      validators=[InputRequired()])
 
-    # TODO - add support for h:m:s format
-    duration = IntegerField('Idling Duration (h:m:s)', validators=[
-        InputRequired('Idling duration (hours:minutes:seconds) is required.'),
+    duration = IntegerField('Idling Duration (in minutes)', validators=[
+        InputRequired('Idling duration is required.'),
         NumberRange(min=0,
-                    max=10000,
-                    message='Idling duration must be between '
-                            '0 and 10000 minutes.')
+                    message='Idling duration must be positive.')
     ])
 
     agency = QuerySelectField('Vehicle Agency ',
                               validators=[InputRequired()],
                               get_label='name',
-                              query_factory=lambda: db.session.query(Agency))
+                              query_factory=lambda: db.session.query(Agency)
+                              .filter_by(is_official=True)
+                              .order_by(Agency.name))
 
-    picture = FileField('Upload a picture of the idling vehicle.',
-                        validators=[Optional()])
+    picture_file = FileField('Upload a picture of the idling vehicle.',
+                             validators=[Optional()])
+
+    picture_url = StringField('Picture URL', validators=[
+        Optional(),
+        URL(message='Picture URL must be a valid URL. '
+                    'Please upload the image to an image hosting website '
+                    'and paste the link here.')
+        ])
 
     description = TextAreaField('Additional Notes', validators=[
         Optional(),
@@ -76,11 +92,15 @@ class IncidentReportForm(Form):
 
 
 class EditIncidentReportForm(IncidentReportForm):
-    # use picture URL instead of picture
-    picture = StringField('Picture URL', validators=[
-        URL(message='Picture URL must be a valid URL. '
-                    'Please upload the image to an image hosting website '
-                    'and paste the link into this field.')
+    duration = StringField('Idling Duration (h:m:s)', validators=[
+        InputRequired('Idling duration is required.')
     ])
+
+    # All agencies should be options in the EditForm but only official agencies
+    # should be an option in the ReportForm
+    agency = QuerySelectField('Vehicle Agency ',
+                              validators=[InputRequired()],
+                              get_label='name',
+                              query_factory=lambda: db.session.query(Agency))
 
     submit = SubmitField('Update Report')

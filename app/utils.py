@@ -1,6 +1,12 @@
 import re
 import requests
+
 from flask import url_for, flash, current_app
+from datetime import timedelta
+from pytimeparse.timeparse import timeparse
+from redis import Redis
+from imgurpython import ImgurClient
+from rq_scheduler import Scheduler
 
 
 def register_template_utils(app):
@@ -25,6 +31,9 @@ def index_for_role(role):
 def parse_phone_number(phone_number):
     """Make phone number conform to E.164 (https://en.wikipedia.org/wiki/E.164)
     """
+    if phone_number is None:
+        return None
+
     stripped = re.sub(r'\D', '', phone_number)
     if len(stripped) == 10:
         stripped = '1' + stripped
@@ -32,12 +41,30 @@ def parse_phone_number(phone_number):
     return stripped
 
 
+def minutes_to_timedelta(minutes):
+    """Use when creating new report."""
+    return timedelta(minutes=minutes)
+
+
+def parse_timedelta(duration):
+    """Parse string into timedelta object"""
+    seconds = timeparse(duration)
+    return timedelta(seconds=seconds)
+
+
 def flash_errors(form):
+    """Show a list of all errors in form after trying to submit."""
     for field, errors in form.errors.items():
         for error in errors:
             flash("Error: %s - %s" % (
                 getattr(form, field).label.text, error),
                 'form-error')
+
+
+def strip_non_alphanumeric_chars(input_string):
+    """Strip all non-alphanumeric characters from the input."""
+    stripped = re.sub('[\W_]+', '', input_string)
+    return stripped
 
 
 def geocode(address):
@@ -95,3 +122,42 @@ def get_current_weather(location):
                 wind_key['speed'])
 
     return weather_text.strip()
+
+
+def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
+                 image_file_path=None, title=None, description=None):
+    """Uploads an image to Imgur by the image's url or file_path. Returns the
+    Imgur api response."""
+    if image_url is None and image_file_path is None:
+        raise ValueError('Either image_url or image_file_path must be '
+                         'supplied.')
+    client = ImgurClient(imgur_client_id, imgur_client_secret)
+    if title is None:
+        title = '{} Image Upload'.format(current_app.config['APP_NAME'])
+
+    if description is None:
+        description = 'This is part of an idling vehicle report on {}.'.format(
+            current_app.config['APP_NAME'])
+
+    if image_url is not None:
+        result = client.upload_from_url(url=image_url, config={
+            'title': title,
+            'description': description,
+        })
+    else:
+        result = client.upload_from_path(path=image_file_path, config={
+            'title': title,
+            'description': description,
+        })
+
+    return result['link'], result['deletehash']
+
+
+def get_rq_scheduler(app=current_app):
+    conn = Redis(
+        host=app.config['RQ_DEFAULT_HOST'],
+        port=app.config['RQ_DEFAULT_PORT'],
+        db=0,
+        password=app.config['RQ_DEFAULT_PASSWORD']
+    )
+    return Scheduler(connection=conn)  # Get a scheduler for the default queue

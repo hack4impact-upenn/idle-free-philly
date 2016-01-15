@@ -20,7 +20,7 @@
                 {% set href = url_for(current_user.role.index + '.index') %}
                 <a class="item" id="nav_dashboard" href="{{ href }}">Dashboard</a>
                 <div class="header">Reports</div>
-                {% if current_user.is_admin() %}
+                {% if current_user.is_admin() or current_user.is_agency_worker() %}
                 <a href="{{ url_for('reports.view_reports') }}" class="item">All Reports</a>
                 {% endif %}
                 <a href="{{ url_for('reports.view_my_reports') }}" class="item">My Reports</a>
@@ -28,6 +28,8 @@
                 <div class="header">Admin</div>
                 <a class="item" href="{{ url_for(current_user.role.index + '.all_agencies') }}">
                 Manage Agencies</a>
+                <a class="item" href="{{ url_for(current_user.role.index + '.add_agency') }}">
+                Add New Agency</a>
                 <a class="item" href="{{ url_for(current_user.role.index + '.registered_users') }}">
                 Manage Users</a>
                 <a class="item" href="{{ url_for(current_user.role.index + '.invite_user') }}">

@@ -49,7 +49,7 @@
                             <td>{{ a.name }}</td>
                             <td>{{ 'Yes' if a.is_official else 'No' }}</td>
                             <td>{{ 'Yes' if a.is_public else 'No' }}</td>
-                            <td>{{ a.reports|length }}</td>
+                            <td>{{ a.incident_reports|length }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

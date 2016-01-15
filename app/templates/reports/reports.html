@@ -5,8 +5,10 @@
         <div class="sixteen wide tablet twelve wide computer centered column">
             <a class="ui basic compact button" href="{{ url_for('admin.index') }}">
                 <i class="caret left icon"></i>
+                <!-- TODO: change dashboard link for general and agency worker users -->
                 Back to dashboard
             </a>
+
             {% if agencies|length < 2 %}
             <div class="ui two column vertically padded stackable grid">
               <div class="column">
@@ -77,7 +79,7 @@
                     <tbody>
                     {% for r in reports | sort(attribute='date') %}
                         <tr onclick="window.location.href = '{{ url_for('reports.report_info', report_id=r.id) }}';">
-                            <td class="single line">{{ r.date.strftime('%m-%d-%Y') }}</td>
+                            <td class="single line">{{ r.date.strftime('%m-%d-%Y at %I:%M %p') }}</td>
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.license_plate }}</td>

@@ -42,7 +42,7 @@
         <tr><td>Time</td><td>{{ report.date.strftime('%I:%M %p') }}</td></tr>
         <tr><td>Duration (h:m:s)</td><td>{{ report.duration}}</td></tr>
         <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
-        <tr><td>Weather conditions during incident</td>
+        <tr><td>Weather Conditions</td>
             <td>
                 {% for line in report.weather.splitlines() %}
                     {{ line }}<br>

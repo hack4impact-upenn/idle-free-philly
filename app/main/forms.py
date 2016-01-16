@@ -47,9 +47,9 @@ class IncidentReportForm(Form):
     latitude = HiddenField('Latitude')
     longitude = HiddenField('Longitude')
     location = StringField('Address')
-
-    date = DateField('Date', default=datetime.date.today(),
-                     validators=[InputRequired()])
+    today = datetime.date.today()
+    date = DateField('Date', default=today,
+                     validators=[Optional()])
 
     # TODO - add support for h:m:s format
     duration = IntegerField('Idling Duration (minutes)', validators=[

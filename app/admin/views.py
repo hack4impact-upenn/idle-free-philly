@@ -318,10 +318,10 @@ def update_editor_contents():
     return 'OK', 200
 
 
-@admin.route('/get_reports', methods=['GET'])
+@admin.route('/download_reports', methods=['GET'])
 @login_required
 @admin_required
-def get_reports():
+def download_reports():
     '''outfile = open('dump.csv', 'wb')
     outcsv = csv.writer(outfile)
     incident_reports = IncidentReport.query.all()

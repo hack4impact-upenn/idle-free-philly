@@ -7,7 +7,7 @@ from app.models import IncidentReport, Agency
 from datetime import timedelta
 
 
-@main.route('/')
+@main.route('/', methods=['GET', 'POST'])
 @main.route('/map', methods=['GET', 'POST'])
 def index():
     form = IncidentReportForm()
@@ -19,13 +19,13 @@ def index():
                             longitude=form.longitude.data)
 
         new_incident = models.IncidentReport(
-            vehicle_id=form.vehicle_ID.data,
+            vehicle_id=form.vehicle_id.data,
             license_plate=form.license_plate.data,
             location=l,
             date=form.date.data,
-            duration=timedelta(minutes=form.idling_duration.data),
+            duration=timedelta(minutes=form.duration.data),
             agency=form.agency.data,
-            description=form.notes.data,
+            description=form.description.data,
         )
         db.session.add(new_incident)
         db.session.commit()

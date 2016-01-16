@@ -1,10 +1,9 @@
 from ..decorators import admin_required
-
 from flask import render_template, abort, redirect, flash, url_for, \
     request, Response
 from flask.ext.login import login_required, current_user
 from flask.ext.rq import get_queue
-
+from datetime import datetime
 from forms import (
     ChangeUserEmailForm,
     ChangeUserPhoneNumberForm,
@@ -322,29 +321,25 @@ def update_editor_contents():
 @login_required
 @admin_required
 def download_reports():
-    '''outfile = open('dump.csv', 'wb')
-    outcsv = csv.writer(outfile)
-    incident_reports = IncidentReport.query.all()
-    outcsv.writerows(incident_reports)
-    outfile.close()'''
-
-    outfile = open('mydump.csv', 'w+')
+    """Download a csv file of all incident reports."""
+    current_date = str(datetime.date.today())
+    csv_name = 'IncidentReports-' + current_date + '.csv'
+    outfile = open(csv_name, 'w+')
     print('initial file contents:', outfile.read())
 
     wr = csv.writer(outfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
     reports = db.session.query(IncidentReport).all()
-    wr.writerow(['VEHICLE ID', 'LICENSE PLATE', 'LOCATION', 'DATE',
-                'DURATION', 'AGENCY ID', 'DESCRIPTION'])
+    wr.writerow(['DATE', 'LOCATION', 'AGENCY ID', 'VEHICLE ID', 'DURATION',
+                'LICENSE PLATE', 'DESCRIPTION'])
     for r in reports:
-        print('vehicle id:', r.vehicle_id)
-        wr.writerow([r.date, r.location, r.agency_id, r.vehicle_id,
+        wr.writerow([r.date, r.location, r.agency.name, r.vehicle_id,
                      r.duration,
                      r.license_plate,
                      r.description])
 
-    endfile = open('mydump.csv', 'r+')
+    endfile = open(csv_name, 'r+')
     data = endfile.read()
     return Response(
         data,
         mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=mydump.csv"})
+        headers={"Content-disposition": "attachment; filename=" + csv_name})

@@ -3,7 +3,7 @@ from flask import render_template, abort, redirect, flash, url_for, \
     request, Response
 from flask.ext.login import login_required, current_user
 from flask.ext.rq import get_queue
-from datetime import datetime
+import datetime
 from forms import (
     ChangeUserEmailForm,
     ChangeUserPhoneNumberForm,

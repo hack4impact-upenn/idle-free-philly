@@ -1,7 +1,9 @@
+import datetime as datetime
+
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, SubmitField, IntegerField, TextAreaField, HiddenField, \
-    DateField, FileField
-from ..models import Agency
+from wtforms.fields import StringField, SubmitField, IntegerField, \
+    TextAreaField, HiddenField, FileField, DateField
+from wtforms_components import TimeField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
     InputRequired,
@@ -10,9 +12,10 @@ from wtforms.validators import (
     NumberRange,
     URL
 )
+
 from app.custom_validators import StrippedLength
+from ..models import Agency
 from .. import db
-import datetime as datetime
 
 
 class IncidentReportForm(Form):
@@ -36,6 +39,7 @@ class IncidentReportForm(Form):
         )
     ])
 
+    # TODO Make this a hidden field unless SEPTA Bus is selected as agency
     bus_number = IntegerField('Bus Number', validators=[
         Optional()
     ])
@@ -47,17 +51,19 @@ class IncidentReportForm(Form):
     latitude = HiddenField('Latitude')
     longitude = HiddenField('Longitude')
     location = StringField('Address')
-    today = datetime.date.today()
-    date = DateField('Date', default=today,
-                     validators=[Optional()])
 
-    # TODO - add support for h:m:s format
-    duration = IntegerField('Idling Duration (minutes)', validators=[
-        InputRequired('Idling duration (minutes) is required.'),
+    today = datetime.datetime.today()
+    date = DateField('Date (year-month-day)',
+                     default=today.strftime('%m-%d-%Y'),
+                     validators=[InputRequired()])
+    time = TimeField('Time (hours:minutes am/pm)',
+                     default=today.strftime('%I:%M %p'),
+                     validators=[InputRequired()])
+
+    duration = IntegerField('Idling Duration (in minutes)', validators=[
+        InputRequired('Idling duration is required.'),
         NumberRange(min=0,
-                    max=10000,
-                    message='Idling duration must be between '
-                            '0 and 10000 minutes.')
+                    message='Idling duration must be positive.')
     ])
 
     agency = QuerySelectField('Vehicle Agency ',
@@ -83,3 +89,18 @@ class IncidentReportForm(Form):
     ])
 
     submit = SubmitField('Create Report')
+
+
+class EditIncidentReportForm(IncidentReportForm):
+    duration = StringField('Idling Duration (h:m:s)', validators=[
+        InputRequired('Idling duration is required.')
+    ])
+
+    # All agencies should be options in the EditForm but only official agencies
+    # should be an option in the ReportForm
+    agency = QuerySelectField('Vehicle Agency ',
+                              validators=[InputRequired()],
+                              get_label='name',
+                              query_factory=lambda: db.session.query(Agency))
+
+    submit = SubmitField('Update Report')

@@ -1,5 +1,6 @@
 import os
 import urlparse
+from raygun4py.middleware import flask as flask_raygun
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -24,12 +25,19 @@ class Config:
     # Default viewport is bounding box for Philadelphia, PA
     VIEWPORT = '39.861204,-75.310357|40.138932,-74.928582'
 
+    OPEN_WEATHER_MAP_API_KEY = os.environ.get('OPEN_WEATHER_MAP_API_KEY') or \
+        'SjefBOa$1FgGco0SkfPO392qqH9'
     IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID')
     IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET')
 
-    # TODO: explain what is happening here
+    TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+    TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+
     REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
 
+    RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
+
+    # Parse the REDIS_URL to set RQ config variables
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(REDIS_URL)
 
@@ -65,25 +73,8 @@ class ProductionConfig(Config):
     def init_app(cls, app):
         Config.init_app(app)
 
-        # Email errors to administators
-        import logging
-        from logging.handlers import SMTPHandler
-        credentials = None
-        secure = None
-        if getattr(cls, 'MAIL_USERNAME', None) is not None:
-            credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
-            if getattr(cls, 'MAIL_USE_TLS', None):
-                secure = ()
-        mail_handler = SMTPHandler(
-            mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
-            fromaddr=cls.EMAIL_SENDER,
-            toaddrs=[cls.ADMIN_EMAIL],
-            subject=cls.EMAIL_SUBJECT_PREFIX + ' Application Error',
-            credentials=credentials,
-            secure=secure
-        )
-        mail_handler.setLevel(logging.ERROR)
-        app.logger.addHandler(mail_handler)
+        if app.config['RAYGUN_APIKEY'] is not None:
+            flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
 
 
 class HerokuConfig(ProductionConfig):
@@ -120,6 +111,7 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'heroku': HerokuConfig,
     'production_debug': ProductionWithDebug,
     'default': DevelopmentConfig
 }

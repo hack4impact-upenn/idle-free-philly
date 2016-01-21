@@ -39,6 +39,7 @@ class IncidentReportForm(Form):
         )
     ])
 
+    # TODO Make this a hidden field unless SEPTA Bus is selected as agency
     bus_number = IntegerField('Bus Number', validators=[
         Optional()
     ])
@@ -69,7 +70,8 @@ class IncidentReportForm(Form):
                               validators=[InputRequired()],
                               get_label='name',
                               query_factory=lambda: db.session.query(Agency)
-                              .filter_by(is_official=True))
+                              .filter_by(is_official=True)
+                              .order_by(Agency.name))
 
     picture_file = FileField('Upload a picture of the idling vehicle.',
                              validators=[Optional()])

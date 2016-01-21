@@ -16,6 +16,7 @@ jsmin==2.1.6
 Mako==1.0.1
 MarkupSafe==0.23
 psycopg2==2.6.1
+raygun4py==3.0.2
 SQLAlchemy==1.0.6
 WTForms==2.0.2
 Werkzeug==0.10.4
@@ -30,3 +31,4 @@ redis==2.10.5
 rq==0.5.6
 WTForms-Components==0.9.9
 pytimeparse==1.1.5
+-e git://github.com/ui/rq-scheduler.git@4e6837bb6a6e5be4ca364ff9d6218c2b2153009a#egg=rq-scheduler

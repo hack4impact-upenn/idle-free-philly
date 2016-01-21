@@ -60,8 +60,8 @@ class IncidentReportTestCase(unittest.TestCase):
 
     def test_incident_report_with_location_no_agency(self):
         loc1 = Location(
-            latitude='-75.197428',
-            longitude='39.951039',
+            latitude='39.951021',
+            longitude='-75.197243',
             original_user_text='3700 Spruce St.'
         )
         loc2 = Location(

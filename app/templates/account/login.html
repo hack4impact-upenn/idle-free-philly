@@ -29,6 +29,8 @@
                 {{ f.form_message(flashes['success'], header='Success!', class='success') }}
 
                 {{ f.render_form_field(form.submit) }}
+
+            {{ form.hidden_tag() }}
             {{ f.end_form(form) }}
         </div>
     </div>

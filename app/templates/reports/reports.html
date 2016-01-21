@@ -5,6 +5,7 @@
         <div class="sixteen wide tablet twelve wide computer centered column">
             <a class="ui basic compact button" href="{{ url_for('admin.index') }}">
                 <i class="caret left icon"></i>
+                <!-- TODO: change dashboard link for general and agency worker users -->
                 Back to dashboard
             </a>
 
@@ -71,6 +72,7 @@
                             <th>Vehicle ID</th>
                             <th>License Plate</th>
                             <th>Duration</th>
+                            <th>Weather Conditions</th>
                             <th>Description</th>
                         </tr>
                     </thead>
@@ -82,6 +84,7 @@
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.license_plate }}</td>
                             <td>{{ r.duration }}</td>
+                            <td>{{ r.weather }}</td>
                             <td>{{ r.description }}</td>
                         </tr>
                     {% endfor %}

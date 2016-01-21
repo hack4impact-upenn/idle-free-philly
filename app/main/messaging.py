@@ -68,7 +68,7 @@ def handle_message():
         description, step = handle_description_step(body, step, twiml)
 
     elif step == 8:
-        picture_url, step, image_job_id = handle_picture_step(
+        step, image_job_id = handle_picture_step(
             body, step, message_sid, twilio_hosted_media_url, twiml)
 
         new_incident = handle_create_report(agency_name, description, duration,
@@ -314,7 +314,7 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
             message_sid=message_sid
         )
 
-    return '', step, image_job_id
+    return step, image_job_id
 
 
 def reply_with_errors(errors, twiml, field_name):

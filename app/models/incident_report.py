@@ -4,6 +4,7 @@ from flask.ext.rq import get_queue
 from .. import db
 from . import Agency, User
 from ..email import send_email
+from ..utils import get_current_weather
 
 
 class Location(db.Model):
@@ -41,6 +42,7 @@ class IncidentReport(db.Model):
     # legal issues).
     picture_deletehash = db.Column(db.Text)
     description = db.Column(db.Text)
+    weather = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # True if this report's agency will be publicly shown alongside it. That
@@ -57,6 +59,9 @@ class IncidentReport(db.Model):
 
         if self.date is None:
             self.date = datetime.now()
+
+        if self.weather is None and self.location is not None:
+            self.weather = get_current_weather(self.location)
 
         if notify_workers_upon_creation:
             all_reports_for_agency_link = url_for('reports.view_reports',
@@ -106,9 +111,9 @@ class IncidentReport(db.Model):
             l = Location(
                 original_user_text=fake.address(),
                 latitude=str(fake.geo_coordinate(center=39.951021,
-                                                 radius=0.001)),
+                                                 radius=0.01)),
                 longitude=str(fake.geo_coordinate(center=-75.197243,
-                                                  radius=0.001))
+                                                  radius=0.01))
             )
             r = IncidentReport(
                 vehicle_id=rand_alphanumeric(6),

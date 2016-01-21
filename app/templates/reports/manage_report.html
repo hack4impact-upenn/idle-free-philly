@@ -30,7 +30,7 @@
     <table class="ui compact definition table">
         <tr><td>Report ID</td><td>{{ report.id }}</td></tr>
         <tr><td>Vehicle ID</td><td>{{ report.vehicle_id }}</td></tr>
-        <tr><td>License Plate</td><td>{{ report.license_plate }}</td></tr>
+        <tr><td>License Plate</td><td>{{ report.license_plate if report.license_plate else '' }}</td></tr>
         <tr><td>Bus Number</td><td>
                 {{ report.bus_number if report.bus_number else '' }}
             </td></tr>
@@ -42,7 +42,23 @@
         <tr><td>Time</td><td>{{ report.date.strftime('%I:%M %p') }}</td></tr>
         <tr><td>Duration (h:m:s)</td><td>{{ report.duration}}</td></tr>
         <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
-        <tr><td>Picture</td><td><img src="{{ report.picture_url }}" alt="report picture" width="200"</td></tr>
+        <tr><td>Weather Conditions</td>
+            <td>
+                {% if report.weather %}
+                    {% for line in report.weather.splitlines() %}
+                        {{ line }}<br>
+                    {% endfor %}
+                    <br>
+                {% endif %}
+            </td>
+        </tr>
+        <tr><td>Picture</td>
+            <td>
+                {% if report.picture_url %}
+                <img src="{{ report.picture_url }}" alt="report picture" width="200">
+                {% endif %}
+            </td>
+        </tr>
         <!-- TODO add width attr to styles -->
         <tr><td>Description</td><td>{{ report.description }}</td></tr>
     </table>

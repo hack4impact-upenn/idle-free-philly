@@ -67,9 +67,11 @@ def strip_non_alphanumeric_chars(input_string):
     return stripped
 
 
-# Viewport-biased geocoding using Google API
-# Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
 def geocode(address):
+    """Viewport-biased geocoding using Google API
+
+    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+    """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
     r = requests.get(url, params=payload)
@@ -78,6 +80,48 @@ def geocode(address):
     else:
         coords = r.json()['results'][0]['geometry']['location']
         return coords['lat'], coords['lng']
+
+
+def get_current_weather(location):
+    """Given an app.models.Location object, returns the current weather at
+    that location as a string."""
+
+    url = "http://api.openweathermap.org/data/2.5/weather"
+    payload = {
+        'APPID': current_app.config['OPEN_WEATHER_MAP_API_KEY'],
+        'units': 'imperial',
+        'lat': location.latitude,
+        'lon': location.longitude,
+    }
+    r = requests.get(url, params=payload)
+    response = r.json()
+    weather_text = ''
+
+    weather_key = response.get('weather')
+    if weather_key is not None:
+        weather_key = weather_key[0]
+        if weather_key.get('description') is not None:
+            weather_text += 'Description: {}\n'.format(
+                weather_key['description'])
+
+    main_key = response.get('main')
+    if main_key is not None:
+        if main_key.get('temp') is not None:
+            weather_text += 'Temperature: {} degrees fahrenheit\n'.format(
+                main_key['temp'])
+        if main_key.get('pressure') is not None:
+            weather_text += 'Atmospheric pressure: {} hPa\n'.format(
+                main_key['pressure'])
+        if main_key.get('humidity') is not None:
+            weather_text += 'Humidity: {}%\n'.format(main_key['humidity'])
+
+    wind_key = response.get('wind')
+    if wind_key is not None:
+        if wind_key.get('speed') is not None:
+            weather_text += 'Wind speed: {} miles/hour\n'.format(
+                wind_key['speed'])
+
+    return weather_text.strip()
 
 
 def upload_image(imgur_client_id, imgur_client_secret, app_name,

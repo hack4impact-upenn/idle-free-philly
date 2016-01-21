@@ -19,7 +19,18 @@
           <li>Longitude: {{ incident_report.location.longitude }}</li>
       </ul>
   </li>
+  {% if incident_report.weather %}
+  <li><b>Weather Conditions:</b>
+    <ul>
+        {% for line in incident_report.weather.splitlines() %}
+            <li>{{ line }}</li>
+        {% endfor %}
+    </ul>
+  </li>
+  {% endif %}
+  {% if incident_report.picture_url %}
   <li><b>Picture:</b> <a href="{{ incident_report.picture_url }}">{{ incident_report.picture_url }}</a></li>
+  {% endif %}
   <li><b>Description:</b> {{ incident_report.description }}</li>
 </ul>
 

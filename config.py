@@ -25,6 +25,8 @@ class Config:
     # Default viewport is bounding box for Philadelphia, PA
     VIEWPORT = '39.861204,-75.310357|40.138932,-74.928582'
 
+    OPEN_WEATHER_MAP_API_KEY = os.environ.get('OPEN_WEATHER_MAP_API_KEY') or \
+        'SjefBOa$1FgGco0SkfPO392qqH9'
     IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID')
     IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET')
 

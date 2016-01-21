@@ -42,6 +42,16 @@
         <tr><td>Time</td><td>{{ report.date.strftime('%I:%M %p') }}</td></tr>
         <tr><td>Duration (h:m:s)</td><td>{{ report.duration}}</td></tr>
         <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
+        <tr><td>Weather Conditions</td>
+            <td>
+                {% if report.weather %}
+                    {% for line in report.weather.splitlines() %}
+                        {{ line }}<br>
+                    {% endfor %}
+                    <br>
+                {% endif %}
+            </td>
+        </tr>
         <tr><td>Picture</td>
             <td>
                 {% if report.picture_url %}

@@ -12,6 +12,17 @@ import twilio.twiml
 from twilio.rest import TwilioRestClient
 
 
+STEP_INIT = 0
+STEP_LOCATION = 1
+STEP_AGENCY = 2
+STEP_OTHER_AGENCY = 3
+STEP_LICENSE_PLATE = 4
+STEP_VEHICLE_ID = 5
+STEP_DURATION = 6
+STEP_DESCRIPTION = 7
+STEP_PICTURE = 8
+
+
 @main.route('/report_incident', methods=['GET'])  # noqa
 def handle_message():
     """Called by Twilio when a text message is received."""
@@ -46,28 +57,28 @@ def handle_message():
 
         step = handle_start_report(twiml)
 
-    elif step == 1:
+    elif step == STEP_LOCATION:
         location, step = handle_location_step(body, step, twiml)
 
-    elif step == 2:
+    elif step == STEP_AGENCY:
         agency_name, step = handle_agency_step(body, step, twiml)
 
-    elif step == 3:
+    elif step == STEP_OTHER_AGENCY:
         agency_name, step = handle_other_agency_step(body, step, twiml)
 
-    elif step == 4:
+    elif step == STEP_LICENSE_PLATE:
         license_plate, step = handle_license_plate_step(body, step, twiml)
 
-    elif step == 5:
+    elif step == STEP_VEHICLE_ID:
         vehicle_id, step = handle_vehicle_id_step(body, step, twiml)
 
-    elif step == 6:
+    elif step == STEP_DURATION:
         duration, step = handle_duration_step(body, step, twiml)
 
-    elif step == 7:
+    elif step == STEP_DESCRIPTION:
         description, step = handle_description_step(body, step, twiml)
 
-    elif step == 8:
+    elif step == STEP_PICTURE:
         step, image_job_id = handle_picture_step(step, message_sid,
                                                  twilio_hosted_media_url)
 
@@ -97,7 +108,7 @@ def handle_message():
             )
 
         # reset report variables/cookies
-        step = 0
+        step = STEP_INIT
 
     else:
         twiml.message('Welcome to {}! Please reply "report" to report an '
@@ -152,7 +163,7 @@ def handle_create_report(agency_name, description, duration, license_plate,
 def handle_start_report(twiml):
     """Handle a message from the user indicating they want to start a new
     report."""
-    step = 1
+    step = STEP_LOCATION
     twiml.message('What is your location? Be specific! (e.g. "34th and '
                   'Spruce in Philadelphia PA")')
     return step
@@ -169,7 +180,7 @@ def handle_location_step(body, step, twiml):
                       'full address including city and state.')
     if len(errors) == 0:
         location = body
-        step += 1
+        step = STEP_AGENCY
         agencies = Agency.query.filter_by(is_official=True).order_by(
             Agency.name).all()
         letters = all_strings(len(agencies) + 1)  # one extra letter for Other
@@ -193,13 +204,13 @@ def handle_agency_step(body_upper, step, twiml):
     letters_to_agency = dict(zip(letters, agencies))
 
     if body_upper == letters[-1]:  # Other
-        step += 1
+        step = STEP_OTHER_AGENCY
         agency_name = ''
         twiml.message('You selected Other. What is the name of the agency '
                       'which operates the vehicle?')
 
     elif body_upper in letters_to_agency.keys():
-        step += 2
+        step = STEP_LICENSE_PLATE
         agency_name = letters_to_agency[body_upper].name
         twiml.message('What is the license plate number? Reply "no" to skip. '
                       '(e.g. MG1234E)')
@@ -215,7 +226,7 @@ def handle_agency_step(body_upper, step, twiml):
 def handle_other_agency_step(body, step, twiml):
     """Called when the user wants to enter an 'Other' agency."""
     agency_name = body
-    step += 1
+    step = STEP_LICENSE_PLATE
     twiml.message('What is the license plate number? Reply "no" to skip. '
                   '(e.g. MG1234E)')
 
@@ -235,7 +246,7 @@ def handle_license_plate_step(body, step, twiml):
     )
     if len(errors) == 0:
         license_plate = body
-        step += 1
+        step = STEP_VEHICLE_ID
         twiml.message('What is the Vehicle ID? This is usually on the back or '
                       'side of the vehicle. (e.g. 105014)')
     else:
@@ -253,7 +264,7 @@ def handle_vehicle_id_step(body, step, twiml):
 
     if len(errors) == 0:
         vehicle_id = body
-        step += 1
+        step = STEP_DURATION
         twiml.message('How many minutes have you observed the vehicle idling? '
                       '(eg. 10)')
     else:
@@ -273,7 +284,7 @@ def handle_duration_step(body, step, twiml):
 
     if len(errors) == 0:
         duration = body
-        step += 1
+        step = STEP_DESCRIPTION
         twiml.message('Please describe the situation (eg. The driver is '
                       'sleeping)')
     else:
@@ -291,7 +302,7 @@ def handle_description_step(body, step, twiml):
 
     if len(errors) == 0:
         description = body
-        step += 1
+        step = STEP_PICTURE
         twiml.message('Last, can you take a photo of the vehicle and text '
                       'it back? Reply "no" to skip.')
     else:

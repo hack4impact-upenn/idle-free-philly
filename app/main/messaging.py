@@ -120,6 +120,7 @@ def handle_message():
 
 def handle_create_report(agency_name, description, duration, license_plate,
                          location, picture_url, vehicle_id, phone_number):
+    """Create a report with given fields."""
     lat, lon = geocode(location)
     agency = Agency.get_agency_by_name(agency_name)
     if agency is None:
@@ -149,6 +150,8 @@ def handle_create_report(agency_name, description, duration, license_plate,
 
 
 def handle_start_report(twiml):
+    """Handle a message from the user indicating they want to start a new
+    report."""
     step = 1
     twiml.message('What is your location? Be specific! (e.g. "34th and '
                   'Spruce in Philadelphia PA")')
@@ -156,6 +159,7 @@ def handle_start_report(twiml):
 
 
 def handle_location_step(body, step, twiml):
+    """Handle a message from the user containing the report's location."""
     validator_form = IncidentReportForm()
     errors = data_errors(form=validator_form, field=validator_form.location,
                          data=body)
@@ -182,6 +186,7 @@ def handle_location_step(body, step, twiml):
 
 
 def handle_agency_step(body_upper, step, twiml):
+    """Handle a message from the user containing the report's agency."""
     body_upper = body_upper.upper()
     agencies = Agency.query.filter_by(is_official=True).all()
     letters = all_strings(len(agencies) + 1)  # one extra letter for Other
@@ -208,6 +213,7 @@ def handle_agency_step(body_upper, step, twiml):
 
 
 def handle_other_agency_step(body, step, twiml):
+    """Called when the user wants to enter an 'Other' agency."""
     agency_name = body
     step += 1
     twiml.message('What is the license plate number? Reply "no" to skip. '
@@ -217,6 +223,7 @@ def handle_other_agency_step(body, step, twiml):
 
 
 def handle_license_plate_step(body, step, twiml):
+    """Handle a message from the user containing the report's license plate."""
     if body.lower() == 'no':
         body = ''
 
@@ -239,6 +246,7 @@ def handle_license_plate_step(body, step, twiml):
 
 
 def handle_vehicle_id_step(body, step, twiml):
+    """Handle a message from the user containing the report's vehicle id."""
     validator_form = IncidentReportForm()
     errors = data_errors(form=validator_form, field=validator_form.vehicle_id,
                          data=body)
@@ -256,6 +264,7 @@ def handle_vehicle_id_step(body, step, twiml):
 
 
 def handle_duration_step(body, step, twiml):
+    """Handle a message from the user containing the report's duration."""
     errors = []
     try:
         body = int(body)
@@ -275,6 +284,7 @@ def handle_duration_step(body, step, twiml):
 
 
 def handle_description_step(body, step, twiml):
+    """Handle a message from the user containing the report's description."""
     validator_form = IncidentReportForm()
     errors = data_errors(form=validator_form, field=validator_form.description,
                          data=body)
@@ -292,6 +302,7 @@ def handle_description_step(body, step, twiml):
 
 
 def handle_picture_step(step, message_sid, twilio_hosted_media_url):
+    """Handle a message from the user containing the report's picture."""
     image_job_id = None
     if twilio_hosted_media_url is not None:
         account_sid = current_app.config['TWILIO_ACCOUNT_SID']

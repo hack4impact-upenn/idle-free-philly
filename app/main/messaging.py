@@ -44,7 +44,7 @@ def handle_message():
         location = ''
         picture_url = ''
 
-        step = handle_start_report(step, twiml)
+        step = handle_start_report(twiml)
 
     elif step == 1:
         location, step = handle_location_step(body, step, twiml)
@@ -68,8 +68,8 @@ def handle_message():
         description, step = handle_description_step(body, step, twiml)
 
     elif step == 8:
-        picture_url, step, image_job_id = handle_picture_step(
-            body, step, message_sid, twilio_hosted_media_url, twiml)
+        step, image_job_id = handle_picture_step(step, message_sid,
+                                                 twilio_hosted_media_url)
 
         new_incident = handle_create_report(agency_name, description, duration,
                                             license_plate, location,
@@ -148,7 +148,7 @@ def handle_create_report(agency_name, description, duration, license_plate,
     return new_incident
 
 
-def handle_start_report(step, twiml):
+def handle_start_report(twiml):
     step = 1
     twiml.message('What is your location? Be specific! (e.g. "34th and '
                   'Spruce in Philadelphia PA")')
@@ -291,8 +291,7 @@ def handle_description_step(body, step, twiml):
     return description, step
 
 
-def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
-                        twiml):
+def handle_picture_step(step, message_sid, twilio_hosted_media_url):
     image_job_id = None
     if twilio_hosted_media_url is not None:
         account_sid = current_app.config['TWILIO_ACCOUNT_SID']
@@ -314,7 +313,7 @@ def handle_picture_step(body, step, message_sid, twilio_hosted_media_url,
             message_sid=message_sid
         )
 
-    return '', step, image_job_id
+    return step, image_job_id
 
 
 def reply_with_errors(errors, twiml, field_name):

@@ -1,6 +1,14 @@
+import datetime
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, SubmitField, IntegerField, TextAreaField, HiddenField, \
-    DateField, FileField
+from wtforms.fields import (
+    StringField,
+    SubmitField,
+    IntegerField,
+    TextAreaField,
+    HiddenField,
+    DateField,
+    FileField
+)
 from ..models import Agency
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
@@ -12,7 +20,6 @@ from wtforms.validators import (
 )
 from app.custom_validators import StrippedLength
 from .. import db
-import datetime as datetime
 
 
 class IncidentReportForm(Form):

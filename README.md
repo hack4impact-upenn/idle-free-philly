@@ -17,38 +17,44 @@
     $ source env/bin/activate
     ```
 
-3. Install the dependencies
+3. Install the app dependencies
 
     ```
     $ pip install -r requirements/common.txt
     $ pip install -r requirements/dev.txt
     ```
 
-4. Create the database
+4. Other dependencies for running locally
+
+    ```
+    $ gem install foreman
+    $ brew install redis
+    ```
+
+5. Create the database
 
     ```
     $ python manage.py recreate_db
     ```
 
-5. Other setup (e.g. creating roles in database)
+6. Other setup (e.g. creating roles in database)
 
     ```
     $ python manage.py setup_dev
     ```
 
-6. [Optional] Add fake data to the database
+7. [Optional] Add fake data to the database
 
     ```
     $ python manage.py add_fake_data
     ```
 
-## Running the app
+## Running the app locally
 
 ```
 $ source env/bin/activate
-$ python manage.py runserver
- * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
- * Restarting with stat
+$ redis-server &
+$ foreman start
 ```
 
 ## License

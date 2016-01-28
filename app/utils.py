@@ -2,10 +2,10 @@ import re
 import requests
 
 from flask import url_for, flash, current_app
+from imgurpython import ImgurClient
 from datetime import timedelta
 from pytimeparse.timeparse import timeparse
 from redis import Redis
-from imgurpython import ImgurClient
 from rq_scheduler import Scheduler
 
 
@@ -124,20 +124,18 @@ def get_current_weather(location):
     return weather_text.strip()
 
 
-def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
-                 image_file_path=None, title=None, description=None):
+def upload_image(imgur_client_id, imgur_client_secret, app_name,
+                 image_url=None, image_file_path=None):
     """Uploads an image to Imgur by the image's url or file_path. Returns the
     Imgur api response."""
     if image_url is None and image_file_path is None:
         raise ValueError('Either image_url or image_file_path must be '
                          'supplied.')
     client = ImgurClient(imgur_client_id, imgur_client_secret)
-    if title is None:
-        title = '{} Image Upload'.format(current_app.config['APP_NAME'])
+    title = '{} Image Upload'.format(current_app.config['APP_NAME'])
 
-    if description is None:
-        description = 'This is part of an idling vehicle report on {}.'.format(
-            current_app.config['APP_NAME'])
+    description = 'This is part of an idling vehicle report on {}.'.format(
+        current_app.config['APP_NAME'])
 
     if image_url is not None:
         result = client.upload_from_url(url=image_url, config={
@@ -151,6 +149,13 @@ def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
         })
 
     return result['link'], result['deletehash']
+
+
+def delete_image(deletehash, imgur_client_id, imgur_client_secret):
+    """Attempts to delete a specific image from Imgur using its deletehash."""
+    client = ImgurClient(imgur_client_id, imgur_client_secret)
+
+    client.delete_image(deletehash)
 
 
 def get_rq_scheduler(app=current_app):

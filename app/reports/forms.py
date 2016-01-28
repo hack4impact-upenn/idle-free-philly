@@ -50,7 +50,7 @@ class IncidentReportForm(Form):
 
     latitude = HiddenField('Latitude')
     longitude = HiddenField('Longitude')
-    location = StringField('Address')
+    location = StringField('Address')  # TODO: make required
 
     today = datetime.datetime.today()
     date = DateField('Date (year-month-day)',

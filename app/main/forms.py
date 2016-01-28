@@ -1,5 +1,6 @@
 import datetime
-from flask.ext.wtf import Form
+from flask_wtf import Form
+from flask_wtf.file import FileField
 from wtforms.fields import (
     StringField,
     SubmitField,
@@ -7,7 +8,6 @@ from wtforms.fields import (
     TextAreaField,
     HiddenField,
     DateField,
-    FileField
 )
 from ..models import Agency
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -74,7 +74,7 @@ class IncidentReportForm(Form):
                               .filter_by(is_official=True)
                               .order_by(Agency.name))
 
-    picture_file = FileField('Upload a picture of the idling vehicle.',
+    picture_file = FileField('Upload a picture of the idling vehicle',
                              validators=[Optional()])
 
     picture_url = StringField('Picture URL', validators=[

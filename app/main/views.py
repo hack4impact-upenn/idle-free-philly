@@ -29,6 +29,17 @@ def index():
         )
         db.session.add(new_incident)
         db.session.commit()
+
+        # filename = secure_filename(form.picture_file.data.filename)
+        print type(form.picture_file.data)
+        # image_job_id = get_queue().enqueue(
+        #     upload_image,
+        #     imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
+        #     imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
+        #     app_name=current_app.config['APP_NAME'],
+        #     image_file_path=
+        # ).id
+
     return render_template('main/map.html',
                            agencies=agencies,
                            form=form,

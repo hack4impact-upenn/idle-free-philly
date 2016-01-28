@@ -31,19 +31,26 @@
     $ brew install redis
     ```
 
-5. Create the database
+5. Create a .env file in the project root for environment variables
+    
+    To start off, add:
+    ```
+    FLASK_CONFIG=development
+    ```
+
+6. Create the database
 
     ```
     $ python manage.py recreate_db
     ```
 
-6. Other setup (e.g. creating roles in database)
+7. Other setup (e.g. creating roles in database)
 
     ```
     $ python manage.py setup_dev
     ```
 
-7. [Optional] Add fake data to the database
+8. [Optional] Add fake data to the database
 
     ```
     $ python manage.py add_fake_data

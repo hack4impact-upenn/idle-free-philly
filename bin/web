@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ "$FLASK_CONFIG" == "development" ]; then
+        python manage.py runserver
+else
+        gunicorn manage:app
+fi

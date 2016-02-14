@@ -1,5 +1,6 @@
 import re
 import requests
+import time
 from flask import url_for, current_app
 
 
@@ -46,7 +47,13 @@ def geocode(address):
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
     r = requests.get(url, params=payload)
-    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+
+    # Google's geocode api is limited to 10 requests a second
+    if r.json()['status'] == 'OVER_QUERY_LIMIT':
+        time.sleep(0.5)
+        r = requests.get(url, params=payload)
+
+    if r.json()['status'] == 'ZERO_RESULTS' or len(r.json()['results']) is 0:
         return None, None
     else:
         coords = r.json()['results'][0]['geometry']['location']

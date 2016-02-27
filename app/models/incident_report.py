@@ -48,8 +48,8 @@ class IncidentReport(db.Model):
         if self.date is None:
             self.date = datetime.now()
 
-        self.description.replace('\n', ' ')
-        self.description.replace('\r', ' ')
+        self.description = self.description.replace('\n', ' ').strip()
+        self.description = self.description.replace('\r', ' ').strip()
 
     @staticmethod
     def generate_fake(count=100, **kwargs):

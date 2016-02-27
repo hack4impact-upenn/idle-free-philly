@@ -3,7 +3,7 @@ import functools
 from datetime import datetime
 from app.utils import geocode, strip_non_alphanumeric_chars
 from app.models import Location, Agency, IncidentReport
-from app.main.forms import IncidentReportForm
+from app.reports.forms import IncidentReportForm
 
 
 def parse_to_db(db, filename):

@@ -36,7 +36,13 @@
     $ python manage.py setup_dev
     ```
 
-6. [Optional] Add fake data to the database
+6. [Optional] Import a dump of real data
+
+    ```
+    $ python manage.py parse_csv -f poll244.csv
+    ```
+
+7. [Optional] Add fake data to the database
 
     ```
     $ python manage.py add_fake_data

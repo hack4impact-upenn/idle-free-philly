@@ -106,7 +106,9 @@ def parse_to_db(db, filename):
                         duration=time2 - time1,
                         agency=agency,
                         picture_url=row[picture_index],
-                        description=row[description_index])
+                        description=row[description_index],
+                        notify_workers_upon_creation=False,
+                    )
                     db.session.add(incident)
 
         db.session.commit()

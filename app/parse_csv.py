@@ -59,6 +59,10 @@ def parse_to_db(db, filename):
                 vehicle_id_text = row[vehicle_id_index].strip()
                 license_plate_text = row[license_plate_index].strip()
 
+                # If the license plate is too short, just ignore it
+                if len(strip_non_alphanumeric_chars(license_plate_text)) < 3:
+                    license_plate_text = ''
+
                 # Validate all the fields
                 validate_field = functools.partial(
                     validate_field_partial,
@@ -71,12 +75,6 @@ def parse_to_db(db, filename):
                 if not validate_field(
                     field=validator_form.vehicle_id,
                     data=vehicle_id_text
-                ):
-                    errors += 1
-
-                if not validate_field(
-                    field=validator_form.license_plate,
-                    data=license_plate_text
                 ):
                     errors += 1
 
@@ -110,8 +108,8 @@ def parse_to_db(db, filename):
                         picture_url=row[picture_index],
                         description=row[description_index])
                     db.session.add(incident)
-                    db.session.commit()
 
+        db.session.commit()
         return columns
 
 

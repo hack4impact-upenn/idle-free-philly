@@ -50,10 +50,11 @@ def geocode(address):
 
     # Google's geocode api is limited to 10 requests a second
     if r.json()['status'] == 'OVER_QUERY_LIMIT':
-        time.sleep(0.5)
+        time.sleep(1)
         r = requests.get(url, params=payload)
 
     if r.json()['status'] == 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        print r.json()
         return None, None
     else:
         coords = r.json()['results'][0]['geometry']['location']

@@ -1,7 +1,7 @@
 import csv
 import functools
 from datetime import datetime
-from app.utils import strip_non_alphanumeric_chars
+from app.utils import geocode, strip_non_alphanumeric_chars
 from app.models import Location, Agency, IncidentReport
 from app.main.forms import IncidentReportForm
 
@@ -26,8 +26,7 @@ def parse_to_db(db, filename):
         for i, row in enumerate(reader, start=2):  # i is the row number
 
             address_text = row[location_index]
-            # coords = geocode(address_text)
-            coords = '', ''
+            coords = geocode(address_text)
 
             # Ignore rows that do not have correct geocoding
             if coords[0] is None or coords[1] is None:

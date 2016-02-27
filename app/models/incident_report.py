@@ -21,7 +21,7 @@ class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.String(50))
-    license_plate = db.Column(db.String(16))
+    license_plate = db.Column(db.String(50))
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',

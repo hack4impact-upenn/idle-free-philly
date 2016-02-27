@@ -1,6 +1,10 @@
 from datetime import datetime
+from flask import url_for
+from flask.ext.rq import get_queue
 from .. import db
 from . import Agency, User
+from ..email import send_email
+from ..utils import get_current_weather
 
 
 class Location(db.Model):
@@ -8,29 +12,37 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.String(50))
     longitude = db.Column(db.String(50))
+    # TODO: ensure original_user_text is always non-null
     original_user_text = db.Column(db.Text)  # the raw text which we geocoded
     incident_report_id = db.Column(db.Integer,
                                    db.ForeignKey('incident_reports.id'))
 
     def __repr__(self):
-        # TODO: Show address instead?
-        return 'Coordinates: {0}, {1}'.format(self.latitude, self.longitude)
+        return str(self.original_user_text)
 
 
 class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.String(50))
-    license_plate = db.Column(db.String(50))
+    license_plate = db.Column(db.String(50))  # optional
+    bus_number = db.Column(db.Integer)  # optional
+    led_screen_number = db.Column(db.Integer)  # optional
     location = db.relationship('Location',
                                uselist=False,
                                lazy='joined',
                                backref='incident_report')
-    date = db.Column(db.DateTime)  # hour the incident occurred
-    duration = db.Column(db.Interval)  # like timedelta object
+    date = db.Column(db.DateTime)  # datetime object
+    duration = db.Column(db.Interval)  # timedelta object
     agency_id = db.Column(db.Integer, db.ForeignKey('agencies.id'))
     picture_url = db.Column(db.Text)
+
+    # Should never be exposed to the user. This is the Imgur deletehash, so
+    # we can delete an image from Imgur in case of problems (e.g.
+    # legal issues).
+    picture_deletehash = db.Column(db.Text)
     description = db.Column(db.Text)
+    weather = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # True if this report's agency will be publicly shown alongside it. That
@@ -40,7 +52,7 @@ class IncidentReport(db.Model):
     # is_public field.
     show_agency_publicly = db.Column(db.Boolean, default=False)
 
-    def __init__(self, **kwargs):
+    def __init__(self, notify_workers_upon_creation=True, **kwargs):
         super(IncidentReport, self).__init__(**kwargs)
         if self.agency is not None and 'show_agency_publicly' not in kwargs:
             self.show_agency_publicly = self.agency.is_public
@@ -48,8 +60,30 @@ class IncidentReport(db.Model):
         if self.date is None:
             self.date = datetime.now()
 
+        if self.weather is None and self.location is not None:
+            self.weather = get_current_weather(self.location)
+
         self.description = self.description.replace('\n', ' ').strip()
         self.description = self.description.replace('\r', ' ').strip()
+
+        if notify_workers_upon_creation:
+            all_reports_for_agency_link = url_for('reports.view_reports',
+                                                  _external=True)
+            subject = '{} Idling Incident'.format(self.agency.name)
+
+            if self.location.original_user_text is not None:
+                subject += ' at {}'.format(self.location.original_user_text)
+
+            for agency_worker in self.agency.users:
+                get_queue().enqueue(
+                    send_email,
+                    recipient=agency_worker.email,
+                    subject=subject,
+                    template='reports/email/alert_workers',
+                    incident_report=self,
+                    user=agency_worker,
+                    all_reports_for_agency_link=all_reports_for_agency_link
+                )
 
     @staticmethod
     def generate_fake(count=100, **kwargs):
@@ -58,10 +92,18 @@ class IncidentReport(db.Model):
         from random import seed, choice, randint
         from datetime import timedelta
         from faker import Faker
+        import random
+        import string
 
         def flip_coin():
             """Returns True or False with equal probability"""
             return choice([True, False])
+
+        def rand_alphanumeric(n):
+            """Returns random string of alphanumeric characters of length n"""
+            r = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                        for _ in range(n))
+            return r
 
         agencies = Agency.query.all()
         users = User.query.all()
@@ -72,14 +114,14 @@ class IncidentReport(db.Model):
             l = Location(
                 original_user_text=fake.address(),
                 latitude=str(fake.geo_coordinate(center=39.951021,
-                                                 radius=0.001)),
+                                                 radius=0.01)),
                 longitude=str(fake.geo_coordinate(center=-75.197243,
-                                                  radius=0.001))
+                                                  radius=0.01))
             )
             r = IncidentReport(
-                vehicle_id=fake.password(length=6, lower_case=False),
+                vehicle_id=rand_alphanumeric(6),
                 # Either sets license plate to '' or random 6 character string
-                license_plate=fake.password(length=6, lower_case=False)
+                license_plate=rand_alphanumeric(6)
                 if flip_coin() else '',
                 location=l,
                 date=fake.date_time_between(start_date="-1y", end_date="now"),
@@ -88,6 +130,7 @@ class IncidentReport(db.Model):
                 user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
+                notify_workers_upon_creation=False,
                 **kwargs
             )
             db.session.add(r)

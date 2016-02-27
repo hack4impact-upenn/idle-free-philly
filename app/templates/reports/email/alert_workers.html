@@ -1,0 +1,45 @@
+<p>Dear {{ user.full_name() }},</p>
+
+<p>A {{ incident_report.agency.name }} vehicle was reported idling. Here is some information about the idling incident.</p>
+
+<ul>
+  <li><b>Time:</b> {{ incident_report.date.strftime('%m-%d-%Y at %I:%M %p') }}</li>
+  <li><b>Duration (h:m:s):</b> {{ incident_report.duration }}</li>
+  <li><b>Agency:</b> {{ incident_report.agency.name }}</li>
+  <li><b>Vehicle ID:</b> {{ incident_report.vehicle_id }}</li>
+  {% if incident_report.license_plate %}
+    <li><b>License Plate:</b> {{ incident_report.license_plate }}</li>
+  {% endif %}
+  <li><b>Location:</b>
+      <ul>
+          {% if incident_report.location.original_user_text %}
+          <li>User text: {{ incident_report.location.original_user_text }}</li>
+          {% endif %}
+          <li>Latitude: {{ incident_report.location.latitude }}</li>
+          <li>Longitude: {{ incident_report.location.longitude }}</li>
+      </ul>
+  </li>
+  {% if incident_report.weather %}
+  <li><b>Weather Conditions:</b>
+    <ul>
+        {% for line in incident_report.weather.splitlines() %}
+            <li>{{ line }}</li>
+        {% endfor %}
+    </ul>
+  </li>
+  {% endif %}
+  {% if incident_report.picture_url %}
+  <li><b>Picture:</b> <a href="{{ incident_report.picture_url }}">{{ incident_report.picture_url }}</a></li>
+  {% endif %}
+  <li><b>Description:</b> {{ incident_report.description }}</li>
+</ul>
+
+<p>Please go to <a href="{{ all_reports_for_agency_link }}">{{ all_reports_for_agency_link }}</a> to see all {{ incident_report.agency.name }} idling incidents.</p>
+
+<p>Sincerely,</p>
+
+<p>The {{ config.APP_NAME }} Team</p>
+
+<p><small>Note: replies to this email address are not monitored.</small></p>
+
+<!--TODO: finish up when it is known exactly which fields are optional-->

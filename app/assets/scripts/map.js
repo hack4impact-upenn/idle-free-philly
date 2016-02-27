@@ -157,6 +157,11 @@ $(document).ready(function() {
     });
 });
 
+function getNextDate(startDate) {
+    startDate.setDate(startDate.getDate()+1);
+    return startDate;
+}
+
 function initializeDateSlider() {
     $("#slider").dateRangeSlider({
         bounds: {
@@ -170,11 +175,10 @@ function initializeDateSlider() {
         },
     });
     $("#slider").bind("valuesChanged", function(e, data) {
-    	console.log("Values just changed. min: " + String(data.values.min).substring(4, 15) + " max: " + String(data.values.max).substring(4, 15));
         var beginYear = parseInt(String(data.values.min).substring(11, 15), 10);
         var beginDay = parseInt(String(data.values.min).substring(8, 10), 10);
         var endYear = parseInt(String(data.values.max).substring(11, 15), 10);
-        var endDay = parseInt(String(data.values.min).substring(8, 10), 10);
+        var endDay = parseInt(String(data.values.max).substring(8, 10), 10);
         var beginMonth = 0;
         var endMonth = 0;
         monthObj = {
@@ -194,10 +198,10 @@ function initializeDateSlider() {
         beginMonth = monthObj[String(data.values.min).substring(4, 7)];
         endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
-        endDate = new Date(endYear, endMonth, endDay);
+        endDate = getNextDate(new Date(endYear, endMonth, endDay));
         for (mw = 0; mw < globalMarkerWrappers.length; mw++) {
             if ((globalMarkerWrappers[mw].incidentDate.getTime() < beginDate.getTime()) ||
-                (globalMarkerWrappers[mw].incidentDate.getTime() > endDate.getTime())) {
+                (globalMarkerWrappers[mw].incidentDate.getTime() >= endDate.getTime())) {
                 globalMarkerWrappers[mw].actualMarker.setMap(null);
             }
             else

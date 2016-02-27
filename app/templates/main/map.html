@@ -9,7 +9,6 @@
         <form name="addressForm" id="addressForm">
             <div class="ui action input" id="addressSearch">
                 <input class="prompt" placeholder="Enter Address..." type="text" name="address" id="address">
-                <!--<input class="ui button" type="submit" id="submitButton" value="Search">-->
                 <button id="submitButton" class="ui button">Search</button>
             </div>
         </form>
@@ -57,14 +56,16 @@
                                 '<button id="close_info" class="ui icon button close">' +
                                 '<i class="remove icon"></i>' +
                                 '</button>' +
-                                '<h3>Date: ' + '{{ report.date }}' + '</h3>' +
-                                '<p>Duration: ' + '{{ report.duration }}' + '</p>' +
+                                '<h3>Date: ' + '{{ report.date.strftime('%m-%d-%Y at %I:%M %p') }}' + '</h3>' +
+                                '<p>Duration (h:m:s): ' + '{{ report.duration }}' + '</p>' +
                                 '<p>Vehicle ID: ' + '{{ report.vehicle_id }}' +'</p>' +
-                                '<p>License Plate: ' + '{{ report.license_plate }}' + '</p>' +
-                                {% if current_user.is_admin() or report.agency in current_user.agencies or report.agency.is_public %}
+                                '<p>License Plate: ' + '{{ report.license_plate if report.license_plate else '' }}' + '</p>' +
+                                {% if current_user.is_admin() or report.agency in current_user.agencies or report.show_agency_publicly %}
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
                                 {% endif %}
+                                {% if report.picture_url %}
                                 '<p><a href=' + '{{ report.picture_url }}' + '>' + 'Link to Picture' + '</a></p>' +
+                                {% endif %}
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>';
             bounds.extend(marker.getPosition());

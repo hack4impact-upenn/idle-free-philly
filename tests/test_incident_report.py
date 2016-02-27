@@ -28,8 +28,8 @@ class IncidentReportTestCase(unittest.TestCase):
         self.assertTrue(loc.incident_report is None)
 
     def test_location_has_incident(self):
-        incident_report_1 = IncidentReport()
-        incident_report_2 = IncidentReport()
+        incident_report_1 = IncidentReport(notify_workers_upon_creation=False)
+        incident_report_2 = IncidentReport(notify_workers_upon_creation=False)
         loc = Location(
             latitude='39.951039',
             longitude='-75.197428',
@@ -48,7 +48,8 @@ class IncidentReportTestCase(unittest.TestCase):
             date=now,
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
-            description='Truck idling on the road!'
+            description='Truck idling on the road!',
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.vehicle_id, '123456')
         self.assertEqual(incident.license_plate, 'ABC123')
@@ -59,8 +60,8 @@ class IncidentReportTestCase(unittest.TestCase):
 
     def test_incident_report_with_location_no_agency(self):
         loc1 = Location(
-            latitude='-75.197428',
-            longitude='39.951039',
+            latitude='39.951021',
+            longitude='-75.197243',
             original_user_text='3700 Spruce St.'
         )
         loc2 = Location(
@@ -75,7 +76,8 @@ class IncidentReportTestCase(unittest.TestCase):
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
             description='Truck idling on the road!',
-            location=loc1
+            location=loc1,
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.location, loc1)
         incident.location = loc2
@@ -92,7 +94,8 @@ class IncidentReportTestCase(unittest.TestCase):
             duration=datetime.timedelta(minutes=5),
             picture_url='http://google.com',
             description='Truck idling on the road!',
-            agency=agency1
+            agency=agency1,
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.agency, agency1)
         incident.agency = agency2
@@ -102,8 +105,69 @@ class IncidentReportTestCase(unittest.TestCase):
         u1 = User(email='user@example.com', password='password')
         u2 = User(email='otheruser@example.org', password='notpassword')
         incident = IncidentReport(
-            user=u1
+            user=u1,
+            notify_workers_upon_creation=False
         )
         self.assertEqual(incident.user, u1)
         incident.user = u2
         self.assertEqual(incident.user, u2)
+
+    def test_incident_report_show_agency_publicly_inherits(self):
+        agency1 = Agency(name='SEPTA', is_public=False)
+        agency2 = Agency(name='PECO', is_public=True)
+
+        incident1 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency1,
+            notify_workers_upon_creation=False
+        )
+
+        incident2 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency2,
+            notify_workers_upon_creation=False
+        )
+
+        self.assertFalse(incident1.show_agency_publicly)
+        self.assertTrue(incident2.show_agency_publicly)
+
+    def test_incident_report_show_agency_publicly_overwritten(self):
+        agency1 = Agency(name='SEPTA', is_public=False)
+        agency2 = Agency(name='PECO', is_public=True)
+
+        incident1 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency1,
+            show_agency_publicly=True,
+            notify_workers_upon_creation=False
+        )
+
+        incident2 = IncidentReport(
+            vehicle_id='123456',
+            license_plate='ABC123',
+            date=datetime.datetime.now(),
+            duration=datetime.timedelta(minutes=5),
+            picture_url='http://google.com',
+            description='Truck idling on the road!',
+            agency=agency2,
+            show_agency_publicly=False,
+            notify_workers_upon_creation=False
+        )
+
+        self.assertTrue(incident1.show_agency_publicly)
+        self.assertFalse(incident2.show_agency_publicly)

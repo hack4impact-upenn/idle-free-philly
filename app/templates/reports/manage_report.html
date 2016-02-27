@@ -1,0 +1,135 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% set deletion_endpoint = 'reports.delete_report_request' %}
+
+{% if (report.user_id == current_user.id) or current_user.is_admin() %}
+    {% set endpoints = [
+        ('reports.report_info', 'Report information'),
+        ('reports.edit_report_info', 'Edit report'),
+        (deletion_endpoint, 'Delete report')
+    ] %}
+{% else %}
+    {% set endpoints = [
+        ('reports.report_info', 'Report information'),
+    ] %}
+{% endif %}
+
+{% macro navigation(items) %}
+    <div class="ui vertical fluid secondary menu">
+        {% for route, name in items %}
+            {% set href = url_for(route, report_id=report.id) %}
+            <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro report_info(report) %}
+    <table class="ui compact definition table">
+        <tr><td>Report ID</td><td>{{ report.id }}</td></tr>
+        <tr><td>Vehicle ID</td><td>{{ report.vehicle_id }}</td></tr>
+        <tr><td>License Plate</td><td>{{ report.license_plate if report.license_plate else '' }}</td></tr>
+        <tr><td>Bus Number</td><td>
+                {{ report.bus_number if report.bus_number else '' }}
+            </td></tr>
+        <tr><td>LED Screen Number</td><td>
+                {{ report.led_screen_number if report.led_screen_number else '' }}
+            </td></tr>
+        <tr><td>Location</td><td>{{ report.location }}</td></tr>
+        <tr><td>Date</td><td>{{ report.date.strftime('%m-%d-%Y') }}</td></tr>
+        <tr><td>Time</td><td>{{ report.date.strftime('%I:%M %p') }}</td></tr>
+        <tr><td>Duration (h:m:s)</td><td>{{ report.duration}}</td></tr>
+        <tr><td>Agency</td><td>{{ report.agency.name }}</td></tr>
+        <tr><td>Weather Conditions</td>
+            <td>
+                {% if report.weather %}
+                    {% for line in report.weather.splitlines() %}
+                        {{ line }}<br>
+                    {% endfor %}
+                    <br>
+                {% endif %}
+            </td>
+        </tr>
+        <tr><td>Picture</td>
+            <td>
+                {% if report.picture_url %}
+                <img src="{{ report.picture_url }}" alt="report picture" width="200">
+                {% endif %}
+            </td>
+        </tr>
+        <!-- TODO add width attr to styles -->
+        <tr><td>Description</td><td>{{ report.description }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            {% if (report.user_id == current_user.id) %}
+            <a class="ui basic compact button" href="{{ url_for('reports.view_my_reports') }}">
+                <i class="caret left icon"></i>
+                Back to my reports
+            </a>
+            {% else %}
+            <a class="ui basic compact button" href="{{ url_for('reports.view_reports') }}">
+                <i class="caret left icon"></i>
+                Back to all reports
+            </a>
+            {% endif %}
+            <h2 class="ui header">
+                {{ '%s\'s report on %s' % (report.user.full_name(), report.agency.name) }}
+                <div class="sub header">View and manage this report.</div>
+            </h2>
+        </div>
+        <div class="stretched divided very relaxed row">
+            <div class="four wide column">
+                {{ navigation(endpoints) }}
+            </div>
+            <div class="eight wide column">
+                {% if request.endpoint == deletion_endpoint %}
+                    <h3 class="ui red block header">
+                        <i class="warning circle icon"></i>
+                        <div class="content">
+                            This action is permanent
+                            <div class="sub header">
+                                Deleting a report is not a reversible change. Any information associated
+                                with this report will be removed, and cannot be recovered.
+                            </div>
+                        </div>
+                    </h3>
+
+                    <div class="ui form">
+                        <div class="inline field">
+                            <div class="ui deletion checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden">
+                                <label>I understand that this action cannot be undone.</label>
+                            </div>
+                        </div>
+                        <a class="ui disabled negative deletion button">
+                            Delete this report
+                        </a>
+                    </div>
+                    </div>
+                {% elif form %}
+                    {{ f.render_form(form) }}
+                {% else %}
+                    {{ report_info(report) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $('.deletion.checkbox').checkbox({
+            onChecked: function() {
+                $('.deletion.button').removeClass('disabled')
+                        .attr('href', '{{ url_for('reports.delete_report', report_id=report.id) }}');
+            },
+            onUnchecked: function() {
+                $('.deletion.button').addClass('disabled').removeAttr('href');
+            }
+        });
+    </script>
+{% endblock %}

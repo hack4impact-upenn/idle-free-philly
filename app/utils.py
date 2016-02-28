@@ -1,5 +1,6 @@
 import re
 import requests
+import time
 
 from flask import url_for, flash, current_app
 from imgurpython import ImgurClient
@@ -68,14 +69,21 @@ def strip_non_alphanumeric_chars(input_string):
 
 
 def geocode(address):
-    """Viewport-biased geocoding using Google API
+    """Viewport-biased geocoding using Google API.
 
-    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails.
     """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
     r = requests.get(url, params=payload)
-    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+
+    # Google's geocode api is limited to 10 requests a second
+    if r.json()['status'] == 'OVER_QUERY_LIMIT':
+        time.sleep(1)
+        r = requests.get(url, params=payload)
+
+    if r.json()['status'] == 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        print r.json()
         return None, None
     else:
         coords = r.json()['results'][0]['geometry']['location']

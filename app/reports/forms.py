@@ -1,8 +1,15 @@
 import datetime as datetime
 
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, SubmitField, IntegerField, \
-    TextAreaField, HiddenField, FileField, DateField
+from wtforms.fields import (
+    StringField,
+    SubmitField,
+    IntegerField,
+    TextAreaField,
+    HiddenField,
+    FileField,
+    DateField,
+)
 from wtforms_components import TimeField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import (
@@ -22,9 +29,9 @@ class IncidentReportForm(Form):
     vehicle_id = StringField('Vehicle ID', validators=[
         InputRequired('Vehicle ID is required.'),
         StrippedLength(
-            min_length=2,
+            min_length=1,
             max_length=15,
-            message='Vehicle ID must be between 2 to 15 characters after '
+            message='Vehicle ID must be between 1 to 15 characters after '
                     'removing all non-alphanumeric characters.'
         ),
     ])
@@ -32,9 +39,9 @@ class IncidentReportForm(Form):
     license_plate = StringField('License Plate Number', validators=[
         Optional(),
         StrippedLength(
-            min_length=4,
+            min_length=3,
             max_length=8,
-            message='License plate must be between 4 to 8 characters after '
+            message='License plate must be between 3 to 8 characters after '
                     'removing all non-alphanumeric characters.'
         )
     ])

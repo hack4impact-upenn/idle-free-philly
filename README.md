@@ -63,6 +63,12 @@ $ python manage.py setup_dev
 $ python manage.py add_fake_data
 ```
 
+##### [Optional] Import some actual data
+
+```
+$ python manage.py parse_csv -f poll244.csv
+```
+
 ##### [Optional] Create a .env file in the project root for environment variables
 
 To start off, add:

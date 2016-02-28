@@ -2,61 +2,76 @@
 
 ## Setting up
 
-1. Clone the repo
+#####  Clone the repo
 
-    ```
-    $ git clone https://github.com/hack4impact/clean-air-council.git
-    $ cd clean-air-council
-    ```
+```
+$ git clone https://github.com/hack4impact/clean-air-council.git
+$ cd clean-air-council
+```
 
-2. Initialize a virtualenv
+##### Initialize a virtualenv
 
-    ```
-    $ pip install virtualenv
-    $ virtualenv env
-    $ source env/bin/activate
-    ```
+```
+$ pip install virtualenv
+$ virtualenv env
+$ source env/bin/activate
+```
 
-3. Install the app dependencies
+##### Install the app dependencies
 
-    ```
-    $ pip install -r requirements/common.txt
-    $ pip install -r requirements/dev.txt
-    ```
+```
+$ pip install -r requirements/common.txt
+$ pip install -r requirements/dev.txt
+```
 
-4. Other dependencies for running locally
+##### Other dependencies for running locally
 
-    ```
-    $ gem install foreman
-    $ brew install redis
-    ```
+You need to install [Foreman](https://ddollar.github.io/foreman/) and [Redis](http://redis.io/). Chances are, these commands will work:
 
-5. Create a .env file in the project root for environment variables
-    
-    To start off, add:
-    ```
-    FLASK_CONFIG=development
-    ```
+```
+$ gem install foreman
+```
 
-6. Create the database
+Mac (using [homebrew](http://brew.sh/)):
 
-    ```
-    $ python manage.py recreate_db
-    ```
+```
+$ brew install redis
+```
 
-7. Other setup (e.g. creating roles in database)
+Linux:
 
-    ```
-    $ python manage.py setup_dev
-    ```
+```
+$ sudo apt-get install redis-server
+```
 
-8. [Optional] Add fake data to the database
 
-    ```
-    $ python manage.py add_fake_data
-    ```
+##### Create the database
 
-## Running the app locally
+```
+$ python manage.py recreate_db
+```
+
+##### Other setup (initialize database)
+
+```
+$ python manage.py setup_dev
+```
+
+##### [Optional] Add fake data to the database
+
+```
+$ python manage.py add_fake_data
+```
+
+##### [Optional] Create a .env file in the project root for environment variables
+
+To start off, add:
+
+```
+FLASK_CONFIG=development
+```
+
+## Running the app
 
 ```
 $ source env/bin/activate

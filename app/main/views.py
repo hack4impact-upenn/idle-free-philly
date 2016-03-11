@@ -1,9 +1,8 @@
 from flask import render_template
-from ..models import EditableHTML
 from . import main
 from app import models, db
 from forms import IncidentReportForm
-from app.models import IncidentReport, Agency
+from app.models import IncidentReport, Agency, EditableHTML
 from datetime import timedelta
 
 

@@ -131,6 +131,7 @@ class IncidentReport(db.Model):
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
                 notify_workers_upon_creation=False,
+                **kwargs
             )
             db.session.add(r)
             try:

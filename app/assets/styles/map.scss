@@ -33,11 +33,11 @@
     text-transform: uppercase;
 }
 
-#submitButton:hover {
+#submitButton:hover, #submit:hover{
     background-color: $light-teal;
 }
 
-#current_location_button {
+#current_location_button, #submit{
     background-color: $teal;
     color: $white;
     width: 100%;
@@ -46,7 +46,7 @@
     margin-bottom: 1em;
 }
 
-#current_location_button:hover {
+#current_location_button:hover, #submit:hover {
     background-color: $light-teal;
     cursor: pointer;
 }
@@ -159,4 +159,9 @@
 
 .bus_number, .led_screen_number {
     display: hide;
+}
+
+form textarea#description {
+    min-height: 2em;
+    height: 4em;
 }

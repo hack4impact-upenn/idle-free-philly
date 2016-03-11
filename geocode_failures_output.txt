@@ -1,0 +1,116 @@
+Geocode failure count: 113
+Geocode failed addresses:
+20. Cherry just east of 23
+41. 19tg and Sansom 5min
+42. Test street
+47. Market just west of 18th
+70. Market just west of 20th
+80. Walnut just east of 17th
+85. 22 just north of market street
+89. Yes
+105. 19 street between market and chestnut
+119. Xy
+121.
+125. 15 th street just south of chancellor
+126. Market between 21 and 20
+135. 23rd just north of walnut street
+136. 23rd street just north of walnut
+137. Market just east of 20th
+162. Outside f 3609 market
+176. Market street a little west of 19th
+183. 15th close to chancellor
+186. Yes
+187. 38 at Samson
+192. 17th street right before walnut.
+212. 15th a little north of walnut.
+223. 15 th a little south of walnut
+225. 15th just south of walnut street
+227. 15th just north of walnut.
+232. 15 & Samson
+246. 15th just north of walnut
+273. 4600 block of Hazel ace
+284. Samson at spruce
+285. Spruce and Samson
+290.
+322. 18th just north of market
+409. 15 and market (15 st station)
+433. 18th just north of market
+435. 22nd and Market southwest corner septa station.
+443. 38 between spruce and chestnut
+444. 19 between Sansom and walnut
+447. 19 between Sansom and walnut
+455. Alley between 1845 walnut and 135 s 19th off walnut
+456. Spruce between 13 and juniper
+458. 1033 Germantown (piazza)
+462. 19th just past market
+471. 3 between race and market
+473. Spruce between broad and 13
+477. 14 th and Bach street
+478. 14 th street a little past locust
+488. 16 between spruce and locust
+495. Market between 22 and 21
+497. 15 and walnut on 15 th
+499. Walnut street between 17 and 18
+504. Lia Toyota dealership
+506. 12 th between market and chestnut
+509. 19 th and Samson
+510. Delivery truck idling behind Haymarket on Crackerbarrel Alley
+518. 19th between Samson and walnut
+526. 20th to Samson
+534. 22nd just north of market
+539. 22nd between chestnut and market
+540. 22 nd between chestnut and market
+541. 22nd between chestnut and market
+542. Samson between 16 and 15th
+544. 22nd and market trolley stop SW corner.
+545. Samson between 16 and 17
+546. Swanson street between 16 and 17.
+552. Market close to 19th
+554. Sansom between 6&7
+559. Market between 22nd and 21st.
+560. 5 th street past market
+561. 19 between walnut and Sansom
+562. Sansom between 6&7
+568. Front and Lombard St. Parking lot on east side if Front
+569. 5 past market on east side
+570. 5th street past market on east side
+580. Chestnut between 7&8
+581. Sansom between 18&19
+590. Yes
+591. Yes
+592.
+Yes
+593. Walnut between broad and 13th
+594. Yes
+600. Walnut between 18&19
+601. Arch between 10&11
+602. Arch between 10&11
+603. Arch between 10&11
+604. Arch between 10&11
+605. Arch between 10&11
+606. Arch between 9&10
+607. Arch between 9&10
+618. 6th between arch & race
+622. 22nd and market trolley stop NW corner
+626. Locust between 20 & 21
+634. 22nd and Market southwest corner trolley stop.
+666. Sansom between 6 & 7
+676. 13th and movarian
+679. Market between 7 & 8
+680. Market between 7 & 8
+685. Walnut between 16 & 17
+689. Broad between locust and spruce
+693. 2nd and Naudain, then 100 block of Front St.
+699. Market between 5 & 4
+706. Market between 5 & 4
+707. Market between 5 & 4
+708. Market between 5 & 4
+709. Market between 5 & 4
+711. 12 between chestnut and market
+713. market street between 22 and 21
+715. 5 just north of market
+719. 6 between market and chestnut
+720. Sansom between 6&7
+740. Walnut btwn 18&19
+746. Spruce between 17&18
+750. 9 but idling when I approached

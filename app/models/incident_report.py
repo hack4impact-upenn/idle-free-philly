@@ -25,7 +25,7 @@ class IncidentReport(db.Model):
     __tablename__ = 'incident_reports'
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.String(50))
-    license_plate = db.Column(db.String(16))  # optional
+    license_plate = db.Column(db.String(50))  # optional
     bus_number = db.Column(db.Integer)  # optional
     led_screen_number = db.Column(db.Integer)  # optional
     location = db.relationship('Location',
@@ -62,6 +62,9 @@ class IncidentReport(db.Model):
 
         if self.weather is None and self.location is not None:
             self.weather = get_current_weather(self.location)
+
+        self.description = self.description.replace('\n', ' ').strip()
+        self.description = self.description.replace('\r', ' ').strip()
 
         if notify_workers_upon_creation:
             all_reports_for_agency_link = url_for('reports.view_reports',

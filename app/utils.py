@@ -1,11 +1,12 @@
 import re
 import requests
+import time
 
 from flask import url_for, flash, current_app
+from imgurpython import ImgurClient
 from datetime import timedelta
 from pytimeparse.timeparse import timeparse
 from redis import Redis
-from imgurpython import ImgurClient
 from rq_scheduler import Scheduler
 
 
@@ -68,14 +69,21 @@ def strip_non_alphanumeric_chars(input_string):
 
 
 def geocode(address):
-    """Viewport-biased geocoding using Google API
+    """Viewport-biased geocoding using Google API.
 
-    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails
+    Returns a tuple of (latitude, longitude), (None, None) if geocoding fails.
     """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
     r = requests.get(url, params=payload)
-    if r.json()['status'] is 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+
+    # Google's geocode api is limited to 10 requests a second
+    if r.json()['status'] == 'OVER_QUERY_LIMIT':
+        time.sleep(1)
+        r = requests.get(url, params=payload)
+
+    if r.json()['status'] == 'ZERO_RESULTS' or len(r.json()['results']) is 0:
+        print r.json()
         return None, None
     else:
         coords = r.json()['results'][0]['geometry']['location']
@@ -124,20 +132,18 @@ def get_current_weather(location):
     return weather_text.strip()
 
 
-def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
-                 image_file_path=None, title=None, description=None):
+def upload_image(imgur_client_id, imgur_client_secret, app_name,
+                 image_url=None, image_file_path=None):
     """Uploads an image to Imgur by the image's url or file_path. Returns the
     Imgur api response."""
     if image_url is None and image_file_path is None:
         raise ValueError('Either image_url or image_file_path must be '
                          'supplied.')
     client = ImgurClient(imgur_client_id, imgur_client_secret)
-    if title is None:
-        title = '{} Image Upload'.format(current_app.config['APP_NAME'])
+    title = '{} Image Upload'.format(current_app.config['APP_NAME'])
 
-    if description is None:
-        description = 'This is part of an idling vehicle report on {}.'.format(
-            current_app.config['APP_NAME'])
+    description = 'This is part of an idling vehicle report on {}.'.format(
+        current_app.config['APP_NAME'])
 
     if image_url is not None:
         result = client.upload_from_url(url=image_url, config={
@@ -151,6 +157,13 @@ def upload_image(imgur_client_id, imgur_client_secret, image_url=None,
         })
 
     return result['link'], result['deletehash']
+
+
+def delete_image(deletehash, imgur_client_id, imgur_client_secret):
+    """Attempts to delete a specific image from Imgur using its deletehash."""
+    client = ImgurClient(imgur_client_id, imgur_client_secret)
+
+    client.delete_image(deletehash)
 
 
 def get_rq_scheduler(app=current_app):

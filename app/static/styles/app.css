@@ -434,12 +434,12 @@ footer > div > h3 {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000336}}
-#submitButton:hover {
+#submitButton:hover, #submit:hover {
   background-color: #7CC1D8;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000340}}
-#current_location_button {
+#current_location_button, #submit {
   background-color: #56A5BF;
   color: #FFFFFF;
   width: 100%;
@@ -449,7 +449,7 @@ footer > div > h3 {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000349}}
-#current_location_button:hover {
+#current_location_button:hover, #submit:hover {
   background-color: #7CC1D8;
   cursor: pointer;
 }
@@ -579,4 +579,10 @@ footer > div > h3 {
 @media -sass-debug-info{filename{}line{font-family:\00003160}}
 .bus_number, .led_screen_number {
   display: hide;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003164}}
+form textarea#description {
+  min-height: 2em;
+  height: 4em;
 }

@@ -1,7 +1,6 @@
 from flask import render_template
 from . import main
-from app import models, db
-from forms import IncidentReportForm
+from app import models, db, reports
 from app.models import IncidentReport, Agency, EditableHTML
 from datetime import timedelta
 
@@ -9,7 +8,7 @@ from datetime import timedelta
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/map', methods=['GET', 'POST'])
 def index():
-    form = IncidentReportForm()
+    form = reports.forms.IncidentReportForm()
     agencies = Agency.query.all()
 
     if form.validate_on_submit():
@@ -22,6 +21,7 @@ def index():
             license_plate=form.license_plate.data,
             location=l,
             date=form.date.data,
+            time=form.time.data,
             duration=timedelta(minutes=form.duration.data),
             agency=form.agency.data,
             description=form.description.data,

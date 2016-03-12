@@ -1,5 +1,3 @@
-import csv
-import datetime
 from ..decorators import admin_required
 from flask import (
     render_template,
@@ -8,7 +6,6 @@ from flask import (
     flash,
     url_for,
     request,
-    Response,
 )
 from flask.ext.login import login_required, current_user
 from flask.ext.rq import get_queue
@@ -23,7 +20,7 @@ from forms import (
     AddAgencyForm,
 )
 from . import admin
-from ..models import User, Role, Agency, EditableHTML, IncidentReport
+from ..models import User, Role, Agency, EditableHTML
 from .. import db
 from ..utils import parse_phone_number
 from ..email import send_email
@@ -322,31 +319,3 @@ def update_editor_contents():
     db.session.commit()
 
     return 'OK', 200
-
-
-@admin.route('/download_reports', methods=['GET'])
-@login_required
-@admin_required
-def download_reports():
-    """Download a csv file of all incident reports."""
-    current_date = str(datetime.date.today())
-    csv_name = 'IncidentReports-' + current_date + '.csv'
-    outfile = open(csv_name, 'w+')
-    print('initial file contents:', outfile.read())
-
-    wr = csv.writer(outfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-    reports = db.session.query(IncidentReport).all()
-    wr.writerow(['DATE', 'LOCATION', 'AGENCY ID', 'VEHICLE ID', 'DURATION',
-                'LICENSE PLATE', 'DESCRIPTION'])
-    for r in reports:
-        wr.writerow([r.date, r.location, r.agency.name, r.vehicle_id,
-                     r.duration,
-                     r.license_plate,
-                     r.description])
-
-    endfile = open(csv_name, 'r+')
-    data = endfile.read()
-    return Response(
-        data,
-        mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=" + csv_name})

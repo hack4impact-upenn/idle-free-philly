@@ -3,7 +3,9 @@
 # If the FLASK_CONFIG is set to development or it is unset, then run the
 # app with werkzeug. Else, run it with gunicorn.
 if [ "$FLASK_CONFIG" == "development" ] || [ -z "$FLASK_CONFIG"]; then
-        python manage.py runserver
+        # In order for logging to output in real-time, PYTHONUNBUFFERED must be
+        # set. We use a subshell so that the export only affects this command.
+        (export PYTHONUNBUFFERED=True && python manage.py runserver)
 else
         gunicorn manage:app
 fi

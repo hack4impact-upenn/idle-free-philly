@@ -35,6 +35,7 @@
             {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
             {{ f.render_form_field(field) }}
             {% endfor %}
+            {{ form.hidden_tag() }}
             {{ f.end_form() }}
             </div>
         </div>

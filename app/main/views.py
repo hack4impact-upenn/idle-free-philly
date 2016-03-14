@@ -1,6 +1,7 @@
 from flask import render_template
 from . import main
-from app import models, db, reports
+from .. import reports
+from app import models, db
 from app.models import IncidentReport, Agency, EditableHTML
 from datetime import timedelta
 
@@ -12,6 +13,7 @@ def index():
     agencies = Agency.query.all()
 
     if form.validate_on_submit():
+        print "Submit"
         l = models.Location(original_user_text=form.location.data,
                             latitude=form.latitude.data,
                             longitude=form.longitude.data)
@@ -26,6 +28,7 @@ def index():
             agency=form.agency.data,
             description=form.description.data,
         )
+        print(new_incident)
         db.session.add(new_incident)
         db.session.commit()
     return render_template('main/map.html',

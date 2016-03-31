@@ -19,13 +19,15 @@
             } %}
 
             {{ f.begin_form(form, flashes) }}
-            {{ f.render_form_field(form.license_plate) }}
             {{ f.render_form_field(form.vehicle_id) }}
+            {{ f.render_form_field(form.license_plate) }}
             {{ f.render_form_field(form.description) }}
             {{ f.render_form_field(form.duration) }}
             {{ f.render_form_field(form.location)}}
             <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
             {{ f.render_form_field(form.agency)}}
+            {{ f.render_form_field(form.date)}}
+            {{ f.render_form_field(form.time)}}
             {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
             {{ f.render_form_field(form.led_screen_number, extra_classes='led_screen_number') }}
             {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}

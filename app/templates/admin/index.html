@@ -26,16 +26,16 @@
             <h2>
                 Reports
             </h2>
-            <div class="ui three column stackable grid">
+            <div class="ui two column stackable grid">
                 {{ dashboard_option('All Reports', 'reports.view_reports', description='View and manage all incident reports', icon='folder icon') }}
                 {{ dashboard_option('My reports', 'reports.view_my_reports', description='View and manage my incident reports', icon='file icon') }}
-                {{ dashboard_option('Download reports', 'admin.invite_user', description='Download all incident reports', icon='download icon') }}
+                {{ dashboard_option('Download Reports', 'admin.download_reports', description='Download reports in CSV', icon='download icon') }}
             </div>
             <br>
             <h2>
                 Admin
             </h2>
-            <div class="ui three column stackable grid">
+            <div class="ui two column stackable grid">
                 {{ dashboard_option('Manage Agencies', 'admin.all_agencies',
                                     description='View and manage all agencies', icon='shipping icon') }}
                 {{ dashboard_option('Add New Agency', 'admin.add_agency',
@@ -49,7 +49,7 @@
             <h2>
                Account
             </h2>
-            <div class="ui three column stackable grid">
+            <div class="ui two column stackable grid">
                 {{ dashboard_option('My account', 'account.manage', description='View and manage your account', icon='user icon') }}
             </div>
             <br>

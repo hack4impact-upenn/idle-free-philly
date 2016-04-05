@@ -1,15 +1,42 @@
 from flask import render_template
-from ..models import EditableHTML, IncidentReport
 from . import main
+from app import models, db
+from app.reports.forms import IncidentReportForm
+from app.models import IncidentReport, Agency, EditableHTML
+from datetime import timedelta, datetime
 
 
-@main.route('/')
-@main.route('/map')
+@main.route('/', methods=['GET', 'POST'])
+@main.route('/map', methods=['GET', 'POST'])
 def index():
-    """Get information on all Incident Reports in the db, and
-    pass to map.html
-    """
+    form = IncidentReportForm()
+    agencies = Agency.query.all()
+
+    if form.validate_on_submit():
+        l = models.Location(original_user_text=form.location.data,
+                            latitude=form.latitude.data,
+                            longitude=form.longitude.data)
+
+        new_incident = models.IncidentReport(
+            vehicle_id=form.vehicle_id.data,
+            license_plate=form.license_plate.data,
+            location=l,
+            date=datetime.combine(form.date.data, form.time.data),
+            duration=timedelta(minutes=form.duration.data),
+            agency=form.agency.data,
+            description=form.description.data,
+        )
+        db.session.add(new_incident)
+        db.session.commit()
+
+    # pre-populate form
+    form.date.default = datetime.now()
+    form.time.default = datetime.now()
+    form.process()
+
     return render_template('main/map.html',
+                           agencies=agencies,
+                           form=form,
                            incident_reports=IncidentReport.query.all())
 
 

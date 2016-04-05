@@ -1,8 +1,46 @@
 {% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
 {% block content %}
 <div id="wrapper">
     <div id="googleMap"></div>
         <div id="slider"></div>
+        <div id="form_button">Report Incident</div>
+        <div id="form_container">
+            <button id="close_form" class="ui icon button close">
+                <i class="remove icon"></i>
+            </button>
+            <div id ="form_fields">
+            {% set flashes = {
+            'error': get_flashed_messages(category_filter=['form-error']),
+            'warning': get_flashed_messages(category_filter=['form-check-email']),
+            'info': get_flashed_messages(category_filter=['form-info']),
+            'success': get_flashed_messages(category_filter=['form-success'])
+            } %}
+
+            {{ f.begin_form(form, flashes) }}
+            {{ f.render_form_field(form.vehicle_id) }}
+            {{ f.render_form_field(form.license_plate) }}
+            {{ f.render_form_field(form.description) }}
+            {{ f.render_form_field(form.duration) }}
+            {{ f.render_form_field(form.location)}}
+            <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
+            {{ f.render_form_field(form.agency)}}
+            {{ f.render_form_field(form.date)}}
+            {{ f.render_form_field(form.time)}}
+            {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
+            {{ f.render_form_field(form.led_screen_number, extra_classes='led_screen_number') }}
+            {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+            {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+            {{ f.form_message(flashes['info'], header='Information', class='info') }}
+            {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+            {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
+            {{ f.render_form_field(field) }}
+            {% endfor %}
+            {{ form.hidden_tag() }}
+            {{ f.end_form() }}
+            </div>
+        </div>
         <div id="info_container">
             <div id="replaceable"></div>
         </div>
@@ -31,6 +69,26 @@
 
 <script type="text/javascript">
 
+    $('#form_button').click(function(){
+        $('#form_container').toggle();
+        $('#info_container').hide();
+    });
+
+    $('#close_form').click(function(){
+        $('#form_container').hide();
+    });
+
+    $('#agency').change(function(){
+        if ($("#agency option:selected").val() === '5') {
+            $('.bus_number').show()
+            $('.led_screen_number').show()
+        }
+        else {
+            $('.bus_number').hide()
+            $('.led_screen_number').hide()
+        }
+    });
+
     var selectedMarker;
     function initializeMapAndMarkers() {
         markerWrappers = [];
@@ -51,7 +109,6 @@
             incidentDate = new Date(year, month, day);
             if (incidentDate.getTime() < minDate.getTime())
                 minDate.setTime(incidentDate.getTime());
-            //marker.setMap(map);
             var contentString = '<div id="replaceable" class="ui segment">' +
                                 '<button id="close_info" class="ui icon button close">' +
                                 '<i class="remove icon"></i>' +
@@ -77,6 +134,7 @@
 
             // Add click listener to marker for displaying infoWindow
             marker.addListener('click', function() {
+                $('#form_container').hide()
                 $('#info_container').show();
                 $('#replaceable').replaceWith(contentString);
                 if (selectedMarker) {
@@ -99,10 +157,12 @@
         map=new google.maps.Map($('#googleMap')[0],mapProp);
         google.maps.event.addListener(map, 'click', function(event) {
                 $('#latitude').val(event.latLng.lat());
+                $('#replaceable').hide()
                 $('#info_container').hide()
                 $('#longitude').val(event.latLng.lng());
                 getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
         });
+
         storeMarkerState(markerWrappers, map, minDate, bounds);
         initializeDateSlider();
         addLocationButton(map);
@@ -111,7 +171,6 @@
     $(document).ready(function() {
         // Add the map to the window
         google.maps.event.addDomListener(window, 'load', initializeMapAndMarkers);
-
         // Set the height of the googleMap to the height of the window (less
         // any elements above the googleMap)
         $(function () {
@@ -121,6 +180,40 @@
             $("footer").css("margin-top", "0");
         });
     });
+
+    function getReverseGeocodingData(lat, lng) {
+        var latlng = new google.maps.LatLng(lat, lng);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                alert(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+                console.log(results);
+                 $('#location').val(results[0].formatted_address);
+            }
+        });
+    }
+
+    function geoFindMe() {
+        if (!navigator.geolocation){
+          return;
+        }
+        function success(position) {
+            var geocoder = new google.maps.Geocoder;
+            $('#latitude').val(position.coords.latitude);
+            $('#longitude').val(position.coords.longitude);
+            getReverseGeocodingData(position.coords.latitude, 
+                position.coords.longitude)
+        };
+        function error() {
+        };
+        navigator.geolocation.getCurrentPosition(success, error);
+    }
+
 </script>
 
 {% endblock %}
+

@@ -160,7 +160,7 @@ h3 {
 footer {
 	bottom: 0;
 	width: 100%;
-	text-align: right;
+	text-align: center;
 	padding: 1em;
 	margin-top: 5%;
 	background-color: $teal;
@@ -173,8 +173,9 @@ footer {
 	margin-right: 0.5em;
 }
 
-footer > div > h3 {
+footer > div > h3, footer > div > h3 > a{
 	color: $white;
+	text-align: center;
 	margin-top: 0;
 	font-weight: 300;
 }

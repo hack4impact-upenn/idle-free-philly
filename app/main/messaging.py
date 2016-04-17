@@ -175,9 +175,6 @@ def handle_location_step(body, step, twiml):
     errors = data_errors(form=validator_form, field=validator_form.location,
                          data=body)
 
-    if geocode(body) == (None, None):
-        errors.append('We could not find that location. Please respond with a '
-                      'full address including city and state.')
     if len(errors) == 0:
         location = body
         step = STEP_AGENCY

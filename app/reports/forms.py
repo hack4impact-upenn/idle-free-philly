@@ -20,7 +20,7 @@ from wtforms.validators import (
     URL
 )
 
-from app.custom_validators import StrippedLength
+from app.custom_validators import StrippedLength, ValidLocation
 from ..models import Agency
 from .. import db
 
@@ -55,9 +55,13 @@ class IncidentReportForm(Form):
         Optional()
     ])
 
-    latitude = HiddenField('Latitude')
+    latitude = HiddenField('Latitude')  # TODO: what are these used for?
     longitude = HiddenField('Longitude')
-    location = StringField('Address')  # TODO: make required
+    location = StringField('Address', validators=[
+        InputRequired(),
+        ValidLocation(),
+
+    ])
 
     today = datetime.datetime.today()
     date = DateField('Date (year-month-day)',

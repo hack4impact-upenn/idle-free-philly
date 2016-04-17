@@ -92,7 +92,6 @@ def edit_report_info(report_id):
         report.vehicle_id = form.vehicle_id.data
         report.license_plate = form.license_plate.data
 
-        # reformat location data - TODO error-checking for bad addresses
         lat, lng = geocode(form.location.data)
         report.location.latitude, report.location.longitude = lat, lng
         report.location.original_user_text = form.location.data

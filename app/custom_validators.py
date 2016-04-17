@@ -1,6 +1,6 @@
 from wtforms import ValidationError
 from app.models import User
-from app.utils import parse_phone_number, strip_non_alphanumeric_chars
+from app.utils import parse_phone_number, strip_non_alphanumeric_chars, geocode
 
 
 class UniqueEmail(object):
@@ -55,3 +55,13 @@ class StrippedLength(object):
         stripped = strip_non_alphanumeric_chars(field.data)
         if not (self.min_length <= len(stripped) <= self.max_length):
             raise ValidationError(self.message)
+
+
+class ValidLocation(object):
+    """Geocode the address to make sure it is valid."""
+    def __call__(self, form, field):
+        lat, lng = geocode(field.data)
+        if lat is None or lng is None:
+            raise ValidationError('We could not find that location. Please '
+                                  'respond with a full address including city '
+                                  'and state.')

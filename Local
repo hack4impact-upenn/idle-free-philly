@@ -1,2 +1,3 @@
-web: gunicorn manage:app
+redis: redis-server
+web: python manage.py runserver
 worker: sh -c "python -u manage.py run_worker & python -u manage.py run_scheduler"

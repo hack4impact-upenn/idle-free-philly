@@ -69,20 +69,11 @@ $ python manage.py add_fake_data
 $ python manage.py parse_csv -f poll244.csv
 ```
 
-##### [Optional] Create a .env file in the project root for environment variables
-
-To start off, add:
-
-```
-FLASK_CONFIG=development
-```
-
 ## Running the app
 
 ```
 $ source env/bin/activate
-$ redis-server &
-$ foreman start
+$ foreman start -f Local
 ```
 
 ## License

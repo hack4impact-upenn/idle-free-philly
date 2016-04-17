@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import render_template, abort, flash, redirect, url_for, current_app
 from flask.ext.login import login_required, current_user
 from flask.ext.rq import get_queue
+from werkzeug import secure_filename
 
 from forms import EditIncidentReportForm
 
@@ -14,7 +15,8 @@ from ..utils import (
     flash_errors,
     geocode,
     parse_timedelta,
-    delete_image
+    delete_image,
+    upload_image,
 )
 
 
@@ -103,9 +105,24 @@ def edit_report_info(report_id):
         report.duration = parse_timedelta(form.duration.data)
         report.agency = form.agency.data
 
-        # TODO upload picture_file
         report.picture_url = form.picture_url.data
         report.description = form.description.data
+
+        if form.picture_file.data.filename:
+            filepath = secure_filename(form.picture_file.data.filename)
+            form.picture_file.data.save(filepath)
+
+            # synchronously upload image so that the user will be able to see
+            # the changes immediately.
+            link, deletehash = upload_image(
+                imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
+                imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
+                app_name=current_app.config['APP_NAME'],
+                image_file_path=filepath
+            )
+
+            report.picture_url = link
+            report.picture_deletehash = deletehash
 
         db.session.add(report)
         db.session.commit()

@@ -34,23 +34,24 @@ def index():
         db.session.add(new_incident)
         db.session.commit()
 
-        filepath = secure_filename(form.picture_file.data.filename)
-        form.picture_file.data.save(filepath)
+        if form.picture_file.data.filename:
+            filepath = secure_filename(form.picture_file.data.filename)
+            form.picture_file.data.save(filepath)
 
-        image_job_id = get_queue().enqueue(
-            upload_image,
-            imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
-            imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
-            app_name=current_app.config['APP_NAME'],
-            image_file_path=filepath
-        ).id
+            image_job_id = get_queue().enqueue(
+                upload_image,
+                imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
+                imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
+                app_name=current_app.config['APP_NAME'],
+                image_file_path=filepath
+            ).id
 
-        get_queue().enqueue(
-            attach_image_to_incident_report,
-            depends_on=image_job_id,
-            incident_report=new_incident,
-            image_job_id=image_job_id,
-        )
+            get_queue().enqueue(
+                attach_image_to_incident_report,
+                depends_on=image_job_id,
+                incident_report=new_incident,
+                image_job_id=image_job_id,
+            )
 
     # pre-populate form
     form.date.default = datetime.now()

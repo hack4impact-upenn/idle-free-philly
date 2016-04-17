@@ -1,7 +1,7 @@
 import datetime as datetime
 
 from flask.ext.wtf import Form
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields import (
     StringField,
     SubmitField,
@@ -84,8 +84,14 @@ class IncidentReportForm(Form):
                               .filter_by(is_official=True)
                               .order_by(Agency.name))
 
-    picture_file = FileField('Upload a picture of the idling vehicle.',
-                             validators=[Optional()])
+    picture_file = FileField(
+        'Upload a picture of the idling vehicle.',
+        validators=[
+            Optional(),
+            FileAllowed(['jpg', 'jpe', 'jpeg', 'png', 'gif', 'svg', 'bmp'],
+                        'Only images are allowed.')
+        ]
+    )
 
     picture_url = StringField('Picture URL', validators=[
         Optional(),

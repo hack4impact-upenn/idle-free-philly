@@ -78,10 +78,12 @@
                 Back to all reports
             </a>
             {% endif %}
-            <h2 class="ui header">
+            <h3 class="ui header">
+              {% if (report.user) %}
                 {{ '%s\'s report on %s' % (report.user.full_name(), report.agency.name) }}
+              {% endif %}
                 <div class="sub header">View and manage this report.</div>
-            </h2>
+            </h3>
         </div>
         <div class="stretched divided very relaxed row">
             <div class="four wide column">

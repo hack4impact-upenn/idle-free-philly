@@ -4,7 +4,12 @@ from flask import request, make_response, current_app, url_for
 from flask.ext.rq import get_queue
 from . import main
 from .. import db
-from ..utils import geocode, upload_image, get_rq_scheduler
+from ..utils import (
+    geocode,
+    upload_image,
+    get_rq_scheduler,
+    attach_image_to_incident_report
+)
 from ..models import Agency, IncidentReport, Location, User
 from ..reports.forms import IncidentReportForm
 from datetime import datetime, timedelta
@@ -347,16 +352,6 @@ def delete_mms(account_sid, auth_token, message_sid):
     client = TwilioRestClient(account_sid, auth_token)
     for media in client.messages.get(message_sid).media_list.list():
         media.delete()
-
-
-def attach_image_to_incident_report(incident_report, image_job_id):
-    """Attach the image uploaded by the job with image_job_id to the given
-    incident_report."""
-    link, deletehash = get_queue().fetch_job(image_job_id).result
-    incident_report.picture_url = link
-    incident_report.deletehash = deletehash
-    db.session.add(incident_report)
-    db.session.commit()
 
 
 def get_agencies_listed(agencies, letters):

@@ -1,13 +1,13 @@
 import datetime as datetime
 
 from flask.ext.wtf import Form
+from flask_wtf.file import FileField
 from wtforms.fields import (
     StringField,
     SubmitField,
     IntegerField,
     TextAreaField,
     HiddenField,
-    FileField,
     DateField,
 )
 from wtforms_components import TimeField

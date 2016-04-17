@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import render_template, abort, flash, redirect, url_for
+from flask import render_template, abort, flash, redirect, url_for, current_app
 from flask.ext.login import login_required, current_user
 from flask.ext.rq import get_queue
 
@@ -158,7 +158,12 @@ def delete_report(report_id):
     report = IncidentReport.query.filter_by(id=report_id).first()
 
     # Asynchronously delete the report's image
-    get_queue().enqueue(delete_image, deletehash=report.picture_deletehash)
+    get_queue().enqueue(
+        delete_image,
+        deletehash=report.picture_deletehash,
+        imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
+        imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
+    )
     report_user_id = report.user_id
 
     db.session.delete(report)

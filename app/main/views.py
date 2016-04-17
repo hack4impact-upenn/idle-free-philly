@@ -1,9 +1,14 @@
-from flask import render_template
+from datetime import timedelta, datetime
+
+from flask import render_template, current_app
+from flask.ext.rq import get_queue
+from werkzeug import secure_filename
+
 from . import main
 from app import models, db
 from app.reports.forms import IncidentReportForm
 from app.models import IncidentReport, Agency, EditableHTML
-from datetime import timedelta, datetime
+from app.utils import upload_image, attach_image_to_incident_report
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -28,6 +33,24 @@ def index():
         )
         db.session.add(new_incident)
         db.session.commit()
+
+        filepath = secure_filename(form.picture_file.data.filename)
+        form.picture_file.data.save(filepath)
+
+        image_job_id = get_queue().enqueue(
+            upload_image,
+            imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
+            imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
+            app_name=current_app.config['APP_NAME'],
+            image_file_path=filepath
+        ).id
+
+        get_queue().enqueue(
+            attach_image_to_incident_report,
+            depends_on=image_job_id,
+            incident_report=new_incident,
+            image_job_id=image_job_id,
+        )
 
     # pre-populate form
     form.date.default = datetime.now()

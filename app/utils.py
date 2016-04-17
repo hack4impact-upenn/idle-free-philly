@@ -1,13 +1,17 @@
 import re
 import requests
 import time
+import os
 
 from flask import url_for, flash, current_app
+from flask.ext.rq import get_queue
 from imgurpython import ImgurClient
 from datetime import timedelta
 from pytimeparse.timeparse import timeparse
 from redis import Redis
 from rq_scheduler import Scheduler
+
+from app import db
 
 
 def register_template_utils(app):
@@ -155,6 +159,7 @@ def upload_image(imgur_client_id, imgur_client_secret, app_name,
             'title': title,
             'description': description,
         })
+        os.remove(image_file_path)
 
     return result['link'], result['deletehash']
 
@@ -174,3 +179,13 @@ def get_rq_scheduler(app=current_app):
         password=app.config['RQ_DEFAULT_PASSWORD']
     )
     return Scheduler(connection=conn)  # Get a scheduler for the default queue
+
+
+def attach_image_to_incident_report(incident_report, image_job_id):
+    """Attach the image uploaded by the job with image_job_id to the given
+    incident_report."""
+    link, deletehash = get_queue().fetch_job(image_job_id).result
+    incident_report.picture_url = link
+    incident_report.picture_deletehash = deletehash
+    db.session.add(incident_report)
+    db.session.commit()

@@ -67,6 +67,7 @@ def invite_user():
         )
         flash('User {} successfully invited'.format(user.full_name()),
               'form-success')
+        return redirect(url_for('admin.invite_user'))
     return render_template('admin/invite_user.html', form=form)
 
 

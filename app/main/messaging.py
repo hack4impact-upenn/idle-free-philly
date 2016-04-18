@@ -268,7 +268,7 @@ def handle_vehicle_id_step(body, step, twiml):
         vehicle_id = body
         step = STEP_DURATION
         twiml.message('How many minutes have you observed the vehicle idling? '
-                      '(eg. 10)')
+                      '(e.g. 10)')
     else:
         vehicle_id = ''
         reply_with_errors(errors, twiml, 'vehicle ID')
@@ -287,7 +287,7 @@ def handle_duration_step(body, step, twiml):
     if len(errors) == 0:
         duration = body
         step = STEP_DESCRIPTION
-        twiml.message('Please describe the situation (eg. The driver is '
+        twiml.message('Please describe the situation (e.g. The driver is '
                       'sleeping)')
     else:
         duration = 0

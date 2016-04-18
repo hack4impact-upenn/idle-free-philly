@@ -41,8 +41,6 @@ def index():
             agency=agency,
             description=form.description.data,
         )
-        db.session.add(new_incident)
-        db.session.commit()
 
         if form.picture_file.data.filename:
             filepath = secure_filename(form.picture_file.data.filename)
@@ -59,6 +57,9 @@ def index():
 
             new_incident.picture_url = link
             new_incident.picture_deletehash = deletehash
+
+        db.session.add(new_incident)
+        db.session.commit()
 
     # pre-populate form
     form.date.default = datetime.now()

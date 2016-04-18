@@ -1,14 +1,13 @@
 from datetime import timedelta, datetime
 
 from flask import render_template, current_app
-from flask.ext.rq import get_queue
 from werkzeug import secure_filename
 
 from . import main
 from app import models, db
 from app.reports.forms import IncidentReportForm
 from app.models import IncidentReport, Agency, EditableHTML
-from app.utils import upload_image, attach_image_to_incident_report, geocode
+from app.utils import upload_image, geocode
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -49,20 +48,17 @@ def index():
             filepath = secure_filename(form.picture_file.data.filename)
             form.picture_file.data.save(filepath)
 
-            image_job_id = get_queue().enqueue(
-                upload_image,
+            # synchronously upload image because heroku resets the file system
+            # after the request
+            link, deletehash = upload_image(
                 imgur_client_id=current_app.config['IMGUR_CLIENT_ID'],
                 imgur_client_secret=current_app.config['IMGUR_CLIENT_SECRET'],
                 app_name=current_app.config['APP_NAME'],
                 image_file_path=filepath
-            ).id
-
-            get_queue().enqueue(
-                attach_image_to_incident_report,
-                depends_on=image_job_id,
-                incident_report=new_incident,
-                image_job_id=image_job_id,
             )
+
+            new_incident.picture_url = link
+            new_incident.picture_deletehash = deletehash
 
     # pre-populate form
     form.date.default = datetime.now()

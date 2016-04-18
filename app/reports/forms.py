@@ -39,9 +39,9 @@ class IncidentReportForm(Form):
     license_plate = StringField('License Plate Number', validators=[
         Optional(),
         StrippedLength(
-            min_length=3,
-            max_length=8,
-            message='License plate must be between 3 to 8 characters after '
+            min_length=1,
+            max_length=12,
+            message='License plate must be between 1 to 12 characters after '
                     'removing all non-alphanumeric characters.'
         )
     ])

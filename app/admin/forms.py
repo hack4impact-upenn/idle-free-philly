@@ -49,7 +49,8 @@ class ChangeAgencyAffiliationsForm(Form):
         'Agency affiliations',
         validators=[InputRequired()],
         get_label='name',
-        query_factory=lambda: db.session.query(Agency).order_by('name')
+        query_factory=lambda: db.session.query(Agency).filter_by(
+            is_official=True).order_by('name')
     )
     submit = SubmitField('Update agency affiliations')
 
@@ -64,7 +65,8 @@ class InviteUserForm(Form):
     agency_affiliations = QuerySelectMultipleField(
         'Agency affiliations',
         get_label='name',
-        query_factory=lambda: db.session.query(Agency).order_by('name')
+        query_factory=lambda: db.session.query(Agency).filter_by(
+            is_official=True).order_by('name')
     )
     first_name = StringField('First name', validators=[InputRequired(),
                                                        Length(1, 64)])

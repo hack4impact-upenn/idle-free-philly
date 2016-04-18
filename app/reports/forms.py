@@ -20,7 +20,7 @@ from wtforms.validators import (
     URL
 )
 
-from app.custom_validators import StrippedLength, ValidLocation
+from app.custom_validators import StrippedLength, ValidLocation, RequiredIf
 from ..models import Agency
 from .. import db
 
@@ -46,7 +46,6 @@ class IncidentReportForm(Form):
         )
     ])
 
-    # TODO Make this a hidden field unless SEPTA Bus is selected as agency
     bus_number = IntegerField('Bus Number', validators=[
         Optional()
     ])
@@ -55,7 +54,7 @@ class IncidentReportForm(Form):
         Optional()
     ])
 
-    latitude = HiddenField('Latitude')  # TODO: what are these used for?
+    latitude = HiddenField('Latitude')
     longitude = HiddenField('Longitude')
     location = StringField('Address', validators=[
         InputRequired(),
@@ -77,12 +76,20 @@ class IncidentReportForm(Form):
                     message='Idling duration must be positive.')
     ])
 
-    agency = QuerySelectField('Vehicle Agency ',
-                              validators=[InputRequired()],
-                              get_label='name',
-                              query_factory=lambda: db.session.query(Agency)
-                              .filter_by(is_official=True)
-                              .order_by(Agency.name))
+    agency = QuerySelectField(
+        'Vehicle Agency ',
+        validators=[InputRequired()],
+        get_label='name',
+        query_factory=lambda: db.session.query(Agency).filter_by(
+            is_official=True).order_by(Agency.name),
+        allow_blank=True,
+        blank_text='Other',
+    )
+
+    other_agency = StringField(
+        'Other Agency',
+        validators=[RequiredIf(agency=None)]
+    )
 
     picture_file = FileField(
         'Upload a picture of the idling vehicle.',
@@ -115,9 +122,13 @@ class EditIncidentReportForm(IncidentReportForm):
 
     # All agencies should be options in the EditForm but only official agencies
     # should be an option in the ReportForm
-    agency = QuerySelectField('Vehicle Agency ',
-                              validators=[InputRequired()],
-                              get_label='name',
-                              query_factory=lambda: db.session.query(Agency))
+    agency = QuerySelectField(
+        'Vehicle Agency ',
+        validators=[InputRequired()],
+        get_label='name',
+        query_factory=lambda: db.session.query(Agency),
+        allow_blank=True,
+        blank_text='Other',
+    )
 
     submit = SubmitField('Update Report')

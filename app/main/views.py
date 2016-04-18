@@ -8,7 +8,7 @@ from . import main
 from app import models, db
 from app.reports.forms import IncidentReportForm
 from app.models import IncidentReport, Agency, EditableHTML
-from app.utils import upload_image, attach_image_to_incident_report
+from app.utils import upload_image, attach_image_to_incident_report, geocode
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -18,9 +18,20 @@ def index():
     agencies = Agency.query.all()
 
     if form.validate_on_submit():
+
+        # If geocode happened client-side, it's not necessary to geocode again.
+        lat, lng = form.latitude.data, form.longitude.data
+        if not lat or not lng:
+            lat, lng = geocode(form.location.data)
+
         l = models.Location(original_user_text=form.location.data,
-                            latitude=form.latitude.data,
-                            longitude=form.longitude.data)
+                            latitude=lat,
+                            longitude=lng)
+
+        agency = form.agency.data
+        if agency is None:
+            agency = Agency(name=form.other_agency.data, is_official=False,
+                            is_public=False)
 
         new_incident = models.IncidentReport(
             vehicle_id=form.vehicle_id.data,
@@ -28,7 +39,7 @@ def index():
             location=l,
             date=datetime.combine(form.date.data, form.time.data),
             duration=timedelta(minutes=form.duration.data),
-            agency=form.agency.data,
+            agency=agency,
             description=form.description.data,
         )
         db.session.add(new_incident)

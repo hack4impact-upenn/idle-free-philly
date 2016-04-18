@@ -83,8 +83,8 @@ def edit_report_info(report_id):
 
     if report is None:
         abort(404)
-    """Either the user is editing their own report, or the user is an admin.
-    Agency workers cannot edit reports for their own agency."""
+    # Either the user is editing their own report, or the user is an admin.
+    # Agency workers cannot edit reports for their own agency.
     if (report.user_id != current_user.id) and (not current_user.is_admin()):
         abort(403)
 
@@ -103,10 +103,18 @@ def edit_report_info(report_id):
                                hour=t.hour, minute=t.minute, second=t.second)
 
         report.duration = parse_timedelta(form.duration.data)
-        report.agency = form.agency.data
+
+        agency = form.agency.data
+        if agency is None:
+            agency = Agency(name=form.other_agency.data, is_official=False,
+                            is_public=False)
+        report.agency = agency
 
         report.picture_url = form.picture_url.data
         report.description = form.description.data
+
+        report.bus_number = form.bus_number.data
+        report.led_screen_number = form.led_screen_number.data
 
         if form.picture_file.data.filename:
             filepath = secure_filename(form.picture_file.data.filename)

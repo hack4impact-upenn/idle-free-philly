@@ -27,6 +27,7 @@
             {{ f.render_form_field(form.location)}}
             <div class="ui button" id="current_location_button" onclick="geoFindMe()">Use Current location</div>
             {{ f.render_form_field(form.agency)}}
+            {{ f.render_form_field(form.other_agency, extra_classes='other_agency') }}
             {{ f.render_form_field(form.date)}}
             {{ f.render_form_field(form.time)}}
             {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
@@ -80,13 +81,24 @@
     });
 
     $('#agency').change(function(){
-        if ($("#agency option:selected").val() === '5') {
+        console.log($("#agency option:selected").text());
+        if ($("#agency option:selected").text() === 'SEPTA BUS') {
             $('.bus_number').show()
             $('.led_screen_number').show()
         }
         else {
             $('.bus_number').hide()
             $('.led_screen_number').hide()
+        }
+    });
+
+    $('#agency').change(function(){
+        console.log($("#agency option:selected").text());
+        if ($("#agency option:selected").text() === 'Other') {
+            $('.other_agency').show()
+        }
+        else {
+            $('.other_agency').hide()
         }
     });
 

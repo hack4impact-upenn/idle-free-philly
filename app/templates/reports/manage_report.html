@@ -115,7 +115,31 @@
                     </div>
                     </div>
                 {% elif form %}
-                    {{ f.render_form(form) }}
+                    {% set flashes = {
+                    'error': get_flashed_messages(category_filter=['form-error']),
+                    'warning': get_flashed_messages(category_filter=['form-check-email']),
+                    'info': get_flashed_messages(category_filter=['form-info']),
+                    'success': get_flashed_messages(category_filter=['form-success'])
+                    } %}
+                    {{ f.begin_form(form, flashes) }}
+                    {{ f.render_form_field(form.vehicle_id) }}
+                    {{ f.render_form_field(form.license_plate) }}
+                    {{ f.render_form_field(form.picture_file)}}
+                    {{ f.render_form_field(form.picture_url)}}
+                    {{ f.render_form_field(form.description) }}
+                    {{ f.render_form_field(form.duration) }}
+                    {{ f.render_form_field(form.location)}}
+                    {{ f.render_form_field(form.agency)}}
+                    {{ f.render_form_field(form.other_agency, extra_classes='other_agency') }}
+                    {{ f.render_form_field(form.date)}}
+                    {{ f.render_form_field(form.time)}}
+                    {{ f.render_form_field(form.bus_number, extra_classes='bus_number') }}
+                    {{ f.render_form_field(form.led_screen_number, extra_classes='led_screen_number') }}
+                    {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
+                    {{ f.render_form_field(field) }}
+                    {% endfor %}
+                    {{ form.hidden_tag() }}
+                    {{ f.end_form() }}
                 {% else %}
                     {{ report_info(report) }}
                 {% endif %}
@@ -131,6 +155,28 @@
             },
             onUnchecked: function() {
                 $('.deletion.button').addClass('disabled').removeAttr('href');
+            }
+        });
+
+        $('#agency').change(function(){
+            console.log($("#agency option:selected").text());
+            if ($("#agency option:selected").text() === 'SEPTA BUS') {
+                $('.bus_number').show()
+                $('.led_screen_number').show()
+            }
+            else {
+                $('.bus_number').hide()
+                $('.led_screen_number').hide()
+            }
+        });
+
+        $('#agency').change(function(){
+            console.log($("#agency option:selected").text());
+            if ($("#agency option:selected").text() === 'Other') {
+                $('.other_agency').show()
+            }
+            else {
+                $('.other_agency').hide()
             }
         });
     </script>

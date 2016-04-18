@@ -1,4 +1,5 @@
 from wtforms import ValidationError
+from wtforms.validators import Required, Optional
 from app.models import User
 from app.utils import parse_phone_number, strip_non_alphanumeric_chars, geocode
 
@@ -65,3 +66,28 @@ class ValidLocation(object):
             raise ValidationError('We could not find that location. Please '
                                   'respond with a full address including city '
                                   'and state.')
+
+
+class RequiredIf(object):
+    """Copied from https://gist.github.com/devxoul/7638142
+
+
+    Validates field conditionally.
+    Usage::
+        login_method = StringField('', [AnyOf(['email', 'facebook'])])
+        email = StringField('', [RequiredIf(login_method='email')])
+        password = StringField('', [RequiredIf(login_method='email')])
+        facebook_token = StringField('', [RequiredIf(login_method='facebook')])
+    """
+    def __init__(self, *args, **kwargs):
+        self.conditions = kwargs
+
+    def __call__(self, form, field):
+        for name, data in self.conditions.iteritems():
+            if name not in form._fields:
+                Optional(form, field)
+            else:
+                condition_field = form._fields.get(name)
+                if condition_field.data == data and not field.data:
+                    Required()(form, field)
+        Optional()(form, field)

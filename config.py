@@ -68,6 +68,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SSL_DISABLE = bool(os.environ.get('SSL_DISABLE'))
 
     @classmethod
     def init_app(cls, app):
@@ -78,8 +79,6 @@ class ProductionConfig(Config):
 
 
 class HerokuConfig(ProductionConfig):
-    SSL_DISABLE = bool(os.environ.get('SSL_DISABLE'))
-
     @classmethod
     def init_app(cls, app):
         ProductionConfig.init_app(app)

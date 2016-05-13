@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime
 
-from flask import render_template, current_app
+from flask import render_template, current_app, flash
 from werkzeug import secure_filename
 
 from . import main
@@ -60,6 +60,7 @@ def index():
 
         db.session.add(new_incident)
         db.session.commit()
+        flash('Report successfully submitted.', 'success')
 
     # pre-populate form
     form.date.default = datetime.now()

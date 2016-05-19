@@ -205,6 +205,8 @@ def handle_agency_step(body_upper, step, twiml):
     letters = all_strings(len(agencies) + 1)  # one extra letter for Other
     letters_to_agency = dict(zip(letters, agencies))
 
+    print locals()
+
     if body_upper == letters[-1]:  # Other
         step = STEP_OTHER_AGENCY
         agency_name = ''
@@ -214,6 +216,9 @@ def handle_agency_step(body_upper, step, twiml):
     elif body_upper in letters_to_agency.keys():
         step = STEP_LICENSE_PLATE
         agency_name = letters_to_agency[body_upper].name
+        print letters_to_agency
+        print letters_to_agency[body_upper]
+        print agency_name
         twiml.message('What is the license plate number? Reply "no" to skip. '
                       '(e.g. MG1234E)')
 

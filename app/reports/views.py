@@ -106,8 +106,15 @@ def edit_report_info(report_id):
 
         agency = form.agency.data
         if agency is None:
-            agency = Agency(name=form.other_agency.data, is_official=False,
-                            is_public=False)
+            existing_other_agency = Agency.query.filter_by(
+                name=form.other_agency.data.upper()).first()
+            agency = existing_other_agency or Agency(
+                name=form.other_agency.data.upper(),
+                is_official=False,
+                is_public=False
+            )
+            db.session.add(agency)
+
         report.agency = agency
 
         report.picture_url = form.picture_url.data

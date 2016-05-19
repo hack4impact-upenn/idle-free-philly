@@ -29,8 +29,14 @@ def index():
 
         agency = form.agency.data
         if agency is None:
-            agency = Agency(name=form.other_agency.data, is_official=False,
-                            is_public=False)
+            existing_other_agency = Agency.query.filter_by(
+                name=form.other_agency.data.upper()).first()
+            agency = existing_other_agency or Agency(
+                name=form.other_agency.data.upper(),
+                is_official=False,
+                is_public=False
+            )
+            db.session.add(agency)
 
         new_incident = models.IncidentReport(
             vehicle_id=form.vehicle_id.data,

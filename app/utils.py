@@ -7,7 +7,6 @@ from flask import url_for, flash, current_app
 from flask.ext.rq import get_queue
 from imgurpython import ImgurClient
 from datetime import timedelta
-from pytimeparse.timeparse import timeparse
 from redis import Redis
 from rq_scheduler import Scheduler
 
@@ -53,7 +52,8 @@ def minutes_to_timedelta(minutes):
 
 def parse_timedelta(duration):
     """Parse string into timedelta object"""
-    seconds = timeparse(duration)
+    h, m, s = duration.split(':')
+    seconds = int(s) + 60 * int(m) + 3600 * int(h)
     return timedelta(seconds=seconds)
 
 

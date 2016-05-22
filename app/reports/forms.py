@@ -17,7 +17,8 @@ from wtforms.validators import (
     Length,
     Optional,
     NumberRange,
-    URL
+    URL,
+    Regexp,
 )
 
 from app.custom_validators import StrippedLength, ValidLocation, RequiredIf
@@ -117,7 +118,9 @@ class IncidentReportForm(Form):
 
 class EditIncidentReportForm(IncidentReportForm):
     duration = StringField('Idling Duration (h:m:s)', validators=[
-        InputRequired('Idling duration is required.')
+        InputRequired('Idling duration is required.'),
+        Regexp(r'^(\d{1,2}:)(\d{1,2}:)(\d{1,2})$',
+               message='Write duration as HH:MM:SS')
     ])
 
     # All agencies should be options in the EditForm but only official agencies

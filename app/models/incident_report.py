@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import url_for
 from flask.ext.rq import get_queue
 from .. import db
@@ -60,7 +60,8 @@ class IncidentReport(db.Model):
         if self.date is None:
             self.date = datetime.now()
 
-        if self.weather is None and self.location is not None:
+        if self.weather is None and self.location is not None and \
+                (datetime.now() - self.date < timedelta(minutes=1)):
             self.weather = get_current_weather(self.location)
 
         self.description = self.description.replace('\n', ' ').strip()

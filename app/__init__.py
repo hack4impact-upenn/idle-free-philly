@@ -18,7 +18,8 @@ csrf = CsrfProtect()
 compress = Compress()
 # Set up Flask-Login
 login_manager = LoginManager()
-login_manager.session_protection = 'strong'
+# login_manager.session_protection = 'strong'
+login_manager.session_protection = None  # TODO: HACK
 login_manager.login_view = 'account.login'
 
 

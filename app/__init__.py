@@ -18,8 +18,9 @@ csrf = CsrfProtect()
 compress = Compress()
 # Set up Flask-Login
 login_manager = LoginManager()
-# login_manager.session_protection = 'strong'
-login_manager.session_protection = None  # TODO: HACK
+# TODO: Ideally this should be strong, but that led to bugs. Once this is
+# fixed, switch protection mode back to 'strong'
+login_manager.session_protection = 'basic'
 login_manager.login_view = 'account.login'
 
 

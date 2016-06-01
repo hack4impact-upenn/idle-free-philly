@@ -128,9 +128,9 @@
                                 '</button>' +
                                 '<h3>Date: ' + '{{ report.date.strftime('%m-%d-%Y at %I:%M %p') }}' + '</h3>' +
                                 '<p>Duration (h:m:s): ' + '{{ report.duration }}' + '</p>' +
+                                {% if current_user.is_admin() or report.agency in current_user.agencies or report.show_agency_publicly %}
                                 '<p>Vehicle ID: ' + '{{ report.vehicle_id }}' +'</p>' +
                                 '<p>License Plate: ' + '{{ report.license_plate if report.license_plate else '' }}' + '</p>' +
-                                {% if current_user.is_admin() or report.agency in current_user.agencies or report.show_agency_publicly %}
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
                                 {% endif %}
                                 {% if report.picture_url %}

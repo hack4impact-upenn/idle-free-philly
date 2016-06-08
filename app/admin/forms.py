@@ -11,6 +11,7 @@ from ..custom_validators import (
     UniqueEmail,
     UniquePhoneNumber,
     PhoneNumberLength,
+    UniqueAgencyName
 )
 from ..models import Role, Agency
 from .. import db
@@ -94,7 +95,11 @@ class InviteUserForm(Form):
 class AddAgencyForm(Form):
     name = StringField(
         'Agency name',
-        validators=[InputRequired(), Length(1, 64)]
+        validators=[
+            InputRequired(),
+            Length(1, 64),
+            UniqueAgencyName(),
+        ]
     )
     is_public = SelectField(
         'Publicly visible',

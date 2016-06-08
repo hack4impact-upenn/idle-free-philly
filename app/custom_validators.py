@@ -1,6 +1,6 @@
 from wtforms import ValidationError
 from wtforms.validators import Required, Optional
-from app.models import User
+from app.models import User, Agency
 from app.utils import parse_phone_number, strip_non_alphanumeric_chars, geocode
 
 
@@ -19,6 +19,17 @@ class UniquePhoneNumber(object):
         stripped_number = parse_phone_number(field.data)
         if User.query.filter_by(phone_number=stripped_number).first():
             raise ValidationError('Phone number already registered.')
+
+
+class UniqueAgencyName(object):
+    """Check the database to ensure that the agency name is unique"""
+
+    def __call__(self, form, field):
+        if Agency.query.filter_by(name=field.data.upper()).first():
+            raise ValidationError('An agency with the name "{}" already '
+                                  'exists. You can edit that agency on the '
+                                  'Manage Agencies page.'
+                                  .format(field.data.upper()))
 
 
 class PhoneNumberLength(object):

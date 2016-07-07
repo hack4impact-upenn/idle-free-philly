@@ -67,7 +67,7 @@
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
                         <tr>
-                            <th class="sorted ascending">Date</th>
+                            <th class="sorted descending">Date</th>
                             <th>Agency</th>
                             <th>Vehicle ID</th>
                             <th>License Plate</th>
@@ -79,7 +79,7 @@
                     <tbody>
                     {% for r in reports | sort(attribute='date') %}
                         <tr onclick="window.location.href = '{{ url_for('reports.report_info', report_id=r.id) }}';">
-                            <td class="single line">{{ r.date.strftime('%m-%d-%Y at %I:%M %p') }}</td>
+                            <td class="single line">{{ r.date.strftime('%Y-%m-%d at %I:%M %p') }}</td>
                             <td class="agency name">{{ r.agency.name }}</td>
                             <td>{{ r.vehicle_id }}</td>
                             <td>{{ r.license_plate }}</td>

@@ -59,16 +59,15 @@ class IncidentReport(db.Model):
         if self.agency is not None and 'show_agency_publicly' not in kwargs:
             self.show_agency_publicly = self.agency.is_public
 
-        print self.date
         if self.date is None:
-            print 'setting self.date'
             self.date = datetime.now(pytz.timezone(
                 current_app.config['TIMEZONE']))
-            print self.date.strftime('%Y-%m-%d at %I:%M %p')
+            self.date = self.date.replace(tzinfo=None)
 
+        now = datetime.now(pytz.timezone(
+                current_app.config['TIMEZONE'])).replace(tzinfo=None)
         if self.weather is None and self.location is not None and \
-                (datetime.now(pytz.timezone(current_app.config['TIMEZONE'])) -
-                 self.date < timedelta(minutes=1)):
+                (now - self.date < timedelta(minutes=1)):
             self.weather = get_current_weather(self.location)
 
         self.description = self.description.replace('\n', ' ').strip()

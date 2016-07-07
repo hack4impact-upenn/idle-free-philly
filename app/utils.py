@@ -35,7 +35,7 @@ def index_for_role(role):
 def parse_phone_number(phone_number):
     """Make phone number conform to E.164 (https://en.wikipedia.org/wiki/E.164)
     """
-    if phone_number is None or '':
+    if phone_number is None or phone_number == '':
         return None
 
     stripped = re.sub(r'\D', '', phone_number)

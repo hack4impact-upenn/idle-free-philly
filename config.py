@@ -46,10 +46,6 @@ class Config:
     RQ_DEFAULT_PASSWORD = url.password
     RQ_DEFAULT_DB = 0
 
-    # Make flask aware of current domain so that external url_for works
-    # properly
-    SERVER_NAME = os.getenv('SERVER_NAME') or 'localhost'
-
     @staticmethod
     def init_app(app):
         pass

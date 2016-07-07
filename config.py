@@ -46,6 +46,11 @@ class Config:
     RQ_DEFAULT_PASSWORD = url.password
     RQ_DEFAULT_DB = 0
 
+    # Used for external url_for. This is a hack, see
+    # https://julo.ch/blog/why-flask-can-suck/#urlfor-and-servername for why
+    # this is necessary.
+    DOMAIN = os.environ.get('DOMAIN')
+
     @staticmethod
     def init_app(app):
         pass

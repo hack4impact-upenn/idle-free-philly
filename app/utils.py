@@ -189,3 +189,12 @@ def attach_image_to_incident_report(incident_report, image_job_id):
     incident_report.picture_deletehash = deletehash
     db.session.add(incident_report)
     db.session.commit()
+
+
+def url_for_external(endpoint, **kwargs):
+    """Get a full url (e.g. http:app.com/hello instead of just /hello"""
+    if current_app.config['DOMAIN']:
+        return current_app.config['DOMAIN'] + url_for(endpoint, **kwargs)
+    else:
+        # This will be correct, but may not be what you want.
+        return url_for(endpoint, _external=True, **kwargs)

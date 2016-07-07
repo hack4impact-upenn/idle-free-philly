@@ -1,6 +1,6 @@
 import string
 import itertools
-from flask import request, make_response, current_app, url_for
+from flask import request, make_response, current_app
 from flask.ext.rq import get_queue
 from . import main
 from .. import db
@@ -8,7 +8,8 @@ from ..utils import (
     geocode,
     upload_image,
     get_rq_scheduler,
-    attach_image_to_incident_report
+    attach_image_to_incident_report,
+    url_for_external
 )
 from ..models import Agency, IncidentReport, Location, User
 from ..reports.forms import IncidentReportForm
@@ -93,16 +94,15 @@ def handle_message():
                                             phone_number)
 
         twiml.message('Thanks! See your report on the map at {}'
-                      .format(url_for('main.index', _external=True)))
+                      .format(url_for_external('main.index')))
 
         if new_incident.user is None:
             twiml.message('Want to keep track of all your reports? Create an '
                           'account at {}'
-                          .format(url_for('account.register', _external=True)))
+                          .format(url_for_external('account.register')))
         else:
             twiml.message('See all your reports at {}'
-                          .format(url_for('reports.view_my_reports',
-                                          _external=True)))
+                          .format(url_for_external('reports.view_my_reports')))
 
         if image_job_id is not None:
             get_queue().enqueue(

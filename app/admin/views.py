@@ -25,7 +25,7 @@ from forms import (
 from . import admin
 from ..models import User, Role, Agency, EditableHTML, IncidentReport
 from .. import db
-from ..utils import parse_phone_number
+from ..utils import parse_phone_number, url_for_external
 from ..email import send_email
 
 
@@ -55,8 +55,8 @@ def invite_user():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        invite_link = url_for('account.join_from_invite', user_id=user.id,
-                              token=token, _external=True)
+        invite_link = url_for_external('account.join_from_invite',
+                                       user_id=user.id, token=token)
         get_queue().enqueue(
             send_email,
             recipient=user.email,

@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
-from flask import url_for
 from flask.ext.rq import get_queue
 from .. import db
 from . import Agency, User
 from ..email import send_email
-from ..utils import get_current_weather
+from ..utils import get_current_weather, url_for_external
 
 
 class Location(db.Model):
@@ -68,8 +67,8 @@ class IncidentReport(db.Model):
         self.description = self.description.replace('\r', ' ').strip()
 
         if notify_workers_upon_creation:
-            all_reports_for_agency_link = url_for('reports.view_reports',
-                                                  _external=True)
+            all_reports_for_agency_link = url_for_external(
+                'reports.view_reports')
             subject = '{} Idling Incident'.format(self.agency.name)
 
             if self.location.original_user_text is not None:

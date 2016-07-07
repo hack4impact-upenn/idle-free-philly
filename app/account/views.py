@@ -8,7 +8,7 @@ from flask.ext.login import (
 from flask.ext.rq import get_queue
 from . import account
 from .. import db
-from ..utils import parse_phone_number
+from ..utils import parse_phone_number, url_for_external
 from ..email import send_email
 from ..models import User
 from .forms import (
@@ -52,7 +52,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        confirm_link = url_for('account.confirm', token=token, _external=True)
+        confirm_link = url_for_external('account.confirm', token=token)
         get_queue().enqueue(
             send_email,
             recipient=user.email,
@@ -93,8 +93,8 @@ def reset_password_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             token = user.generate_password_reset_token()
-            reset_link = url_for('account.reset_password', token=token,
-                                 _external=True)
+            reset_link = url_for_external('account.reset_password',
+                                          token=token)
             get_queue().enqueue(
                 send_email,
                 recipient=user.email,
@@ -176,8 +176,8 @@ def change_email_request():
         if current_user.verify_password(form.password.data):
             new_email = form.email.data
             token = current_user.generate_email_change_token(new_email)
-            change_email_link = url_for('account.change_email', token=token,
-                                        _external=True)
+            change_email_link = url_for_external('account.change_email',
+                                                 token=token)
             get_queue().enqueue(
                 send_email,
                 recipient=new_email,
@@ -213,7 +213,7 @@ def change_email(token):
 def confirm_request():
     """Respond to new user's request to confirm their account."""
     token = current_user.generate_confirmation_token()
-    confirm_link = url_for('account.confirm', token=token, _external=True)
+    confirm_link = url_for_external('account.confirm', token=token)
     get_queue().enqueue(
         send_email,
         recipient=current_user.email,
@@ -277,8 +277,8 @@ def join_from_invite(user_id, token):
         flash('The confirmation link is invalid or has expired. Another '
               'invite email with a new link has been sent to you.', 'error')
         token = new_user.generate_confirmation_token()
-        invite_link = url_for('account.join_from_invite', user_id=user_id,
-                              token=token, _external=True)
+        invite_link = url_for_external('account.join_from_invite',
+                                       user_id=user_id, token=token)
         get_queue().enqueue(
             send_email,
             recipient=new_user.email,

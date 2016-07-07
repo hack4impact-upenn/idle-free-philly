@@ -1,4 +1,7 @@
+import pytz
+
 from datetime import datetime, timedelta
+from flask import current_app
 from flask.ext.rq import get_queue
 from .. import db
 from . import Agency, User
@@ -57,10 +60,12 @@ class IncidentReport(db.Model):
             self.show_agency_publicly = self.agency.is_public
 
         if self.date is None:
-            self.date = datetime.now()
+            self.date = datetime.now(pytz.timezone(
+                current_app.config['TIMEZONE']))
 
         if self.weather is None and self.location is not None and \
-                (datetime.now() - self.date < timedelta(minutes=1)):
+                (datetime.now(pytz.timezone(current_app.config['TIMEZONE'])) -
+                 self.date < timedelta(minutes=1)):
             self.weather = get_current_weather(self.location)
 
         self.description = self.description.replace('\n', ' ').strip()

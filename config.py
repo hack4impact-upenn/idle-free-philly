@@ -51,6 +51,10 @@ class Config:
     # this is necessary.
     DOMAIN = os.environ.get('DOMAIN')
 
+    # Used for displaying dates in local format. Must be a string recognized
+    # by pytz.
+    TIMEZONE = os.environ.get('TIMEZONE') or 'US/Eastern'
+
     @staticmethod
     def init_app(app):
         pass

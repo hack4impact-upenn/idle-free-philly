@@ -1,3 +1,5 @@
+import pytz
+
 from datetime import timedelta, datetime
 
 from flask import render_template, current_app, flash
@@ -69,8 +71,10 @@ def index():
         flash('Report successfully submitted.', 'success')
 
     # pre-populate form
-    form.date.default = datetime.now()
-    form.time.default = datetime.now()
+    form.date.default = datetime.now(pytz.timezone(
+        current_app.config['TIMEZONE']))
+    form.time.default = datetime.now(pytz.timezone(
+        current_app.config['TIMEZONE']))
     form.process()
 
     return render_template('main/map.html',

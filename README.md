@@ -1,4 +1,6 @@
-# Clean Air Council [![Circle CI](https://circleci.com/gh/hack4impact/clean-air-council.svg?style=svg)](https://circleci.com/gh/hack4impact/clean-air-council)
+# IdleFreePhilly [![Circle CI](https://circleci.com/gh/hack4impact/idle-free-philly.svg?style=svg)](https://circleci.com/gh/hack4impact/idle-free-philly)
+
+IdleFreePhilly allows anyone to report illegal vehicle idling.
 
 ## Setting up
 

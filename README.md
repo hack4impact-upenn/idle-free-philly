@@ -7,8 +7,8 @@ IdleFreePhilly allows anyone to report illegal vehicle idling.
 #####  Clone the repo
 
 ```
-$ git clone https://github.com/hack4impact/clean-air-council.git
-$ cd clean-air-council
+$ git clone https://github.com/hack4impact/idle-free-philly.git
+$ cd idle-free-philly
 ```
 
 ##### Initialize a virtualenv

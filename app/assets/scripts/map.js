@@ -14,20 +14,12 @@ initial_coords = new google.maps.LatLng(INITIAL_CENTER_LAT, INITIAL_CENTER_LONG)
 var BOUNDS_MIN;
 var BOUNDS_MAX = new Date();
 
-// Make a type for an object that encapsulates a GoogleMaps marker
-// object, the corresponding date, and the corresponding message to
-// display for the marker.
-function MarkerWrapper(actualMarker, incidentDate, contentString) {
-    this.actualMarker = actualMarker;
-    this.incidentDate = incidentDate;
-    this.contentString = contentString;
-}
-
 // Take a list of markers and a map, put them on the map, set the
 // minimum date, and set the location bounds
 function storeMarkerState(markers, map, minDate, bounds, oms) {
     globalMarkers = markers;
     globalMap = map;
+    var markerCluster = new MarkerClusterer(map, markers, {gridSize: 50, maxZoom: 15, minimumClusterSize: 15, imagePath: 'static/images/clusterer/m'});
     for (mw = 0; mw < globalMarkers.length; mw++)
     {
         (globalMarkers[mw]).setMap(globalMap);

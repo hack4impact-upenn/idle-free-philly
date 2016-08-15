@@ -27,6 +27,7 @@ vendor_js = Bundle(
     'vendor/jquery-ui.js',
     'vendor/jQDateRangeSlider-min.js',
     'vendor/oms.min.js',
+    'vendor/markerclusterer.js',
     filters='jsmin',
     output='scripts/vendor.js'
 )

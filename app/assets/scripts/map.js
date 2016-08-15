@@ -1,5 +1,5 @@
 // Global Marker Wrappers and Map
-var globalMarkerWrappers = null;
+var globalMarkers = null;
 var globalMap = null;
 
 // Geographic bounds centered according to incident report locations
@@ -23,14 +23,16 @@ function MarkerWrapper(actualMarker, incidentDate, contentString) {
     this.contentString = contentString;
 }
 
-// Take a list of MarkerWrappers and a map, put them on the map, set the
+// Take a list of markers and a map, put them on the map, set the
 // minimum date, and set the location bounds
-function storeMarkerState(markerWrappers, map, minDate, bounds) {
-    globalMarkerWrappers = markerWrappers;
+function storeMarkerState(markers, map, minDate, bounds, oms) {
+    globalMarkers = markers;
     globalMap = map;
-    for (mw = 0; mw < globalMarkerWrappers.length; mw++)
+    for (mw = 0; mw < globalMarkers.length; mw++)
     {
-        (globalMarkerWrappers[mw].actualMarker).setMap(globalMap);
+        (globalMarkers[mw]).setMap(globalMap);
+        oms.addMarker(globalMarkers[mw]);
+
     }
     BOUNDS_MIN = minDate;
     geographicBounds = bounds;
@@ -199,14 +201,14 @@ function initializeDateSlider() {
         endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
         endDate = getNextDate(new Date(endYear, endMonth, endDay));
-        for (mw = 0; mw < globalMarkerWrappers.length; mw++) {
-            if ((globalMarkerWrappers[mw].incidentDate.getTime() < beginDate.getTime()) ||
-                (globalMarkerWrappers[mw].incidentDate.getTime() >= endDate.getTime())) {
-                globalMarkerWrappers[mw].actualMarker.setMap(null);
+        for (mw = 0; mw < globalMarkers.length; mw++) {
+            if ((globalMarkers[mw].incidentDate.getTime() < beginDate.getTime()) ||
+                (globalMarkers[mw].incidentDate.getTime() >= endDate.getTime())) {
+                globalMarkers[mw].setMap(null);
             }
             else
             {
-                globalMarkerWrappers[mw].actualMarker.setMap(globalMap);
+                globalMarkers[mw].setMap(globalMap);
             }
         }
     });

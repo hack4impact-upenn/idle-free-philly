@@ -104,7 +104,32 @@
 
     var selectedMarker;
     function initializeMapAndMarkers() {
-        markerWrappers = [];
+        map = new google.maps.Map($('#googleMap')[0],mapProp);
+        google.maps.event.addListener(map, 'click', function(event) {
+                $('#latitude').val(event.latLng.lat());
+                $('#replaceable').hide()
+                $('#info_container').hide()
+                $('#longitude').val(event.latLng.lng());
+                getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
+        });
+        var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true, nearbyDistance: 10});
+
+        // Add click listener to marker for displaying infoWindow
+        oms.addListener('click', function(marker, event) {
+          $('#form_container').hide()
+          $('#info_container').show();
+          $('#replaceable').replaceWith(marker.contentString);
+          if (selectedMarker) {
+              selectedMarker.setIcon("../static/images/marker.png");
+          }
+          marker.setIcon("../static/images/marker_selected.png");
+          selectedMarker = marker;
+          $('#close_info').on('click', function() {
+              $('#info_container').hide();
+          });
+        });
+
+        markers = [];
         var minDate = new Date(2015, 0, 1);
         var bounds = new google.maps.LatLngBounds();
         {% for report in incident_reports %}
@@ -139,25 +164,13 @@
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>';
             bounds.extend(marker.getPosition());
-            markerWrapper = new MarkerWrapper(marker, incidentDate, contentString);
-            markerWrappers.push(markerWrapper);
+
+            // Dynamically add state to marker object.
+            marker.incidentDate = incidentDate;
+            marker.contentString = contentString;
+            markers.push(marker);
             var infoWindow = new google.maps.InfoWindow({
                 content: contentString
-            });
-
-            // Add click listener to marker for displaying infoWindow
-            marker.addListener('click', function() {
-                $('#form_container').hide()
-                $('#info_container').show();
-                $('#replaceable').replaceWith(contentString);
-                if (selectedMarker) {
-                    selectedMarker.setIcon("../static/images/marker.png");
-                }
-                marker.setIcon("../static/images/marker_selected.png");
-                selectedMarker = marker;
-                $('#close_info').on('click', function() {
-                    $('#info_container').hide();
-                });
             });
         });
         {% endfor %}
@@ -167,16 +180,7 @@
                 streetViewControl: false,
                 scrollwheel: false,
         };
-        map=new google.maps.Map($('#googleMap')[0],mapProp);
-        google.maps.event.addListener(map, 'click', function(event) {
-                $('#latitude').val(event.latLng.lat());
-                $('#replaceable').hide()
-                $('#info_container').hide()
-                $('#longitude').val(event.latLng.lng());
-                getReverseGeocodingData(event.latLng.lat(), event.latLng.lng())
-        });
-
-        storeMarkerState(markerWrappers, map, minDate, bounds);
+        storeMarkerState(markers, map, minDate, bounds, oms);
         initializeDateSlider();
         addLocationButton(map);
         addCenterButton(map);

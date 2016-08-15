@@ -1,4 +1,4 @@
-Dear {{ user.full_name() }},
+Dear {{ user }},
 
 A {{ incident_report.agency.name }} vehicle was reported idling. Here is some information about the idling incident.
 

@@ -132,9 +132,9 @@
                                 '<p>Vehicle ID: ' + '{{ report.vehicle_id }}' +'</p>' +
                                 '<p>License Plate: ' + '{{ report.license_plate if report.license_plate else '' }}' + '</p>' +
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
-                                {% endif %}
-                                {% if report.picture_url %}
-                                '<p><a href=' + '{{ report.picture_url }}' + '>' + 'Link to Picture' + '</a></p>' +
+                                  {% if report.picture_url %}
+                                  '<p><a href=' + '{{ report.picture_url }}' + '>' + 'Link to Picture' + '</a></p>' +
+                                  {% endif %}
                                 {% endif %}
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +
                                 '</div>';
@@ -187,7 +187,7 @@
         // Set the height of the googleMap to the height of the window (less
         // any elements above the googleMap)
         $(function () {
-            $("#googleMap").css("height", $(window).height() - 
+            $("#googleMap").css("height", $(window).height() -
                 $(".ui.navigation.grid").height());
             $(".ui.navigation.grid").css("margin-bottom", "0");
             $("footer").css("margin-top", "0");
@@ -218,7 +218,7 @@
             var geocoder = new google.maps.Geocoder;
             $('#latitude').val(position.coords.latitude);
             $('#longitude').val(position.coords.longitude);
-            getReverseGeocodingData(position.coords.latitude, 
+            getReverseGeocodingData(position.coords.latitude,
                 position.coords.longitude)
         };
         function error() {
@@ -229,4 +229,3 @@
 </script>
 
 {% endblock %}
-

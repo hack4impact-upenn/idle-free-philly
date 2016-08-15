@@ -133,7 +133,7 @@
                                 '<p>License Plate: ' + '{{ report.license_plate if report.license_plate else '' }}' + '</p>' +
                                 '<p>Agency: ' + '{{ report.agency.name }}' + '</p>' +
                                   {% if report.picture_url %}
-                                  '<p><a href=' + '{{ report.picture_url }}' + '>' + 'Link to Picture' + '</a></p>' +
+                                  '<p><a href="{{ report.picture_url }}" target="_blank" rel="noopener noreferrer">' + 'Link to Picture' + '</a></p>' +
                                   {% endif %}
                                 {% endif %}
                                 '<p>Description: ' + '{{ report.description }}' + '</p>' +

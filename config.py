@@ -55,6 +55,9 @@ class Config:
     # by pytz.
     TIMEZONE = os.environ.get('TIMEZONE') or 'US/Eastern'
 
+    # Send all incident report emails to this address.
+    SEND_ALL_REPORTS_TO = os.environ.get('SEND_ALL_REPORTS_TO')
+
     @staticmethod
     def init_app(app):
         pass

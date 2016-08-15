@@ -107,7 +107,7 @@ def parse_to_db(db, filename):
                         agency=agency,
                         picture_url=row[picture_index],
                         description=row[description_index],
-                        notify_workers_upon_creation=False,
+                        send_email_upon_creation=False,
                     )
                     db.session.add(incident)
 

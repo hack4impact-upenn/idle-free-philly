@@ -54,7 +54,7 @@ class IncidentReport(db.Model):
     # is_public field.
     show_agency_publicly = db.Column(db.Boolean, default=False)
 
-    def __init__(self, notify_workers_upon_creation=True, **kwargs):
+    def __init__(self, send_email_upon_creation=True, **kwargs):
         super(IncidentReport, self).__init__(**kwargs)
         if self.agency is not None and 'show_agency_publicly' not in kwargs:
             self.show_agency_publicly = self.agency.is_public
@@ -73,7 +73,7 @@ class IncidentReport(db.Model):
         self.description = self.description.replace('\n', ' ').strip()
         self.description = self.description.replace('\r', ' ').strip()
 
-        if notify_workers_upon_creation:
+        if send_email_upon_creation:
             all_reports_for_agency_link = url_for_external(
                 'reports.view_reports')
             subject = '{} Idling Incident'.format(self.agency.name)
@@ -88,7 +88,18 @@ class IncidentReport(db.Model):
                     subject=subject,
                     template='reports/email/alert_workers',
                     incident_report=self,
-                    user=agency_worker,
+                    user=agency_worker.full_name(),
+                    all_reports_for_agency_link=all_reports_for_agency_link
+                )
+
+            if current_app.config['SEND_ALL_REPORTS_TO']:
+                get_queue().enqueue(
+                    send_email,
+                    recipient=current_app.config['SEND_ALL_REPORTS_TO'],
+                    subject=subject,
+                    template='reports/email/alert_workers',
+                    incident_report=self,
+                    user=current_app.config['SEND_ALL_REPORTS_TO'],
                     all_reports_for_agency_link=all_reports_for_agency_link
                 )
 
@@ -137,7 +148,7 @@ class IncidentReport(db.Model):
                 user=choice(users),
                 picture_url=fake.image_url(),
                 description=fake.paragraph(),
-                notify_workers_upon_creation=False,
+                send_email_upon_creation=False,
                 **kwargs
             )
             db.session.add(r)

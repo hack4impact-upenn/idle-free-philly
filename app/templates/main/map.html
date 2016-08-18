@@ -104,6 +104,12 @@
 
     var selectedMarker;
     function initializeMapAndMarkers() {
+        var mapProp = {
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                streetViewControl: false,
+                scrollwheel: false,
+        };
         map = new google.maps.Map($('#googleMap')[0],mapProp);
         google.maps.event.addListener(map, 'click', function(event) {
                 $('#latitude').val(event.latLng.lat());
@@ -174,12 +180,6 @@
             });
         });
         {% endfor %}
-        var mapProp = {
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false,
-                streetViewControl: false,
-                scrollwheel: false,
-        };
         storeMarkerState(markers, map, minDate, bounds, oms);
         initializeDateSlider();
         addLocationButton(map);

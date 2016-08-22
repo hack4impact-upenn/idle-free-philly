@@ -102,7 +102,6 @@
         }
     });
 
-    var selectedMarker;
     function initializeMapAndMarkers() {
         var mapProp = {
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -125,11 +124,7 @@
           $('#form_container').hide()
           $('#info_container').show();
           $('#replaceable').replaceWith(marker.contentString);
-          if (selectedMarker) {
-              selectedMarker.setIcon("../static/images/marker.png");
-          }
           marker.setIcon("../static/images/marker_selected.png");
-          selectedMarker = marker;
           $('#close_info').on('click', function() {
               $('#info_container').hide();
           });

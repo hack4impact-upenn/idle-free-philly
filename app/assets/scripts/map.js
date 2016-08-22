@@ -1,6 +1,8 @@
 // Global Marker Wrappers and Map
 var globalMarkers = null;
 var globalMap = null;
+var markerCluster = null;
+
 
 // Geographic bounds centered according to incident report locations
 var geographicBounds = null;
@@ -19,7 +21,7 @@ var BOUNDS_MAX = new Date();
 function storeMarkerState(markers, map, minDate, bounds, oms) {
     globalMarkers = markers;
     globalMap = map;
-    var markerCluster = new MarkerClusterer(map, markers, {gridSize: 50, maxZoom: 15, minimumClusterSize: 15, imagePath: 'static/images/clusterer/m'});
+    markerCluster = new MarkerClusterer(map, markers, {gridSize: 50, maxZoom: 15, minimumClusterSize: 15, imagePath: 'static/images/clusterer/m'});
     for (mw = 0; mw < globalMarkers.length; mw++)
     {
         (globalMarkers[mw]).setMap(globalMap);
@@ -193,6 +195,8 @@ function initializeDateSlider() {
         endMonth = monthObj[String(data.values.max).substring(4, 7)];
         beginDate = new Date(beginYear, beginMonth, beginDay);
         endDate = getNextDate(new Date(endYear, endMonth, endDay));
+
+        var markersDisplayedOnMap = [];
         for (mw = 0; mw < globalMarkers.length; mw++) {
             if ((globalMarkers[mw].incidentDate.getTime() < beginDate.getTime()) ||
                 (globalMarkers[mw].incidentDate.getTime() >= endDate.getTime())) {
@@ -201,7 +205,11 @@ function initializeDateSlider() {
             else
             {
                 globalMarkers[mw].setMap(globalMap);
+                markersDisplayedOnMap.push(globalMarkers[mw]);
             }
         }
+        markerCluster.setMap(null);
+        markerCluster.clearMarkers();
+        markerCluster = new MarkerClusterer(map, markersDisplayedOnMap, {gridSize: 50, maxZoom: 15, minimumClusterSize: 15, imagePath: 'static/images/clusterer/m'});
     });
 }

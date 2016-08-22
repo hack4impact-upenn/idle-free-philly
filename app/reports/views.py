@@ -21,6 +21,7 @@ from ..utils import (
 
 
 @reports.route('/all')
+@login_required
 @admin_or_agency_required
 def view_reports():
     """View all idling incident reports.

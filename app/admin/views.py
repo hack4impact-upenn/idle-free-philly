@@ -330,6 +330,10 @@ def update_editor_contents():
 @admin_required
 def download_reports():
     """Download a csv file of all incident reports."""
+
+    def encode(s):
+        return s.encode('utf-8') if s else ''
+
     current_date = str(datetime.date.today())
     csv_name = 'IncidentReports-' + current_date + '.csv'
     outfile = open(csv_name, 'w+')
@@ -340,10 +344,9 @@ def download_reports():
     wr.writerow(['DATE', 'LOCATION', 'AGENCY ID', 'VEHICLE ID', 'DURATION',
                 'LICENSE PLATE', 'DESCRIPTION'])
     for r in reports:
-        wr.writerow([r.date, r.location, r.agency.name, r.vehicle_id,
-                     r.duration,
-                     r.license_plate,
-                     r.description])
+        wr.writerow([r.date, r.location, r.agency.name,
+                     r.vehicle_id, r.duration,
+                     r.license_plate, encode(r.description)])
 
     endfile = open(csv_name, 'r+')
     data = endfile.read()

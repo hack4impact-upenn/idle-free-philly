@@ -79,8 +79,8 @@ def geocode(address):
     """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
     payload = {
-        'address': address, 
-        'bounds': current_app.config['VIEWPORT'], 
+        'address': address,
+        'bounds': current_app.config['VIEWPORT'],
         'key': current_app.config['GOOGLE_GEOCODE_KEY']
     }
     r = requests.get(url, params=payload)

@@ -36,7 +36,7 @@ class Config:
     REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
 
     RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
-    
+
     GOOGLE_GEOCODE_KEY = os.environ.get('GOOGLE_GEOCODE_KEY')
 
     # Parse the REDIS_URL to set RQ config variables

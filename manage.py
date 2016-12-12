@@ -189,5 +189,6 @@ def run_scheduler():
             else:
                 raise exc
 
+
 if __name__ == '__main__':
     manager.run()

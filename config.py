@@ -37,6 +37,8 @@ class Config:
 
     RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
 
+    GOOGLE_GEOCODE_KEY = os.environ.get('GOOGLE_GEOCODE_KEY')
+
     # Parse the REDIS_URL to set RQ config variables
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(REDIS_URL)

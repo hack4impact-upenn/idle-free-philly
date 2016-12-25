@@ -78,7 +78,11 @@ def geocode(address):
     Returns a tuple of (latitude, longitude), (None, None) if geocoding fails.
     """
     url = "https://maps.googleapis.com/maps/api/geocode/json"
-    payload = {'address': address, 'bounds': current_app.config['VIEWPORT']}
+    payload = {
+        'address': address,
+        'bounds': current_app.config['VIEWPORT'],
+        'key': current_app.config['GOOGLE_GEOCODE_KEY']
+    }
     r = requests.get(url, params=payload)
 
     # Google's geocode api is limited to 10 requests a second

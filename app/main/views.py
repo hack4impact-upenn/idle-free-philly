@@ -90,6 +90,12 @@ def about():
                            editable_html_obj=editable_html_obj)
 
 
+@main.route('/wut')
+def wut():
+    raise Exception
+    return
+
+
 @main.route('/faq')
 def faq():
     editable_html_obj = EditableHTML.get_editable_html('faq')

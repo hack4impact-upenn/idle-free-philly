@@ -1,4 +1,5 @@
 import pytz
+import traceback
 
 from datetime import datetime, timedelta
 from flask import current_app
@@ -102,6 +103,9 @@ class IncidentReport(db.Model):
                     user=current_app.config['SEND_ALL_REPORTS_TO'],
                     all_reports_for_agency_link=all_reports_for_agency_link
                 )
+
+        traceback.print_stack()  # TODO: Remove
+        print locals()
 
     @staticmethod
     def generate_fake(count=100, **kwargs):

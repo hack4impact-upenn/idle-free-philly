@@ -18,7 +18,7 @@ A {{ incident_report.agency.name }} vehicle was reported idling. Here is some in
 * Picture: {{ incident_report.picture_url }}
 * Description: {{ incident_report.description }}
 
-Please go to {{ all_reports_for_agency_link }} to see all {{ incident_report.agency.name }} idling incidents.
+This idling incident can be found on the map page at {{ index_page_link }}. If you are a registered user, go to {{ all_reports_for_agency_link }} to see all {{ incident_report.agency.name }} incidents.
 
 Sincerely,
 

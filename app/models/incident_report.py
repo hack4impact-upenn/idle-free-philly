@@ -77,6 +77,8 @@ class IncidentReport(db.Model):
         if send_email_upon_creation:
             all_reports_for_agency_link = url_for_external(
                 'reports.view_reports')
+            index_page_link = url_for_external(
+                'main.index')
             subject = '{} Idling Incident'.format(self.agency.name)
 
             if self.location.original_user_text is not None:
@@ -90,7 +92,8 @@ class IncidentReport(db.Model):
                     template='reports/email/alert_workers',
                     incident_report=self,
                     user=agency_worker.full_name(),
-                    all_reports_for_agency_link=all_reports_for_agency_link
+                    all_reports_for_agency_link=all_reports_for_agency_link,
+                    index_page_link=index_page_link
                 )
 
             if current_app.config['SEND_ALL_REPORTS_TO']:
@@ -101,7 +104,8 @@ class IncidentReport(db.Model):
                     template='reports/email/alert_workers',
                     incident_report=self,
                     user=current_app.config['SEND_ALL_REPORTS_TO'],
-                    all_reports_for_agency_link=all_reports_for_agency_link
+                    all_reports_for_agency_link=all_reports_for_agency_link,
+                    index_page_link=index_page_link
                 )
 
         traceback.print_stack()  # TODO: Remove

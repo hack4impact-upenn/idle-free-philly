@@ -121,11 +121,17 @@ class ProductionWithDebug(ProductionConfig):
     ASSETS_DEBUG = True
 
 
+class HerokuWithDebug(HerokuConfig):
+    DEBUG = True
+    ASSETS_DEBUG = True
+
+
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
     'heroku': HerokuConfig,
     'production_debug': ProductionWithDebug,
+    'heroku_debug': HerokuWithDebug,
     'default': DevelopmentConfig
 }

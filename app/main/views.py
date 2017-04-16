@@ -12,6 +12,11 @@ from app.models import IncidentReport, Agency, EditableHTML
 from app.utils import upload_image, geocode
 
 
+@main.route('/error', methods=['GET', 'POST'])
+def cause_error():
+    raise Exception('This view function just raises an exception')
+
+
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/map', methods=['GET', 'POST'])
 def index():

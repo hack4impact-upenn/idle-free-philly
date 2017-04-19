@@ -7,8 +7,6 @@ from flask import url_for, flash, current_app
 from flask.ext.rq import get_queue
 from imgurpython import ImgurClient
 from datetime import timedelta
-from redis import Redis
-from rq_scheduler import Scheduler
 
 from app import db
 
@@ -173,16 +171,6 @@ def delete_image(deletehash, imgur_client_id, imgur_client_secret):
     client = ImgurClient(imgur_client_id, imgur_client_secret)
 
     client.delete_image(deletehash)
-
-
-def get_rq_scheduler(app=current_app):
-    conn = Redis(
-        host=app.config['RQ_DEFAULT_HOST'],
-        port=app.config['RQ_DEFAULT_PORT'],
-        db=0,
-        password=app.config['RQ_DEFAULT_PASSWORD']
-    )
-    return Scheduler(connection=conn)  # Get a scheduler for the default queue
 
 
 def attach_image_to_incident_report(incident_report, image_job_id):

@@ -7,7 +7,6 @@ from .. import db
 from ..utils import (
     geocode,
     upload_image,
-    get_rq_scheduler,
     attach_image_to_incident_report,
     url_for_external
 )
@@ -330,9 +329,9 @@ def handle_picture_step(step, message_sid, twilio_hosted_media_url):
             image_url=twilio_hosted_media_url
         ).id
 
-        get_rq_scheduler().enqueue_in(
-            timedelta(minutes=10),
+        get_queue().enqueue(
             delete_mms,
+            depends_on=image_job_id,
             account_sid=account_sid,
             auth_token=auth_token,
             message_sid=message_sid

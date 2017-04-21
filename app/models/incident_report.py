@@ -56,7 +56,6 @@ class IncidentReport(db.Model):
 
     def __init__(self, send_email_upon_creation=True, **kwargs):
         super(IncidentReport, self).__init__(**kwargs)
-        send_email_upon_creation = False  # HACK, remove ASAP
         if self.agency is not None and 'show_agency_publicly' not in kwargs:
             self.show_agency_publicly = self.agency.is_public
 

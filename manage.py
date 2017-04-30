@@ -9,10 +9,9 @@ from app.models import (
     IncidentReport,
     EditableHTML
 )
-from redis import Redis
-from rq import Worker, Queue, Connection
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.rq import get_worker
 from app.parse_csv import parse_to_db
 
 
@@ -148,17 +147,7 @@ def setup_general():
 @manager.command
 def run_worker():
     """Initializes a slim rq task queue."""
-    listen = ['default']
-    conn = Redis(
-        host=app.config['RQ_DEFAULT_HOST'],
-        port=app.config['RQ_DEFAULT_PORT'],
-        db=0,
-        password=app.config['RQ_DEFAULT_PASSWORD']
-    )
-
-    with Connection(conn):
-        worker = Worker(map(Queue, listen))
-        worker.work()
+    get_worker().work()
 
 
 if __name__ == '__main__':
